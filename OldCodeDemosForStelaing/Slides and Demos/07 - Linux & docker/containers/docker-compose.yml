@@ -1,0 +1,39 @@
+version: '3.2'
+
+services:
+  dbasql1:
+    build:
+      context: ./mssql/
+    image: mssql
+    ports:
+      - target: 1433
+        protocol: tcp
+        mode: host
+      - target: 5985
+        protocol: tcp
+        mode: host
+      - target: 5986
+        protocol: tcp
+        mode: host
+    container_name: dbasql1
+    env_file:
+     - ./.env
+
+
+  dbasql2:
+    build:
+      context: ./mssql/
+    image: mssql
+    ports:
+      - target: 1433
+        protocol: tcp
+        mode: host
+      - target: 5985
+        protocol: tcp
+        mode: host
+      - target: 5986
+        protocol: tcp
+        mode: host
+    container_name: dbasql2
+    env_file:
+     - ./.env
