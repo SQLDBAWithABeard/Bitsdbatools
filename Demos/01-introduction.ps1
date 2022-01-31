@@ -1,13 +1,12 @@
-#region before we start
- # This means that we do not need to use sqlcredential parameter for every single dbatools command
- $FolderPath = $Env:USERPROFILE + '\Documents\dbatoolsdemo'
+#region Set up connection
+$securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
+$continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
 
- $sqlcred = Import-Clixml -Path $FolderPath\sqladmin.cred
- $PSDefaultParameterValues = @{
-     "*dba*:SqlCredential" = $sqlcred
- }
+$PSDefaultParameterValues = @{
+    "*dba*:SqlCredential" = $continercredential
+}
 
- $SQLInstances = 'localhost,15592','localhost,15593'
+$containers =  $SQLInstances = 'dbatools1', 'dbatools2'
 #endregion
 
 #region Searching and using commands
@@ -34,13 +33,38 @@ Find-DbaCommand -Pattern linked
 
 Get-Help Test-DbaLinkedServerConnection -Full
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Here a neat trick
 
 Find-DbaCommand -Pattern linked | Out-GridView -PassThru | Get-Help -Full 
 
+
+
+
+
+
+
 ## Lets look at the linked servers on sql0
 
-Get-DbaLinkedServer -SqlInstance $sql0 | Format-Table
+Get-DbaLinkedServer -SqlInstance $SQLInstances[0] | Format-Table
 
 ## I wonder if they are all working correctly
 
