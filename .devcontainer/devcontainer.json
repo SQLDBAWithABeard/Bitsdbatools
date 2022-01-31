@@ -1,0 +1,24 @@
+{
+    "name": "SqlBits",
+    "workspaceFolder": "/workspace",
+    "dockerComposeFile": [
+        "docker-compose.yml"
+    ],
+    "remoteEnv": {
+        "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+        "MY_SERVER": "dbatools1"
+    },
+    "service": "dbatools1",
+    "settings": {
+        "terminal.integrated.shell.linux": "/usr/bin/pwsh"
+    },
+    "extensions": [
+        "ms-vscode.powershell",
+        "github.vscode-pull-request-github",
+        "2gua.rainbow-brackets",
+        "oderwat.indent-rainbow",
+        "mhutchie.git-graph",
+        "usernamehw.errorlens"
+    ],
+    "remoteUser": "root"  // not ideal - prob need to setup a non-root user and use that instead. permissions issue without this!
+}
