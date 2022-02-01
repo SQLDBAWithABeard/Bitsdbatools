@@ -4,6 +4,8 @@ $continercredential = New-Object System.Management.Automation.PSCredential('sqla
 
 $PSDefaultParameterValues = @{
     "*dba*:SqlCredential" = $continercredential
+    "*dba*:SourceSqlCredential" = $continercredential
+    "*dba*:DestinationSqlCredential" = $continercredential
 }
 
 $containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'

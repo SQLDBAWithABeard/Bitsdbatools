@@ -2,7 +2,13 @@
 $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
 $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
 
-$containers = 'dbatools1', 'dbatools2'
+$PSDefaultParameterValues = @{
+    "*dba*:SqlCredential" = $continercredential
+    "*dba*:SourceSqlCredential" = $continercredential
+    "*dba*:DestinationSqlCredential" = $continercredential
+}
+
+$containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'
 #endregion
 
 
