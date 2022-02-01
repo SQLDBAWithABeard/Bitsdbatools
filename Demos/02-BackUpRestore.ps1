@@ -6,7 +6,10 @@ $PSDefaultParameterValues = @{
     "*dba*:SqlCredential" = $continercredential
     "*dba*:SourceSqlCredential" = $continercredential
     "*dba*:DestinationSqlCredential" = $continercredential
+    "*dba*:PrimarySqlCredential" = $continercredential
+    "*dba*:SecondarySqlCredential" = $continercredential
 }
+
 
 $containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'
 #endregion
