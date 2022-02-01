@@ -33,26 +33,7 @@ Find-DbaCommand -Pattern linked
 
 Get-Help Test-DbaLinkedServerConnection -Full
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Here a neat trick
+## Here a neat trick - needs to be run not in a container because of OGV
 
 Find-DbaCommand -Pattern linked | Out-GridView -PassThru | Get-Help -Full 
 
