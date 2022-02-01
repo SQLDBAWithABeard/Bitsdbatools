@@ -17,9 +17,9 @@ RUN echo "export HISTFILE=/commandhistory/.bash_history" >> "/root/.bashrc" \
     && mkdir -p /commandhistory \
     && touch /commandhistory/.bash_history 
 
-# Install Pester, 4.4.3
+# Install Pester, 4.10.1
 SHELL ["/usr/bin/pwsh", "-c"]
-RUN $ErrorActionPreference='Stop'; Install-Module -Name Pester -Force -SkipPublisherCheck -MaximumVersion 4.4.3;
+RUN $ErrorActionPreference='Stop'; Install-Module -Name Pester -Force -SkipPublisherCheck -MaximumVersion 4.10.1;
 
 # Install dbatools
 SHELL ["/usr/bin/pwsh", "-c"]
