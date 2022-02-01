@@ -79,7 +79,7 @@ Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Wha
 
 # ALSO - NEVER RUN THIS IN PROD UNLESS YOUR CV IS UP TO DATE - EVEN IF YOUR CV IS UP TO DATE
 
-Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Confirm
+Get-DbaDatabase -SqlInstance $dbatools1 -ExycludeSystem | Remove-DbaDatabase -Confirm
 
 # so what do we have ?
 
@@ -102,12 +102,14 @@ Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/db
 
 # Super super easy - it will even do this, when the files are more complicated
 
-
+# lets get all fo our databases now
 $databases = Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem 
 
+# define a path and do a full backup fdor each
 $RandomPath = '/var/opt/mssql/data/backups/dbatools1/random'
 Backup-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath -CompressBackup -Database $databases.Name
 
+# Then create a random number of types of backups for our databases
 $x = 50
 while ($x -ge 0) {
     $db = Get-Random $databases.Name
@@ -150,7 +152,9 @@ while ($x -ge 0) {
 
 Get-ChildItem $RandomPath
 
-# Remve the databases - no confirm this time
+Get-ChildItem $RandomPath -Recurse
+
+# Remove the databases - no confirm this time
 
 Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Confirm:$false
 
@@ -162,6 +166,6 @@ Restore-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath
 
 Get-DbaDbRestoreHistory -SqlInstance $dbatools1 | Format-Table
 
-# Those were the simple ones - HOw complex do you want to get ?
+# Those were the simple ones - How complex do you want to get ?
 
 Get-Help Invoke-DbaAdvancedRestore
