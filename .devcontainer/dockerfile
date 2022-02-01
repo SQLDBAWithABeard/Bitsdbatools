@@ -21,14 +21,10 @@ RUN echo "export HISTFILE=/commandhistory/.bash_history" >> "/root/.bashrc" \
 SHELL ["/usr/bin/pwsh", "-c"]
 RUN $ErrorActionPreference='Stop'; Install-Module -Name Pester -Force -SkipPublisherCheck -MaximumVersion 4.10.1;
 
-# Install dbatools
+# Install dbatools,PSFramework,dbachecks,posh-git
 SHELL ["/usr/bin/pwsh", "-c"]
-RUN $ErrorActionPreference='Stop'; Install-Module -Name dbatools -Force -SkipPublisherCheck;
+RUN $ErrorActionPreference='Stop'; Install-Module -Name dbatools,PSFramework,dbachecks,posh-git -Force -SkipPublisherCheck;
 
-# Install PSFramework
-SHELL ["/usr/bin/pwsh", "-c"]
-RUN $ErrorActionPreference='Stop'; Install-Module -Name PSFramework -Force -SkipPublisherCheck;
+# Copy Profile
 
-# Install dbachecks
-SHELL ["/usr/bin/pwsh", "-c"]
-RUN $ErrorActionPreference='Stop'; Install-Module -Name dbachecks -Force -SkipPublisherCheck;
+ADD profile.ps1 /root/.config/powershell/
