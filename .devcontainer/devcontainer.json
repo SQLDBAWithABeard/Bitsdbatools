@@ -3,14 +3,15 @@
     "workspaceFolder": "/workspace",
     "dockerComposeFile": [
         "docker-compose.yml"
-    ],
+    ],#
     "remoteEnv": {
         "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
         "MY_SERVER": "dbatools1"
     },
     "service": "dbatools1",
     "settings": {
-        "terminal.integrated.shell.linux": "/usr/bin/pwsh"
+        "terminal.integrated.shell.linux": "/usr/bin/pwsh",
+        "editor.renderWhitespace": "all"
     },
     "extensions": [
         "ms-vscode.powershell",

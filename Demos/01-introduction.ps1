@@ -14,6 +14,17 @@ $PSDefaultParameterValues = @{
 $containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'
 #endregion
 
+<# 
+
+ _____      _                 _            _   _               _____           _ _           _              _     
+|_   _|    | |               | |          | | (_)             |_   _|         | | |         | |            | |    
+  | | _ __ | |_ _ __ ___   __| |_   _  ___| |_ _  ___  _ __     | | ___     __| | |__   __ _| |_ ___   ___ | |___ 
+  | || '_ \| __| '__/ _ \ / _` | | | |/ __| __| |/ _ \| '_ \    | |/ _ \   / _` | '_ \ / _` | __/ _ \ / _ \| / __|
+ _| || | | | |_| | | (_) | (_| | |_| | (__| |_| | (_) | | | |   | | (_) | | (_| | |_) | (_| | || (_) | (_) | \__ \
+ \___/_| |_|\__|_|  \___/ \__,_|\__,_|\___|\__|_|\___/|_| |_|   \_/\___/   \__,_|_.__/ \__,_|\__\___/ \___/|_|___/
+
+#>
+
 #region Searching and using commands
 
 Return 'Oi Beardy, You may be an MVP but this is a demo, don''t run the whole thing, fool!!'
