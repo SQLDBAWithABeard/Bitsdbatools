@@ -23,7 +23,7 @@ RUN $ErrorActionPreference='Stop'; Install-Module -Name Pester -Force -SkipPubli
 
 # Install dbatools,PSFramework,dbachecks,posh-git
 SHELL ["/usr/bin/pwsh", "-c"]
-RUN $ErrorActionPreference='Stop'; Install-Module -Name dbatools,PSFramework,dbachecks,posh-git -Force -SkipPublisherCheck;
+RUN $ErrorActionPreference='Stop'; Install-Module -Name dbatools,PSFramework,dbachecks,posh-git,Microsoft.PowerShell.ConsoleGuiTools -Force -SkipPublisherCheck;
 
 # Copy Profile
 
