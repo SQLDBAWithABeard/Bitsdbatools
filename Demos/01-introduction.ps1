@@ -38,7 +38,9 @@ Find-DbaCommand -Pattern linked
 
 Get-Help Test-DbaLinkedServerConnection -Full
 
+
 ## Here a neat trick - needs to be run not in a container because of OGV
+# Can we use Microsoft.PowerShell.ConsoleGuiTools for this in Powershell 7?
 
 Find-DbaCommand -Pattern linked | Out-GridView -PassThru | Get-Help -Full 
 

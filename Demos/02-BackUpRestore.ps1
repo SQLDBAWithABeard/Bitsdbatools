@@ -20,11 +20,11 @@ Get-DbaDatabase -SqlInstance $dbatools1
 
 # we can get particular properties 
 
-Get-DbaDatabase -SqlInstance $dbatools1 |Select Name, Status, LastFullBackup
+Get-DbaDatabase -SqlInstance $dbatools1 | Select Name, Status, LastFullBackup
 
 # Added PowerShell bonus, you can see which properties you can 'select' (The columns on a table) with Get-Member
 
-Get-DbaDatabase -SqlInstance $dbatools1 |Get-Member
+Get-DbaDatabase -SqlInstance $dbatools1 | Get-Member
 
 # Lets check the file system from the viewpoint of the SQL Instance Service Account
 
@@ -84,7 +84,7 @@ Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Wha
 
 # ALSO - NEVER RUN THIS IN PROD UNLESS YOUR CV IS UP TO DATE - EVEN IF YOUR CV IS UP TO DATE
 
-Get-DbaDatabase -SqlInstance $dbatools1 -ExycludeSystem | Remove-DbaDatabase -Confirm
+Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Confirm
 
 # so what do we have ?
 
@@ -104,6 +104,12 @@ Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/db
     $dbname = 'pubs-{0}' -f $psitem
     Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/dbatools1/pubs -DatabaseName $dbname -DestinationFilePrefix $psitem -ReplaceDbNameInFile 
 }
+
+# Can we use parallel? - this crashes my PowerShell terminal 
+0..10 | ForEach-Object -Parallel {
+    $dbname = 'pubs-{0}' -f $psitem
+    Restore-DbaDatabase -SqlInstance $using:dbatools1 -Path /var/opt/mssql/data/backups/dbatools1/pubs -DatabaseName $dbname -DestinationFilePrefix $psitem -ReplaceDbNameInFile 
+} 
 
 # Super super easy - it will even do this, when the files are more complicated
 
