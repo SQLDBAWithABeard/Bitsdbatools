@@ -148,6 +148,9 @@ function Get-Index {
   $title = "Joshua Says" 
   $IndexChoice = $host.ui.PromptForChoice($title, "Make Your Choice", $options, 0) + 1
 
+  # ensure we have connection info for all modules
+  . ./Demos/00-ConnectionInfo.ps1
+
   switch ($IndexChoice) {
     1 { 
       Clear-Host
