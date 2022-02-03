@@ -93,7 +93,7 @@ Get-DbaDatabase -SqlInstance $dbatools1 | Format-Table
 
 Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/dbatools1
 
-# You can even restore with the same backup to numerous databases
+# You can even restore with the same backup to numerous databases 26 seconds robs desktop
 
 0..10 | ForEach-Object {
     $dbname = 'pubs-{0}' -f $psitem
@@ -108,14 +108,14 @@ Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/db
 
 # Super super easy - it will even do this, when the files are more complicated
 
-# lets get all fo our databases now
+# lets get all of our databases now
 $databases = Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem 
 
-# define a path and do a full backup fdor each
+# define a path and do a full backup for each
 $RandomPath = '/var/opt/mssql/data/backups/dbatools1/random'
 Backup-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath -CompressBackup -Database $databases.Name
 
-# Then create a random number of types of backups for our databases
+# Then create a random number of types of backups for our databases - 15 secs - Robs desktop
 $x = 50
 while ($x -ge 0) {
     $db = Get-Random $databases.Name
@@ -142,11 +142,13 @@ Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Con
 
 Restore-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath
 
+# what were those warnings??????
+
 ls -l $RandomPath
 
 # Oh - YOur estate doesnt have all the backups in one directory (we know some that do)
 
-# ok
+# ok lets backup with create folder and get some more files to play with - 32 secs - Robs desktop
 
 $x = 100
 while ($x -ge 0) {
@@ -164,13 +166,17 @@ Get-ChildItem $RandomPath -Recurse
 
 Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Confirm:$false
 
-# Still only one line of code 
+# Still only one line of code 23 seconds - Robs Desktop
 
 Restore-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath
 
 # So what happened ?
 
 Get-DbaDbRestoreHistory -SqlInstance $dbatools1 | Format-Table
+
+# There is no sorting here so
+
+Get-DbaDbRestoreHistory -SqlInstance $dbatools1 | Sort-Object Date | Format-Table
 
 # Those were the simple ones - How complex do you want to get ?
 
