@@ -34,6 +34,7 @@ ls /var/opt/mssql/data
 # No result means nothing to see - Lets back up the entire instance in one quick line of code
 
 Backup-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/firstbackup
+Backup-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/firstbackup -Type Log
 
 # Lets check the file system from the viewpoint of the SQL Instance Service Account again
 
@@ -91,7 +92,7 @@ Get-DbaDatabase -SqlInstance $dbatools1 | Format-Table
 # Can you restore all the databases please
 # One line of code
 
-Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/dbatools1
+Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/dbatools1 
 
 # You can even restore with the same backup to numerous databases 26 seconds robs desktop
 
