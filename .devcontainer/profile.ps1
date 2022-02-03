@@ -6,6 +6,22 @@ if ($Host.Name -eq 'Visual Studio Code Host') {
         }
 }
 
+Import-Module /workspace/Game/JessAndBeard.psm1
+ #region Set up connection
+ $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
+ $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
+ 
+ $PSDefaultParameterValues = @{
+     "*dba*:SqlCredential" = $continercredential
+     "*dba*:SourceSqlCredential" = $continercredential
+     "*dba*:DestinationSqlCredential" = $continercredential
+     "*dba*:PrimarySqlCredential" = $continercredential
+     "*dba*:SecondarySqlCredential" = $continercredential
+ }
+ 
+ 
+ $containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'
+ #endregion
 ######## POSH-GIT
 # with props to https://bradwilson.io/blog/prompt/powershell
 # ... Import-Module for posh-git here ...
