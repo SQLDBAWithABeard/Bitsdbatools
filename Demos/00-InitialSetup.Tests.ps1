@@ -30,3 +30,5 @@ $null = Reset-DbcConfig
 $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-dbatools2-config.json
 Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
 
+# add a test for no snapshots
+
