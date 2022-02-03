@@ -92,6 +92,15 @@ $wrongChoice = @"
 ░                             ░               
 "@
 #endregion
+
+[version]$dbachecksversioninconfig= (Get-DbcConfigValue -Name app.checkrepos).Split('/')[-1].Split('\')[0]
+[version]$dbachecksmodulevarsion = (Get-Module dbachecks).Version
+
+if($dbachecksmodulevarsion -ne $dbachecksversioninconfig){
+  Get-ChildItem /workspace/Demos/dbachecksconfigs | ForEach-Object {
+    (Get-Content -Path $_.FullName) -replace $dbachecksversioninconfig,$dbachecksmodulevarsion | Set-Content $_.FullName
+  }
+}
 function Start-Game {
   Clear-Host
   $title = "Joshua Says" 
@@ -117,14 +126,23 @@ function Start-Game {
 function Get-Index {
   Clear-Host
   Write-Output $ChooseYourgame
-  Write-Output "1 - Introduction to dbatools"
-  Write-Output "2 - Backup and Restore"
-  Write-Output "3 - Copy Copy Copy"
+  $gameChapters = @(
+    ("&1 - Introduction to dbatools", "1 - Introduction to dbatools"),
+    ("&2 - Backup and Restore", "2 - Backup and Restore"),
+    ("&3 - Copy Copy Copy", "3 - Copy Copy Copy"),
+    ("&4 - SnapShots", "4 - SnapShots"),
+    ("&5 - Export", "5 - Export")
+  )
+
+  $options = New-Object System.Collections.ObjectModel.Collection[System.Management.Automation.Host.ChoiceDescription]
+
+  foreach ($Chapter in $gameChapters) {
+    $message = '{0}' -f $chapter[1]
+    Write-Output $message
+    $options.Add((New-Object System.Management.Automation.Host.ChoiceDescription $Chapter ) ) 
+  }
+
   $title = "Joshua Says" 
-  $Intro = New-Object System.Management.Automation.Host.ChoiceDescription "&1", "Intro" 
-  $Backup = New-Object System.Management.Automation.Host.ChoiceDescription "&2", "Backup" 
-  $Copy = New-Object System.Management.Automation.Host.ChoiceDescription "&3", "Copy" 
-  $options = [System.Management.Automation.Host.ChoiceDescription[]]($Intro, $Backup, $Copy) 
   $IndexChoice = $host.ui.PromptForChoice($title, "Make Your Choice", $options, 0) + 1
 
   switch ($IndexChoice) {
@@ -133,6 +151,8 @@ function Get-Index {
       Write-Output "1 - Introduction to dbatools" 
       code /workspace/Demos/01-introduction.ps1
       #reset anbd run tests
+      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Assert-Correct -chapter initial
     }
     2 { 
       Clear-Host
@@ -143,6 +163,16 @@ function Get-Index {
       Clear-Host
       Write-Output "3 - Copy Copy Copy" 
       code /workspace/Demos/03-CopyCopy.ps1
+    }
+    4 { 
+      Clear-Host
+      Write-Output "4 - SnapShots" 
+      code /workspace/Demos/04-Snapshots.ps1
+    }
+    5 { 
+      Clear-Host
+      Write-Output "5 - Export" 
+      code /workspace/Demos/05-Export.ps1
     }
     Default {
       Clear-Host
