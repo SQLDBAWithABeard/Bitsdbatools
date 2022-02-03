@@ -93,14 +93,16 @@ $wrongChoice = @"
 "@
 #endregion
 
-[version]$dbachecksversioninconfig= (Get-DbcConfigValue -Name app.checkrepos).Split('/')[-1].Split('\')[0]
-[version]$dbachecksmodulevarsion = (Get-Module dbachecks).Version
-
-if($dbachecksmodulevarsion -ne $dbachecksversioninconfig){
-  Get-ChildItem /workspace/Demos/dbachecksconfigs | ForEach-Object {
-    (Get-Content -Path $_.FullName) -replace $dbachecksversioninconfig,$dbachecksmodulevarsion | Set-Content $_.FullName
-  }
-}
+# If we are not using the ocnfig files becuase they take too long even though they are the correct wya to do things
+# we dont need this replace inhere
+# [version]$dbachecksversioninconfig = (Get-DbcConfigValue -Name app.checkrepos).Split('/')[-1].Split('\')[0]
+# [version]$dbachecksmodulevarsion = (Get-Module dbachecks).Version
+# 
+# if ($dbachecksmodulevarsion -ne $dbachecksversioninconfig) {
+#   Get-ChildItem /workspace/Demos/dbachecksconfigs/*.json | ForEach-Object {
+#     (Get-Content -Path $_.FullName) -replace $dbachecksversioninconfig, $dbachecksmodulevarsion | Set-Content $_.FullName
+#   }
+# }
 function Start-Game {
   Clear-Host
   $title = "Joshua Says" 
@@ -131,7 +133,8 @@ function Get-Index {
     ("&2 - Backup and Restore", "2 - Backup and Restore"),
     ("&3 - Copy Copy Copy", "3 - Copy Copy Copy"),
     ("&4 - SnapShots", "4 - SnapShots"),
-    ("&5 - Export", "5 - Export")
+    ("&5 - Export", "5 - Export"),
+    ("&Q - Quit", "Quit")
   )
 
   $options = New-Object System.Collections.ObjectModel.Collection[System.Management.Automation.Host.ChoiceDescription]
@@ -141,7 +144,6 @@ function Get-Index {
     Write-Output $message
     $options.Add((New-Object System.Management.Automation.Host.ChoiceDescription $Chapter ) ) 
   }
-
   $title = "Joshua Says" 
   $IndexChoice = $host.ui.PromptForChoice($title, "Make Your Choice", $options, 0) + 1
 
@@ -152,27 +154,38 @@ function Get-Index {
       code /workspace/Demos/01-introduction.ps1
       #reset anbd run tests
       Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
-      Assert-Correct -chapter initial
+      Assert-Correct -chapter intro
     }
     2 { 
       Clear-Host
       Write-Output "2 - Backup and Restore" 
       code /workspace/Demos/02-BackUpRestore.ps1
+      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Assert-Correct -chapter Backup
     }
     3 { 
       Clear-Host
       Write-Output "3 - Copy Copy Copy" 
       code /workspace/Demos/03-CopyCopy.ps1
+      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Assert-Correct -chapter Copy
     }
     4 { 
       Clear-Host
       Write-Output "4 - SnapShots" 
       code /workspace/Demos/04-Snapshots.ps1
+      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Assert-Correct -chapter SnapShots
     }
     5 { 
       Clear-Host
       Write-Output "5 - Export" 
       code /workspace/Demos/05-Export.ps1
+      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Assert-Correct -chapter Export
+    }
+    'q' {
+      Clear-Host
     }
     Default {
       Clear-Host
@@ -226,17 +239,101 @@ function Assert-Correct {
 
       $null = Reset-DbcConfig 
 
-      $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-config.json
+      Set-DbcConfig -Name app.sqlinstance -Value $containers
+      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      Set-DbcConfig -Name skip.connection.remoting -Value $true
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
 
-      $null = Reset-DbcConfig 
-
-      $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-dbatools1-config.json
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
       Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
 
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
+      Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
+      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+    }
+    'Intro' { 
+      # Valid estate is as we expect
+
       $null = Reset-DbcConfig 
 
-      $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-dbatools2-config.json
+      Set-DbcConfig -Name app.sqlinstance -Value $containers
+      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      Set-DbcConfig -Name skip.connection.remoting -Value $true
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
+      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
+      Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
+      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+    }
+    'Backup' { 
+      # Valid estate is as we expect
+
+      $null = Reset-DbcConfig 
+
+      Set-DbcConfig -Name app.sqlinstance -Value $containers | Out-Null
+      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL' | Out-Null
+      Set-DbcConfig -Name skip.connection.remoting -Value $true | Out-Null
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
+
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists
+    }
+    'Copy' { 
+      # Valid estate is as we expect
+
+      $null = Reset-DbcConfig 
+      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append
+      Set-DbcConfig -Name app.sqlinstance -Value $containers  | Out-Null
+      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'  | Out-Null
+      Set-DbcConfig -Name skip.connection.remoting -Value $true  | Out-Null
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists
+    }
+    'Snapshots' { 
+      # Valid estate is as we expect
+      Write-PSFHostColor -String "Running the SnapShot Chapter checks" -DefaultColor Green
+      $null = Reset-DbcConfig 
+      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
+      Set-DbcConfig -Name app.sqlinstance -Value $containers  | Out-Null
+      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'  | Out-Null
+      Set-DbcConfig -Name skip.connection.remoting -Value $true  | Out-Null
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases, DatabaseStatus, NoSnapshots
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus
+    }
+    'Export' { 
+      # Valid estate is as we expect
+
+      $null = Reset-DbcConfig 
+
+      Set-DbcConfig -Name app.sqlinstance -Value $containers
+      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      Set-DbcConfig -Name skip.connection.remoting -Value $true
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
+      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
+      Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
       Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
     }
     Default {
