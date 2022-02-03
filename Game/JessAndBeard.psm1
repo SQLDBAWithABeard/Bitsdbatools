@@ -156,3 +156,76 @@ function Get-Index {
     }
   }
 }
+
+function Set-ConnectionInfo {
+  #region Set up connection
+  $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
+  $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
+
+  $PSDefaultParameterValues = @{
+    "*dba*:SqlCredential"            = $continercredential
+    "*dba*:SourceSqlCredential"      = $continercredential
+    "*dba*:DestinationSqlCredential" = $continercredential
+    "*dba*:PrimarySqlCredential"     = $continercredential
+    "*dba*:SecondarySqlCredential"   = $continercredential
+  }
+
+
+  $containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
+  #endregion
+}
+
+function Assert-Correct {
+  param (
+    # Parameter help description
+    [Parameter()]
+    [ValidateSet(
+      'initial',
+      'Intro' ,
+      'Backup',
+      'Copy',
+      'SnapShots',
+      'Export'
+    )]
+    [string]
+    $chapter = 'initial'
+  )
+  switch ($chapter) {
+    'initial' { 
+      # Valid estate is as we expect
+
+      $null = Reset-DbcConfig 
+
+      $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-config.json
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
+
+      $null = Reset-DbcConfig 
+
+      $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-dbatools1-config.json
+      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+
+      $null = Reset-DbcConfig 
+
+      $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-dbatools2-config.json
+      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+    }
+    Default {
+      # Valid estate is as we expect
+
+      $null = Reset-DbcConfig 
+
+      $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-config.json
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection 
+
+      $null = Reset-DbcConfig 
+
+      $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-dbatools1-config.json
+      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+
+      $null = Reset-DbcConfig 
+
+      $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-dbatools2-config.json
+      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+    }
+  }
+}
