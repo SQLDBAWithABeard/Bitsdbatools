@@ -1,5 +1,3 @@
-# get connection info
-. ./Demos/00-ConnectionInfo.ps1
 
 # Documentation for Everyone
 $instanceSplat = @{
