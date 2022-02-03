@@ -229,3 +229,5 @@ function Assert-Correct {
     }
   }
 }
+
+Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $true -Initialize -Description "Whether to ask or not" -ModuleExport 
