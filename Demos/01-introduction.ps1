@@ -1,19 +1,3 @@
-#region Set up connection
-$securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
-$continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
-
-$PSDefaultParameterValues = @{
-    "*dba*:SqlCredential" = $continercredential
-    "*dba*:SourceSqlCredential" = $continercredential
-    "*dba*:DestinationSqlCredential" = $continercredential
-    "*dba*:PrimarySqlCredential" = $continercredential
-    "*dba*:SecondarySqlCredential" = $continercredential
-}
-
-
-$containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'
-#endregion
-
 <# 
 
  _____      _                 _            _   _               _____           _ _           _              _     
@@ -62,7 +46,6 @@ Get-Help (Find-DbaCommand -Pattern role |Select CommandName, Synopsis | Out-Cons
 
 
 
-
 ## Lets look at the linked servers on sql0
 
 Get-DbaLinkedServer -SqlInstance $SQLInstances[0] | Format-Table
@@ -103,7 +86,7 @@ Test-DbaLinkedServerConnection -SqlInstance $sql1
 
 #region Look at Builds
 
-    $builds = Get-DbaBuildReference -SqlInstance $SQLInstances 
+$builds = Get-DbaBuildReference -SqlInstance $SQLInstances 
 
 $Builds | Format-Table
 
