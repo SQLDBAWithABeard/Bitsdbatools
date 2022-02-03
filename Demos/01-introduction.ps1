@@ -1,18 +1,13 @@
-#region Set up connection
-$securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
-$continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
+<# 
 
-$PSDefaultParameterValues = @{
-    "*dba*:SqlCredential" = $continercredential
-    "*dba*:SourceSqlCredential" = $continercredential
-    "*dba*:DestinationSqlCredential" = $continercredential
-    "*dba*:PrimarySqlCredential" = $continercredential
-    "*dba*:SecondarySqlCredential" = $continercredential
-}
+ _____      _                 _            _   _               _____           _ _           _              _     
+|_   _|    | |               | |          | | (_)             |_   _|         | | |         | |            | |    
+  | | _ __ | |_ _ __ ___   __| |_   _  ___| |_ _  ___  _ __     | | ___     __| | |__   __ _| |_ ___   ___ | |___ 
+  | || '_ \| __| '__/ _ \ / _` | | | |/ __| __| |/ _ \| '_ \    | |/ _ \   / _` | '_ \ / _` | __/ _ \ / _ \| / __|
+ _| || | | | |_| | | (_) | (_| | |_| | (__| |_| | (_) | | | |   | | (_) | | (_| | |_) | (_| | || (_) | (_) | \__ \
+ \___/_| |_|\__|_|  \___/ \__,_|\__,_|\___|\__|_|\___/|_| |_|   \_/\___/   \__,_|_.__/ \__,_|\__\___/ \___/|_|___/
 
-
-$containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'
-#endregion
+#>
 
 #region Searching and using commands
 
@@ -45,7 +40,6 @@ Find-DbaCommand -Pattern role | Out-GridView -PassThru | Get-Help -Full
 
 # or we use Microsoft.PowerShell.ConsoleGuiTools for this in Powershell 7
 Get-Help (Find-DbaCommand -Pattern role |Select CommandName, Synopsis | Out-ConsoleGridView).CommandName 
-
 
 
 
@@ -92,7 +86,7 @@ Test-DbaLinkedServerConnection -SqlInstance $sql1
 
 #region Look at Builds
 
-    $builds = Get-DbaBuildReference -SqlInstance $SQLInstances 
+$builds = Get-DbaBuildReference -SqlInstance $SQLInstances 
 
 $Builds | Format-Table
 

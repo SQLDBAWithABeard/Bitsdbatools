@@ -17,6 +17,8 @@ services:
         - "7433:1433"
       container_name: dbatools1
       hostname: dbatools1
+      entrypoint: ["pwsh","-Command", "Start-Game"]
+      
     dbatools2:
       image: "dbatools/sqlinstance2"
       

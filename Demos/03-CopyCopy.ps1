@@ -13,6 +13,17 @@ $PSDefaultParameterValues = @{
 $containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'
 #endregion
 
+<# 
+ _____                   _               _____ _     _                 
+/  __ \                 (_)             |_   _| |   (_)                
+| /  \/ ___  _ __  _   _ _ _ __   __ _    | | | |__  _ _ __   __ _ ___ 
+| |    / _ \| '_ \| | | | | '_ \ / _` |   | | | '_ \| | '_ \ / _` / __|
+| \__/\ (_) | |_) | |_| | | | | | (_| |   | | | | | | | | | | (_| \__ \
+ \____/\___/| .__/ \__, |_|_| |_|\__, |   \_/ |_| |_|_|_| |_|\__, |___/
+            | |     __/ |         __/ |                       __/ |    
+            |_|    |___/         |___/                       |___/     
+#>
+
 # Copying things is where dbatools made its entry into the world
 
 # What databases do we have on our instances?

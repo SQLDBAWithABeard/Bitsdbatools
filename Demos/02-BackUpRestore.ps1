@@ -14,6 +14,17 @@ $PSDefaultParameterValues = @{
 $containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'
 #endregion
 
+<# 
+______            _                                  _  ______          _                 
+| ___ \          | |                                | | | ___ \        | |                
+| |_/ / __ _  ___| | ___   _ _ __     __ _ _ __   __| | | |_/ /___  ___| |_ ___  _ __ ___ 
+| ___ \/ _` |/ __| |/ / | | | '_ \   / _` | '_ \ / _` | |    // _ \/ __| __/ _ \| '__/ _ \
+| |_/ / (_| | (__|   <| |_| | |_) | | (_| | | | | (_| | | |\ \  __/\__ \ || (_) | | |  __/
+\____/ \__,_|\___|_|\_\\__,_| .__/   \__,_|_| |_|\__,_| \_| \_\___||___/\__\___/|_|  \___|
+                            | |                                                           
+                            |_|                                                           
+#>
+
 # Lets take a look at the databases on the first instance
 
 Get-DbaDatabase -SqlInstance $dbatools1
