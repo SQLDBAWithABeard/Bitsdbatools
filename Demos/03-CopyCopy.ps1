@@ -72,20 +72,3 @@ Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Con
 # Better bring them back to readwrite
 
 Set-DbaDbState -SqlInstance $dbatools1 -ReadWrite -AllDatabases
-
-# just cos I want to see if it works and look in ssms
-
-$databases = Get-DbaDatabase -SqlInstance $dbatools1  -ExcludeSystem 
-
-$AvailabilityGroupConfig = @{
-    Name                   = 'NotOnHolidayNowAreYouJess' 
-    SharedPath             = '/var/opt/backups' 
-    Primary                = $dbatools1
-    Secondary              = $dbatools2
-    ClusterType            = 'None' 
-    Database               = $databases.Name
-    SeedingMode            = 'Automatic' 
-    FailoverMode           = 'Manual' 
-    Confirm                = $false
-}
-New-DbaAvailabilityGroup @AvailabilityGroupConfig -Verbose
