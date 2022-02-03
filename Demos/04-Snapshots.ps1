@@ -1,3 +1,13 @@
+<#
+  _____                       _           _       
+ /  ___|                     | |         | |      
+ \ `--. _ __   __ _ _ __  ___| |__   ___ | |_ ___ 
+  `--. \ '_ \ / _` | '_ \/ __| '_ \ / _ \| __/ __|
+ /\__/ / | | | (_| | |_) \__ \ | | | (_) | |_\__ \
+ \____/|_| |_|\__,_| .__/|___/_| |_|\___/ \__|___/
+                   | |                            
+                   |_|                            
+#> 
 Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Select-Object SqlInstance, Name, Status, SizeMB
 
 # Take a snapshot - a read-only copy of your database - changes are stored in a sparse file
@@ -46,9 +56,13 @@ Invoke-DbaQuery @snapshotSplat -Query 'SELECT [EmployeeID],[LastName],[FirstName
 Copy-DbaDbTableData -SqlInstance $dbatools1 -Destination $dbatools1 -Database $northwindSnap.Name -DestinationDatabase Northwind -Table Employees -Truncate
 
 #Script out the foreign keys
+
+if(-not (Test-Path /workspace/Export)){
+    New-Item /workspace/Export -ItemType Directory
+}
 $fks = Get-DbaDbForeignKey -SqlInstance $dbatools1 -Database Northwind | Where-Object ReferencedTable -eq Employees 
 $fks | Select-Object SqlInstance,Database,Table, Name, ReferencedKey, ReferencedTable
-$fks | Export-DbaScript -FilePath Export/ForeignKeys.sql
+$fks | Export-DbaScript -FilePath /workspace/Export/ForeignKeys.sql
 
 # drop the foreign keys
 $fks.drop()
