@@ -1,3 +1,4 @@
+
 <# 
 
  _____      _                 _            _   _               _____           _ _           _              _     
@@ -12,6 +13,7 @@
 #region Searching and using commands
 
 Return 'Oi Beardy, You may be an MVP but this is a demo, don''t run the whole thing, fool!!'
+
 
 ## Lets look at the commands
 Get-Command -Module dbatools 
