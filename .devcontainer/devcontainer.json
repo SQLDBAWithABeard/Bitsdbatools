@@ -3,7 +3,7 @@
     "workspaceFolder": "/workspace",
     "dockerComposeFile": [
         "docker-compose.yml"
-    ],#
+    ],
     "remoteEnv": {
         "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
         "MY_SERVER": "dbatools1"
