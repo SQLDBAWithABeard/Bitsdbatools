@@ -92,7 +92,7 @@
   {
     "Name": "app.checkrepos",
     "Value": [
-      "/root/.local/share/powershell/Modules/dbachecks/2.0.16\\checks"
+      "/root/.local/share/powershell/Modules/dbachecks/2.0.18\\checks"
     ],
     "Description": "Where Pester tests/checks are stored"
   },
