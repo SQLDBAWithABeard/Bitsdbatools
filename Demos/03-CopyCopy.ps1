@@ -63,6 +63,8 @@ Copy-DbaDatabase -Source $dbatools1 -Destination $dbatools2 -BackupRestore -Shar
 
 Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Select ComputerName, Name, Status, ReadOnly
 
+Get-DbaDbState  -SqlInstance $dbatools1, $dbatools2 | Format-Table
+
 # No confirm - remove them from dbatools2
 
 Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Confirm:$false
