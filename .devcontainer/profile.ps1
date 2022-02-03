@@ -3,31 +3,33 @@ if ($Host.Name -eq 'Visual Studio Code Host') {
         Import-Module EditorServicesCommandSuite -ErrorAction SilentlyContinue #workaround
         Import-Module EditorServicesCommandSuite
         Import-EditorCommand -Module EditorServicesCommandSuite -ErrorAction SilentlyContinue
-        }
+    }
 }
 
 Import-Module /workspace/Game/JessAndBeard.psm1
- #region Set up connection
- $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
- $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
+#region Set up connection
+$securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
+$continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
  
- $PSDefaultParameterValues = @{
-     "*dba*:SqlCredential" = $continercredential
-     "*dba*:SourceSqlCredential" = $continercredential
-     "*dba*:DestinationSqlCredential" = $continercredential
-     "*dba*:PrimarySqlCredential" = $continercredential
-     "*dba*:SecondarySqlCredential" = $continercredential
- }
+$PSDefaultParameterValues = @{
+    "*dba*:SqlCredential"            = $continercredential
+    "*dba*:SourceSqlCredential"      = $continercredential
+    "*dba*:DestinationSqlCredential" = $continercredential
+    "*dba*:PrimarySqlCredential"     = $continercredential
+    "*dba*:SecondarySqlCredential"   = $continercredential
+}
  
  
- $containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'
- #endregion
-
-
- if(-not $firstrun){
-     $firstrun = $true
-     Start-Game
- }
+$containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
+#endregion
+$ShallWePlayAGame = Get-PSFConfigValue -Name JessAndBeard.shallweplayagame 
+if (-not $ShallWePlayAGame ) {
+    Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false -
+    Start-Game
+}
+else {
+    Get-Index
+}
 ######## POSH-GIT
 # with props to https://bradwilson.io/blog/prompt/powershell
 # ... Import-Module for posh-git here ...
@@ -116,7 +118,7 @@ set-content Function:prompt {
     # Reset the foreground color to default
     $Host.UI.RawUI.ForegroundColor = $GitPromptSettings.DefaultColor.ForegroundColor
 
-    if($ShowUser){
+    if ($ShowUser) {
         Write-Host " " -NoNewLine
         Write-Host "  " -NoNewLine -BackgroundColor DarkYellow -ForegroundColor Black
         Write-Host  (whoami)  -NoNewLine -BackgroundColor DarkYellow -ForegroundColor Black
@@ -143,7 +145,7 @@ set-content Function:prompt {
             $currentContext = (& kubectl config current-context 2> $null)
             $nodes = kubectl get nodes -o json | ConvertFrom-Json
 
-            $nodename = ($nodes.items.metadata |Where labels  -like '*master*').name
+            $nodename = ($nodes.items.metadata | Where labels  -like '*master*').name
             Write-Host " " -NoNewLine
             Write-Host "" -NoNewLine -BackgroundColor DarkGray -ForegroundColor Green
             #Write-Host " $currentContext " -NoNewLine -BackgroundColor DarkYellow -ForegroundColor Black
@@ -211,7 +213,7 @@ set-content Function:prompt {
             $history = Get-History -ErrorAction Ignore
             if ($history) {
                 if (([System.Management.Automation.PSTypeName]'Sqlcollaborative.Dbatools.Utility.DbaTimeSpanPretty').Type) {
-                    $timemessage =  " " + ( [Sqlcollaborative.Dbatools.Utility.DbaTimeSpanPretty]($history[-1].EndExecutionTime - $history[-1].StartExecutionTime))
+                    $timemessage = " " + ( [Sqlcollaborative.Dbatools.Utility.DbaTimeSpanPretty]($history[-1].EndExecutionTime - $history[-1].StartExecutionTime))
                     Write-Host $timemessage -ForegroundColor DarkYellow -BackgroundColor DarkGray -NoNewline
                 }
                 else {
@@ -290,16 +292,17 @@ set-content Function:prompt {
     return " "
 }
 
-    function whatsmyip  {
-        [CmdletBinding()]
-        param (
-            [Parameter()]
-            [switch]
-            $clip
-        )
-        if($clip){
+function whatsmyip {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [switch]
+        $clip
+    )
+    if ($clip) {
             (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content | Set-Clipboard
-        } else{
-            (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
-        }
     }
+    else {
+            (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
+    }
+}
