@@ -22,6 +22,12 @@ Import-Module /workspace/Game/JessAndBeard.psm1
  
  $containers =  $SQLInstances = $dbatools1,$dbatools2 = 'dbatools1', 'dbatools2'
  #endregion
+
+
+ if(-not $firstrun){
+     $firstrun = $true
+     Start-Game
+ }
 ######## POSH-GIT
 # with props to https://bradwilson.io/blog/prompt/powershell
 # ... Import-Module for posh-git here ...
