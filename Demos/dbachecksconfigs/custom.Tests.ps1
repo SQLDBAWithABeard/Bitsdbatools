@@ -64,5 +64,23 @@ Describe "There should be no snapshots" -Tags NoSnapshots , $Filename {
     }
 }
 
+Describe "There should be no Availabiity Groups" -Tags NoAgs , $Filename {
+    Context "No Ags Here please" {
+        It "<SqlInstance> Should not have any Availability Groups" -testCases @(
+            @{
+                SqlInstance = 'dbatools1'
+            },
+            @{
+                SqlInstance = 'dbatools2'
+            }
+        ) {
+            Param(
+                $SqlInstance
+            )
+            Get-DbaAvailabilityGroup -SqlInstance $SqlInstance | Should -BeNullOrEmpty -Because "We dont want none of them snapshots here wasting our space"
+        }
+    }
+}
+
 
 
