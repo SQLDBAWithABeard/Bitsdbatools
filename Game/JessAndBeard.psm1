@@ -134,6 +134,7 @@ function Get-Index {
     ("&3 - Copy Copy Copy", "3 - Copy Copy Copy"),
     ("&4 - SnapShots", "4 - SnapShots"),
     ("&5 - Export", "5 - Export"),
+    ("&6 - Availability Groups", "5 - Availability Groups"),
     ("&Q - Quit", "Quit")
   )
 
@@ -176,6 +177,13 @@ function Get-Index {
       code /workspace/Demos/04-Snapshots.ps1
       Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
       Assert-Correct -chapter SnapShots
+    }
+    6 { 
+      Clear-Host
+      Write-Output "6 - Availability Groups" 
+      code /workspace/Demos/06-AvailabilityGroups.ps1
+      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Assert-Correct -chapter Ags
     }
     5 { 
       Clear-Host
@@ -228,7 +236,8 @@ function Assert-Correct {
       'Backup',
       'Copy',
       'SnapShots',
-      'Export'
+      'Export',
+      'Ags'
     )]
     [string]
     $chapter = 'initial'
@@ -335,6 +344,25 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
       Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
       Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+    }
+    'Ags' { 
+      # Valid estate is as we expect
+
+      $null = Reset-DbcConfig 
+
+      Set-DbcConfig -Name app.sqlinstance -Value $containers
+      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      Set-DbcConfig -Name skip.connection.remoting -Value $true
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases, DatabaseStatus, NoSnapshots, NoAgs
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus
     }
     Default {
       # Valid estate is as we expect
