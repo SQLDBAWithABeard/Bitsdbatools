@@ -18,11 +18,11 @@ RUN echo "export HISTFILE=/commandhistory/.bash_history" >> "/root/.bashrc" \
     && touch /commandhistory/.bash_history 
 
 # Install Pester, 4.10.1
-SHELL ["/usr/bin/pwsh", "-c", "-NoProfile"]
+SHELL ["/usr/bin/pwsh", "-c"]
 RUN $ErrorActionPreference='Stop'; Install-Module -Name Pester -Force -SkipPublisherCheck -MaximumVersion 4.10.1;
 
 # Install dbatools,PSFramework,dbachecks,posh-git
-SHELL ["/usr/bin/pwsh", "-c", "-NoProfile"]
+SHELL ["/usr/bin/pwsh", "-c"]
 RUN $ErrorActionPreference='Stop'; Install-Module -Name dbatools,PSFramework,dbachecks,posh-git,Microsoft.PowerShell.ConsoleGuiTools -Force -SkipPublisherCheck;
 
 # Copy Profile
