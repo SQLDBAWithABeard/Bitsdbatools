@@ -28,8 +28,7 @@ $ShallWePlayAGame = Get-PSFConfigValue -Name JessAndBeard.shallweplayagame
 if ($ShallWePlayAGame ) {
     Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false 
     Start-Game
-}
-else {
+} else {
     Get-Index
 }
 

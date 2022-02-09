@@ -90,12 +90,6 @@ Describe "dbatools1 should not have the additional databases already" -Tags NoDa
             },
             @{
                 Name = 'pubs-9'
-            },
-            @{
-                Name = 'pubs'
-            },
-            @{
-                Name = 'Northwind'
             }
         )
         It "<Name> Database should not exist on dbatools1" -TestCases $TestCases {
