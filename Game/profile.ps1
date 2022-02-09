@@ -22,6 +22,7 @@ $PSDefaultParameterValues = @{
  
 $containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
 #endregion
+
 $ShallWePlayAGame = Get-PSFConfigValue -Name JessAndBeard.shallweplayagame 
 if (-not $ShallWePlayAGame ) {
     Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false 
@@ -30,6 +31,7 @@ if (-not $ShallWePlayAGame ) {
 else {
     Get-Index
 }
+
 ######## POSH-GIT
 # with props to https://bradwilson.io/blog/prompt/powershell
 # ... Import-Module for posh-git here ...
