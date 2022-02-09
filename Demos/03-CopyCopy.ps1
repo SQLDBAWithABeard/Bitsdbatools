@@ -18,7 +18,7 @@ Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Format-Tabl
 
 # ok so everythign on one side.
 
-# How about if we copied them all to our new instance >?
+# How about if we copied them all to our new instance >? 41 seconds browser
 
 $sharedPath = '/shared'
 Copy-DbaDatabase -Source $dbatools1 -Destination $dbatools2 -BackupRestore -SharedPath $sharedPath -AllDatabases
@@ -37,7 +37,7 @@ Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Format-Tabl
 
 Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Confirm:$false
 
-# ok copy and leeave the source offline
+# ok copy and leeave the source offline - 41 seconds browser
 
 Copy-DbaDatabase -Source $dbatools1 -Destination $dbatools2 -BackupRestore -SharedPath $sharedPath -AllDatabases -SetSourceOffline
 
@@ -55,7 +55,7 @@ Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Con
 
 Set-DbaDbState -SqlInstance $dbatools1 -Online -AllDatabases
 
-# ok now copy and leeave the source readonly
+# ok now copy and leeave the source readonly 48 seconds browser
 
 Copy-DbaDatabase -Source $dbatools1 -Destination $dbatools2 -BackupRestore -SharedPath $sharedPath -AllDatabases -SetSourceReadOnly
 
@@ -72,3 +72,9 @@ Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Con
 # Better bring them back to readwrite
 
 Set-DbaDbState -SqlInstance $dbatools1 -ReadWrite -AllDatabases
+
+# Now what else can we copy ....................................
+
+Write-Output $allofTheThings
+
+Find-DbaCommand -Pattern Copy | ocgv

@@ -27,7 +27,7 @@ $AvailabilityGroupConfig = @{
 }
 New-DbaAvailabilityGroup @AvailabilityGroupConfig 
 
-# And then how to add some more databases to it
+# And then how to add some more databases to it 52 seconds browser
 
 $databases = Get-DbaDatabase -SqlInstance $dbatools1  -ExcludeSystem -ExcludeDatabase pubs
 

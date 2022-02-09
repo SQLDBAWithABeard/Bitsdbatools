@@ -9,7 +9,44 @@
            |_|                           |___/                                                                 
 #>
 
-# Documentation for Everyone
+# Documentation for Everyone 50 seconds browser
+# Export all tables
+Get-DbaDbTable -SqlInstance $dbatools1 -Database Northwind | Export-DbaScript -OutVariable Export
+code $export.fullname
+
+# Export all tables to a specific file
+Get-DbaDbTable -SqlInstance $dbatools1 -Database Northwind | Export-DbaScript -FilePath ./Export/Tables.Sql -OutVariable Export
+code $export.fullname
+
+# We can control the scripts with Microsoft.SqlServer.Management.Smo.ScriptingOptions
+$options = New-DbaScriptingOption
+
+# see what we change
+$options | Get-Member
+
+# lets script out indexes too
+$options.DriIndexes = $true
+Get-DbaDbTable -SqlInstance $dbatools1 -Database Northwind | Export-DbaScript -FilePath ./Export/TablesWithIndexes.Sql -ScriptingOptionsObject $options -OutVariable Export
+code $export.fullname
+
+# lets script out drop statements for our tables
+$options.ScriptDrops = $true
+Get-DbaDbTable -SqlInstance $dbatools1 -Database Northwind | Export-DbaScript -FilePath ./Export/Drops.Sql -ScriptingOptionsObject $options -OutVariable Export
+code $export.fullname
+
+# Lots more scripting options here:
+# https://docs.microsoft.com/en-us/dotnet/api/microsoft.sqlserver.management.smo.scriptingoptions?view=sql-smo-160
+
+# What if we only need one table
+Get-DbaDbTable -SqlInstance $dbatools1 -Database Northwind -Table Customers | Export-DbaScript -OutVariable Export
+code $export.fullname
+
+
+
+
+
+
+# Documentation your whole environment with one script
 $instanceSplat = @{
     SqlInstance   = $dbatools1, $dbatools2
     Path          = '.\Export\'

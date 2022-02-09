@@ -37,6 +37,12 @@ Describe "dbatools2 should not have the databases already" -Tags NoDatabases , $
             },
             @{
                 Name = 'pubs-9'
+            },
+            @{
+                Name = 'pubs'
+            },
+            @{
+                Name = 'Northwind'
             }
         )
         It "<Name> Database should not exist on dbatools2" -TestCases $TestCases {

@@ -90,11 +90,11 @@ Get-DbaDatabase -SqlInstance $dbatools1 | Format-Table
 
 # OH NO A DISASTER HAS BEFALLEN US
 # Can you restore all the databases please
-# One line of code
+# One line of code - 10 seconds in browser
 
 Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/dbatools1 
 
-# You can even restore with the same backup to numerous databases 26 seconds robs desktop
+# You can even restore with the same backup to numerous databases 26 seconds robs desktop 42 seconds browser
 
 0..10 | ForEach-Object {
     $dbname = 'pubs-{0}' -f $psitem
@@ -112,11 +112,11 @@ Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/db
 # lets get all of our databases now
 $databases = Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem 
 
-# define a path and do a full backup for each
+# define a path and do a full backup for each 11 seconds browser
 $RandomPath = '/var/opt/mssql/data/backups/dbatools1/random'
 Backup-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath -CompressBackup -Database $databases.Name
 
-# Then create a random number of types of backups for our databases - 15 secs - Robs desktop
+# Then create a random number of types of backups for our databases - 15 secs - Robs desktop 33 seconds browser
 $x = 50
 while ($x -ge 0) {
     $db = Get-Random $databases.Name
@@ -139,7 +139,7 @@ Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Con
 
 # OF
 
-# CODE
+# CODE - 1 minute 6 seconds in the browser
 
 Restore-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath
 
@@ -149,7 +149,7 @@ ls -l $RandomPath
 
 # Oh - YOur estate doesnt have all the backups in one directory (we know some that do)
 
-# ok lets backup with create folder and get some more files to play with - 32 secs - Robs desktop
+# ok lets backup with create folder and get some more files to play with - 32 secs - Robs desktop 1 minute 10 in the browser
 
 $x = 100
 while ($x -ge 0) {
@@ -167,11 +167,11 @@ Get-ChildItem $RandomPath -Recurse
 
 Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Confirm:$false
 
-# Still only one line of code 23 seconds - Robs Desktop
+# Still only one line of code 23 seconds - Robs Desktop - 1 minute 5 seconds browser
 
 Restore-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath
 
-# So what happened ?
+# So what happened ? Lets take a look
 
 Get-DbaDbRestoreHistory -SqlInstance $dbatools1 | Format-Table
 
