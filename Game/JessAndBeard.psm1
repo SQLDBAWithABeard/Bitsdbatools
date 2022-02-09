@@ -91,6 +91,28 @@ $wrongChoice = @"
 ░ ░       ░  ░  ░    ░ ░   ░  ░ ░         ░  ░
 ░                             ░               
 "@
+$allofTheThings = @"
+ ▄▄▄       ██▓     ██▓        ▒█████    █████▒   ▄▄▄█████▓ ██░ ██ ▓█████    
+▒████▄    ▓██▒    ▓██▒       ▒██▒  ██▒▓██   ▒    ▓  ██▒ ▓▒▓██░ ██▒▓█   ▀    
+▒██  ▀█▄  ▒██░    ▒██░       ▒██░  ██▒▒████ ░    ▒ ▓██░ ▒░▒██▀▀██░▒███      
+░██▄▄▄▄██ ▒██░    ▒██░       ▒██   ██░░▓█▒  ░    ░ ▓██▓ ░ ░▓█ ░██ ▒▓█  ▄    
+ ▓█   ▓██▒░██████▒░██████▒   ░ ████▓▒░░▒█░         ▒██▒ ░ ░▓█▒░██▓░▒████▒   
+ ▒▒   ▓▒█░░ ▒░▓  ░░ ▒░▓  ░   ░ ▒░▒░▒░  ▒ ░         ▒ ░░    ▒ ░░▒░▒░░ ▒░ ░   
+  ▒   ▒▒ ░░ ░ ▒  ░░ ░ ▒  ░     ░ ▒ ▒░  ░             ░     ▒ ░▒░ ░ ░ ░  ░   
+  ░   ▒     ░ ░     ░ ░      ░ ░ ░ ▒   ░ ░         ░       ░  ░░ ░   ░      
+      ░  ░    ░  ░    ░  ░       ░ ░                       ░  ░  ░   ░  ░   
+                                                                            
+            ▄▄▄█████▓ ██░ ██  ██▓ ███▄    █   ▄████   ██████                
+            ▓  ██▒ ▓▒▓██░ ██▒▓██▒ ██ ▀█   █  ██▒ ▀█▒▒██    ▒                
+            ▒ ▓██░ ▒░▒██▀▀██░▒██▒▓██  ▀█ ██▒▒██░▄▄▄░░ ▓██▄                  
+            ░ ▓██▓ ░ ░▓█ ░██ ░██░▓██▒  ▐▌██▒░▓█  ██▓  ▒   ██▒               
+              ▒██▒ ░ ░▓█▒░██▓░██░▒██░   ▓██░░▒▓███▀▒▒██████▒▒               
+              ▒ ░░    ▒ ░░▒░▒░▓  ░ ▒░   ▒ ▒  ░▒   ▒ ▒ ▒▓▒ ▒ ░               
+                ░     ▒ ░▒░ ░ ▒ ░░ ░░   ░ ▒░  ░   ░ ░ ░▒  ░ ░               
+              ░       ░  ░░ ░ ▒ ░   ░   ░ ░ ░ ░   ░ ░  ░  ░                 
+                      ░  ░  ░ ░           ░       ░       ░                 
+                                                                            
+"@
 #endregion
 
 # If we are not using the ocnfig files becuase they take too long even though they are the correct wya to do things
@@ -303,7 +325,7 @@ function Assert-Correct {
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'  | Out-Null
       Set-DbcConfig -Name skip.connection.remoting -Value $true  | Out-Null
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
-      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
 
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases
 
@@ -320,7 +342,7 @@ function Assert-Correct {
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'  | Out-Null
       Set-DbcConfig -Name skip.connection.remoting -Value $true  | Out-Null
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
-      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb',  'tempdb' | Out-Null
 
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases, DatabaseStatus, NoSnapshots
 
@@ -356,7 +378,7 @@ function Assert-Correct {
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
-      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb',  'tempdb' | Out-Null
 
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases, DatabaseStatus, NoSnapshots, NoAgs
 

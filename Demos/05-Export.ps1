@@ -9,7 +9,7 @@
            |_|                           |___/                                                                 
 #>
 
-# Documentation for Everyone
+# Documentation for Everyone 50 seconds browser
 $instanceSplat = @{
     SqlInstance   = $dbatools1, $dbatools2
     Path          = '.\Export\'
