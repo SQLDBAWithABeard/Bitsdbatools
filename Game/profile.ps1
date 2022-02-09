@@ -11,14 +11,15 @@ Import-Module /workspace/Game/JessAndBeard.psm1
 $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
 $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
  
-$PSDefaultParameterValues = @{
-    "*dba*:SqlCredential"            = $continercredential
+$Global:PSDefaultParameterValues = @{
+    "*dba*:SqlCredential"      = $continercredential
     "*dba*:SourceSqlCredential"      = $continercredential
     "*dba*:DestinationSqlCredential" = $continercredential
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
 }
- 
+
+$Global:PSDefaultParameterValues["*dba*:SqlCredential"] = $continercredential
  
 $containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
 #endregion
@@ -38,6 +39,7 @@ if ($ShallWePlayAGame ) {
 ipmo posh-git
 
 Import-Module dbatools
+Import-Module dbachecks
 
 
 
