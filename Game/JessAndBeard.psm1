@@ -303,7 +303,7 @@ function Assert-Correct {
       # Valid estate is as we expect
 
       $null = Reset-DbcConfig 
-
+      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append
       Set-DbcConfig -Name app.sqlinstance -Value $containers | Out-Null
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL' | Out-Null
       Set-DbcConfig -Name skip.connection.remoting -Value $true | Out-Null
@@ -314,7 +314,7 @@ function Assert-Correct {
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn1
     }
     'Copy' { 
       # Valid estate is as we expect
@@ -327,7 +327,7 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
 
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
