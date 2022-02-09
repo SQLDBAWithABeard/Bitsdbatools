@@ -264,6 +264,7 @@ function Assert-Correct {
     [string]
     $chapter = 'initial'
   )
+  $Global:PSDefaultParameterValues.CLear()
   switch ($chapter) {
     'initial' { 
       # Valid estate is as we expect
@@ -405,6 +406,13 @@ function Assert-Correct {
       Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
     }
   }
+  $Global:PSDefaultParameterValues = @{
+    "*dba*:SqlCredential"      = $continercredential
+    "*dba*:SourceSqlCredential"      = $continercredential
+    "*dba*:DestinationSqlCredential" = $continercredential
+    "*dba*:PrimarySqlCredential"     = $continercredential
+    "*dba*:SecondarySqlCredential"   = $continercredential
+}
 }
 
 Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $true -Initialize -Description "Whether to ask or not" -ModuleExport 
