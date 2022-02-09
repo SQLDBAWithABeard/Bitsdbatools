@@ -27,4 +27,4 @@ RUN $ErrorActionPreference='Stop'; Install-Module -Name dbatools,PSFramework,dba
 
 # Copy Profile
 
-ADD profile.ps1 /root/.config/powershell/
+ADD Game/profile.ps1 /root/.config/powershell/
