@@ -3,10 +3,18 @@ name: Docker Image CI
 on:
   push:
     branches: [ main ]
-    paths: [.devcontainer/dockerfile]
+    paths: [
+      dockerfile
+    Game/profile.ps1
+    Game/JessAndBeard.psm1
+    ]
   pull_request:
     branches: [ main ]
-    paths: [.devcontainer/dockerfile]
+    paths: [
+      dockerfile
+      Game/profile.ps1
+      Game/JessAndBeard.psm1
+      ]
   workflow_dispatch:
   
 jobs:
