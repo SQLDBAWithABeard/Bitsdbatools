@@ -1,7 +1,7 @@
 version: "3"
 services:
     dbatools1:
-      image: "sqldbawithabeard/dbatoolsprecon"
+      image: "sqldbawithabeard/dbatoolsprecon:latest"
       volumes:
         - mydata:/var/opt/backups
         - shared:/shared
