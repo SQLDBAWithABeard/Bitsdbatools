@@ -55,7 +55,7 @@ $filename = $MyInvocation.MyCommand.Name.Replace(".Tests.ps1", "")
 Describe "dbatools1 should not have the additional databases already" -Tags NoDatabasesOn1 , $Filename {
     Context  "Databases Should not exist" {
         BeforeAll {
-            $Databasesondbatools2 = (Get-DbaDatabase -SqlInstance $dbatools2).Name
+            $Databasesondbatools1 = (Get-DbaDatabase -SqlInstance $dbatools1).Name
         }
         $TestCases = @(
             @{
@@ -98,9 +98,9 @@ Describe "dbatools1 should not have the additional databases already" -Tags NoDa
                 Name = 'Northwind'
             }
         )
-        It "<Name> Database should not exist on dbatools2" -TestCases $TestCases {
+        It "<Name> Database should not exist on dbatools1" -TestCases $TestCases {
             Param($Name)
-            $Name | Should -Not -BeIn $Databasesondbatools2 -Because "It will make demos pretty tricky"
+            $Name | Should -Not -BeIn $Databasesondbatools1 -Because "It will make demos pretty tricky"
         }
     }
 }
