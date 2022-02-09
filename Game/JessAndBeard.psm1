@@ -176,42 +176,42 @@ function Get-Index {
       Write-Output "1 - Introduction to dbatools" 
       code /workspace/Demos/01-introduction.ps1
       #reset anbd run tests
-      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
       Assert-Correct -chapter intro
     }
     2 { 
       Clear-Host
       Write-Output "2 - Backup and Restore" 
       code /workspace/Demos/02-BackUpRestore.ps1
-      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
       Assert-Correct -chapter Backup
     }
     3 { 
       Clear-Host
       Write-Output "3 - Copy Copy Copy" 
       code /workspace/Demos/03-CopyCopy.ps1
-      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
       Assert-Correct -chapter Copy
     }
     4 { 
       Clear-Host
       Write-Output "4 - SnapShots" 
       code /workspace/Demos/04-Snapshots.ps1
-      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
       Assert-Correct -chapter SnapShots
     }
     6 { 
       Clear-Host
       Write-Output "6 - Availability Groups" 
       code /workspace/Demos/06-AvailabilityGroups.ps1
-      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
       Assert-Correct -chapter Ags
     }
     5 { 
       Clear-Host
       Write-Output "5 - Export" 
       code /workspace/Demos/05-Export.ps1
-      Write-PSFHostColor -String "Just running some test a mo" -DefaultColor Green
+      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
       Assert-Correct -chapter Export
     }
     'q' {
