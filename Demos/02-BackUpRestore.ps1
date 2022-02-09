@@ -94,18 +94,25 @@ Get-DbaDatabase -SqlInstance $dbatools1 | Format-Table
 
 Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/dbatools1 
 
-# You can even restore with the same backup to numerous databases 26 seconds robs desktop 42 seconds browser
+# what were those warnings??????
+
+# You can even restore with the same backup to numerous databases
+
+0..10 | ForEach-Object -Parallel {
+    $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
+    $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
+    $dbname = 'pubs-{0}' -f $psitem
+    Restore-DbaDatabase -SqlInstance $using:dbatools1 -SqlCredential $continercredential -Path /var/opt/mssql/data/backups/dbatools1/pubs -DatabaseName $dbname -DestinationFilePrefix $psitem -ReplaceDbNameInFile 
+} 
+
+<# 
+If we were not in PowerShell Core we could do this
 
 0..10 | ForEach-Object {
     $dbname = 'pubs-{0}' -f $psitem
     Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/dbatools1/pubs -DatabaseName $dbname -DestinationFilePrefix $psitem -ReplaceDbNameInFile 
 }
-
-# Can we use parallel? - this crashes my PowerShell terminal 
-0..10 | ForEach-Object -Parallel {
-    $dbname = 'pubs-{0}' -f $psitem
-    Restore-DbaDatabase -SqlInstance $using:dbatools1 -Path /var/opt/mssql/data/backups/dbatools1/pubs -DatabaseName $dbname -DestinationFilePrefix $psitem -ReplaceDbNameInFile 
-} 
+#>
 
 # Super super easy - it will even do this, when the files are more complicated
 
@@ -116,7 +123,19 @@ $databases = Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem
 $RandomPath = '/var/opt/mssql/data/backups/dbatools1/random'
 Backup-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath -CompressBackup -Database $databases.Name
 
-# Then create a random number of types of backups for our databases - 15 secs - Robs desktop 33 seconds browser
+# Then create a random number of types of backups for our databases - 5.8 seconds Robs desktop
+
+0..50 | ForEach-Object -Parallel {
+    $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
+    $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
+    $db = Get-Random $Using:databases.Name
+    $type = Get-Random 'Full','Diff','Log'
+    Backup-DbaDatabase -SqlInstance $Using:dbatools1 -SqlCredential $continercredential -Database $db -Path $Using:RandomPath -CompressBackup -Type $type
+}
+
+<# 
+#Windows PowerShell Version
+# 15 secs - Robs desktop 33 seconds browser
 $x = 50
 while ($x -ge 0) {
     $db = Get-Random $databases.Name
@@ -124,6 +143,8 @@ while ($x -ge 0) {
     Backup-DbaDatabase -SqlInstance $dbatools1 -Database $db -Path $RandomPath -CompressBackup -Type $type
     $x --    
 }
+#>
+
 
 Get-ChildItem $RandomPath
 
@@ -143,14 +164,23 @@ Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Con
 
 Restore-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath
 
-# what were those warnings??????
-
 ls -l $RandomPath
 
 # Oh - YOur estate doesnt have all the backups in one directory (we know some that do)
 
-# ok lets backup with create folder and get some more files to play with - 32 secs - Robs desktop 1 minute 10 in the browser
+# ok lets backup with create folder and get some more files to play with 9 seconds - Robs desktop
 
+0..100 | ForEach-Object -Parallel {
+    $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
+    $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
+    $db = Get-Random $Using:databases.Name
+    $type = Get-Random 'Full','Diff','Log'
+    Backup-DbaDatabase -SqlInstance $Using:dbatools1 -SqlCredential $continercredential -Database $db -Path $Using:RandomPath -CompressBackup -Type $type -CreateFolder
+}
+
+<# 
+#Windows PowerShell Version
+#- 32 secs - Robs desktop 1 minute 10 in the browser
 $x = 100
 while ($x -ge 0) {
     $db = Get-Random $databases.Name
@@ -158,6 +188,7 @@ while ($x -ge 0) {
     Backup-DbaDatabase -SqlInstance $dbatools1 -Database $db -Path $RandomPath -CompressBackup -Type $type -CreateFolder
     $x --    
 }
+#>
 
 Get-ChildItem $RandomPath
 
@@ -182,3 +213,7 @@ Get-DbaDbRestoreHistory -SqlInstance $dbatools1 | Sort-Object Date | Format-Tabl
 # Those were the simple ones - How complex do you want to get ?
 
 Get-Help Invoke-DbaAdvancedRestore
+
+# CHoose your adventure
+
+Get-Index
