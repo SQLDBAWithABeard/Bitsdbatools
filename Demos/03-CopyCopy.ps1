@@ -73,8 +73,58 @@ Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Con
 
 Set-DbaDbState -SqlInstance $dbatools1 -ReadWrite -AllDatabases
 
+# what about spconfigure
+
+# Compare the spconfig on two instances with a custom function
+
+Compare-SPConfig -Source $dbatools1 -Destination $dbatools2 
+
+# Set the backup compression config to true on dbatools1
+
+Set-DbaSpConfigure -SqlInstance $dbatools1 -Name DefaultBackupCompression -Value 1
+
+# Compare the spconfig on two instances
+
+Compare-SPConfig -Source $dbatools1 -Destination $dbatools2 
+
+# Copy the spconfigure setting to the other instance
+
+Copy-DbaSpConfigure -Source $dbatools1 -Destination $dbatools2 -ConfigName DefaultBackupCompression
+
+# Compare the spconfig on two instances
+
+Compare-SPConfig -Source $dbatools1 -Destination $dbatools2 
+
+# Lets export the configuration
+
+$export = Export-DbaSpConfigure -SqlInstance $dbatools2 -Path /tmp
+code $export.FullName
+
+# lets set the value back on dbatools1
+
+Set-DbaSpConfigure -SqlInstance $dbatools1 -Name DefaultBackupCompression -Value 1
+
+# Compare the spconfig on two instances
+
+Compare-SPConfig -Source $dbatools1 -Destination $dbatools2 
+
+# now we can import from file
+
+Import-DbaSpConfigure -Path $export.FullName -SqlInstance $dbatools1
+
+# Compare the spconfig on two instances
+
+Compare-SPConfig -Source $dbatools1 -Destination $dbatools2 bac
+
+
 # Now what else can we copy ....................................
 
 Write-Output $allofTheThings
 
 Find-DbaCommand -Pattern Copy | ocgv
+
+Get-DbaLogin -SqlInstance $dbatools1,$dbatools2|Format-Table
+
+Get-DbaAgentJob  -SqlInstance $dbatools1,$dbatools2|Format-Table
+
+Copy-DbaSpConfigure
