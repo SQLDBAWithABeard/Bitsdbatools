@@ -91,7 +91,7 @@ $wrongChoice = @"
 ░ ░       ░  ░  ░    ░ ░   ░  ░ ░         ░  ░
 ░                             ░               
 "@
-$allofTheThings = @"
+$Global:allofTheThings = @"
  ▄▄▄       ██▓     ██▓        ▒█████    █████▒   ▄▄▄█████▓ ██░ ██ ▓█████    
 ▒████▄    ▓██▒    ▓██▒       ▒██▒  ██▒▓██   ▒    ▓  ██▒ ▓▒▓██░ ██▒▓█   ▀    
 ▒██  ▀█▄  ▒██░    ▒██░       ▒██░  ██▒▒████ ░    ▒ ▓██░ ▒░▒██▀▀██░▒███      
@@ -112,6 +112,30 @@ $allofTheThings = @"
               ░       ░  ░░ ░ ▒ ░   ░   ░ ░ ░ ░   ░ ░  ░  ░                 
                       ░  ░  ░ ░           ░       ░       ░                 
                                                                             
+"@
+
+$Global:Italwaysis = @"
+
+██▓▄▄▄█████▓  ██████     ▄▄▄       ██▓     █     █░ ▄▄▄     ▓██   ██▓  ██████    
+▓██▒▓  ██▒ ▓▒▒██    ▒    ▒████▄    ▓██▒    ▓█░ █ ░█░▒████▄    ▒██  ██▒▒██    ▒    
+▒██▒▒ ▓██░ ▒░░ ▓██▄      ▒██  ▀█▄  ▒██░    ▒█░ █ ░█ ▒██  ▀█▄   ▒██ ██░░ ▓██▄      
+░██░░ ▓██▓ ░   ▒   ██▒   ░██▄▄▄▄██ ▒██░    ░█░ █ ░█ ░██▄▄▄▄██  ░ ▐██▓░  ▒   ██▒   
+░██░  ▒██▒ ░ ▒██████▒▒    ▓█   ▓██▒░██████▒░░██▒██▓  ▓█   ▓██▒ ░ ██▒▓░▒██████▒▒   
+░▓    ▒ ░░   ▒ ▒▓▒ ▒ ░    ▒▒   ▓▒█░░ ▒░▓  ░░ ▓░▒ ▒   ▒▒   ▓▒█░  ██▒▒▒ ▒ ▒▓▒ ▒ ░   
+ ▒ ░    ░    ░ ░▒  ░ ░     ▒   ▒▒ ░░ ░ ▒  ░  ▒ ░ ░    ▒   ▒▒ ░▓██ ░▒░ ░ ░▒  ░ ░   
+ ▒ ░  ░      ░  ░  ░       ░   ▒     ░ ░     ░   ░    ░   ▒   ▒ ▒ ░░  ░  ░  ░     
+ ░                 ░           ░  ░    ░  ░    ░          ░  ░░ ░           ░     
+                                                              ░ ░                 
+▄▄▄█████▓ ██░ ██  ██▀███  ▓█████ ▓█████     ▄▄▄       ███▄ ▄███▓                  
+▓  ██▒ ▓▒▓██░ ██▒▓██ ▒ ██▒▓█   ▀ ▓█   ▀    ▒████▄    ▓██▒▀█▀ ██▒                  
+▒ ▓██░ ▒░▒██▀▀██░▓██ ░▄█ ▒▒███   ▒███      ▒██  ▀█▄  ▓██    ▓██░                  
+░ ▓██▓ ░ ░▓█ ░██ ▒██▀▀█▄  ▒▓█  ▄ ▒▓█  ▄    ░██▄▄▄▄██ ▒██    ▒██                   
+  ▒██▒ ░ ░▓█▒░██▓░██▓ ▒██▒░▒████▒░▒████▒    ▓█   ▓██▒▒██▒   ░██▒                  
+  ▒ ░░    ▒ ░░▒░▒░ ▒▓ ░▒▓░░░ ▒░ ░░░ ▒░ ░    ▒▒   ▓▒█░░ ▒░   ░  ░                  
+    ░     ▒ ░▒░ ░  ░▒ ░ ▒░ ░ ░  ░ ░ ░  ░     ▒   ▒▒ ░░  ░      ░                  
+  ░       ░  ░░ ░  ░░   ░    ░      ░        ░   ▒   ░      ░                     
+          ░  ░  ░   ░        ░  ░   ░  ░         ░  ░       ░                     
+                                                                                  
 "@
 #endregion
 
@@ -235,7 +259,7 @@ function Set-ConnectionInfo {
   $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
   $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
 
-  $PSDefaultParameterValues = @{
+  $Global:PSDefaultParameterValues = @{
     "*dba*:SqlCredential"            = $continercredential
     "*dba*:SourceSqlCredential"      = $continercredential
     "*dba*:DestinationSqlCredential" = $continercredential
@@ -248,6 +272,7 @@ function Set-ConnectionInfo {
   #endregion
 }
 
+Set-ConnectionInfo
 function Assert-Correct {
   param (
     # Parameter help description
@@ -343,7 +368,7 @@ function Assert-Correct {
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'  | Out-Null
       Set-DbcConfig -Name skip.connection.remoting -Value $true  | Out-Null
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
-      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb',  'tempdb' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
 
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases, DatabaseStatus, NoSnapshots
 
@@ -379,7 +404,7 @@ function Assert-Correct {
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
-      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb',  'tempdb' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
 
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases, DatabaseStatus, NoSnapshots, NoAgs
 
@@ -407,12 +432,40 @@ function Assert-Correct {
     }
   }
   $Global:PSDefaultParameterValues = @{
-    "*dba*:SqlCredential"      = $continercredential
+    "*dba*:SqlCredential"            = $continercredential
     "*dba*:SourceSqlCredential"      = $continercredential
     "*dba*:DestinationSqlCredential" = $continercredential
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
+  }
 }
+
+Function Compare-SPConfig {
+
+  Param(
+    $Source,
+    $Destination
+  )
+  $SourceSpConfigure = Get-DbaSpConfigure  -SqlInstance $Source
+  $DestSPConfigure = Get-DbaSpConfigure -SqlInstance $Destination
+
+  $propcompare = foreach ($prop in $SourceSpConfigure) {
+    [pscustomobject]@{
+      Config                = $prop.DisplayName
+      'Source setting'      = $prop.RunningValue
+      'Destination Setting' = $DestSPConfigure | Where DisplayName -eq $prop.DisplayName | Select -ExpandProperty RunningValue
+    }
+  } 
+
+  if ($IsCoreCLR) {
+    $propcompare | Out-ConsoleGridView -Title "Comparing Sp_configure Settings Source - $Source With Destination $Destination"
+  }
+  else {
+    $propcompare | Out-GridView -Title "Comparing Sp_configure Settings Source - $SourceWith Destination $Destination"
+
+  }
+
+
 }
 
 Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $true -Initialize -Description "Whether to ask or not" -ModuleExport 
