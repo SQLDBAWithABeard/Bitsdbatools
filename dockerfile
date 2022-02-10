@@ -9,6 +9,11 @@ RUN apt install -y git
 RUN apt-get autoremove -y \
     && apt-get clean -y
 
+# things for ImportExcel
+
+RUN apt-get -y update \
+    && apt-get install -y --no-install-recommends libgdiplus libc6-dev
+
 ENV GIT_PROMPT_START='\033[1;36dbatools>\033[0m\033[0;33m\w\a\033[0m'
 
 # Save command line history
@@ -21,9 +26,9 @@ RUN echo "export HISTFILE=/commandhistory/.bash_history" >> "/root/.bashrc" \
 SHELL ["/usr/bin/pwsh", "-c"]
 RUN $ErrorActionPreference='Stop'; Install-Module -Name Pester -Force -SkipPublisherCheck -MaximumVersion 4.10.1;
 
-# Install dbatools,PSFramework,dbachecks,posh-git
+# Install dbatools,PSFramework,dbachecks,posh-git,ImportExcel
 SHELL ["/usr/bin/pwsh", "-c"]
-RUN $ErrorActionPreference='Stop'; Install-Module -Name dbatools,PSFramework,dbachecks,posh-git,Microsoft.PowerShell.ConsoleGuiTools -Force -SkipPublisherCheck;
+RUN $ErrorActionPreference='Stop'; Install-Module -Name dbatools,PSFramework,dbachecks,posh-git,Microsoft.PowerShell.ConsoleGuiTools,ImportExcel -Force -SkipPublisherCheck;
 
 # Copy Profile
 
