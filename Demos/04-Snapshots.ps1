@@ -46,23 +46,25 @@ Invoke-DbaQuery @snapshotSplat -Query 'SELECT [EmployeeID],[LastName],[FirstName
 
 # what if we only want to fix the data we broke?
 
-# Jut need to update a phone number... 
+# Jut need to update a phone number...forgot the where clause again!?! 
 Invoke-DbaQuery @snapshotSplat -Query "UPDATE [Northwind].[dbo].[Employees] SET [HomePhone] = '(330)-329-6691'"
 
 # Uhoh 
 Invoke-DbaQuery @snapshotSplat -Query 'SELECT [EmployeeID],[LastName],[FirstName],[HomePhone] FROM [dbo].[Employees]'
 
-
+# Let's just truncate the Employees table and copy the data back in from the snapshot
 Copy-DbaDbTableData -SqlInstance $dbatools1 -Destination $dbatools1 -Database $northwindSnap.Name -DestinationDatabase Northwind -Table Employees -Truncate
 
-#Script out the foreign keys
+# Can't because of the foreign keys, Script out the foreign keys so you can drop, reload, recreate 
 
 if(-not (Test-Path /workspace/Export)){
     New-Item /workspace/Export -ItemType Directory
 }
 $fks = Get-DbaDbForeignKey -SqlInstance $dbatools1 -Database Northwind | Where-Object ReferencedTable -eq Employees 
-$fks | Select-Object SqlInstance,Database,Table, Name, ReferencedKey, ReferencedTable
-$fks | Export-DbaScript -FilePath /workspace/Export/ForeignKeys.sql
+$fks | Select-Object SqlInstance,Database,Table, Name, ReferencedKey, ReferencedTable | Format-Table
+$fks | Export-DbaScript -FilePath /workspace/Export/ForeignKeys.sql -OutVariable FKScriptFile
+
+code $FKScriptFile.FullName
 
 # drop the foreign keys
 $fks.drop()
@@ -71,11 +73,11 @@ $fks.drop()
 Copy-DbaDbTableData -SqlInstance $dbatools1 -Destination $dbatools1 -Database $northwindSnap.Name -DestinationDatabase Northwind -Table Employees -Truncate
 
 # run the script to re-create foreign keys
-Invoke-DbaQuery -SqlInstance $dbatools1 -Database Northwind -File ./Export/ForeignKeys.sql
+Invoke-DbaQuery -SqlInstance $dbatools1 -Database Northwind -File $FKScriptFile.FullName
 
 # Check the data and the FKs
 Invoke-DbaQuery @snapshotSplat -Query 'SELECT [EmployeeID],[LastName],[FirstName],[HomePhone] FROM [dbo].[Employees]'
-Get-DbaDbForeignKey -SqlInstance $dbatools1 -Database Northwind | Where-Object ReferencedTable -eq Employees | Select-Object SqlInstance,Database,Table, Name, ReferencedKey, ReferencedTable
+Get-DbaDbForeignKey -SqlInstance $dbatools1 -Database Northwind | Where-Object ReferencedTable -eq Employees | Select-Object SqlInstance,Database,Table, Name, ReferencedKey, ReferencedTable | Format-Table
 
 # clean up snapshot
 Get-DbaDbSnapshot @snapshotSplat | Remove-DbaDbSnapshot -Confirm:$false
