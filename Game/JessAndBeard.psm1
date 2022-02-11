@@ -180,12 +180,13 @@ function Get-Index {
     ("&1 - Introduction to dbatools", "1 - Introduction to dbatools"),
     ("&2 - Backup and Restore", "2 - Backup and Restore"),
     ("&3 - Copy Copy Copy", "3 - Copy Copy Copy"),
-    ("&4 - SnapShots", "4 - SnapShots"),
+    ("&4 - Snapshots", "4 - Snapshots"),
     ("&5 - Export", "5 - Export"),
     ("&6 - Availability Groups", "6 - Availability Groups"),
     ("&7 - Finding Things", "7 - Finding Things"),
     ("&8 - Data Masking", "8 - Data Masking"),
     ("&9 - Logins", "9 - Logins"),
+    ("&X - Advanced Migrations", "10 - Advanced Migrations"),
     ("&Q - Quit", "Quit")
   )
 
@@ -270,6 +271,23 @@ function Get-Index {
       Write-PSFHostColor -String "Just running some tests a mo - I'm not - there arent any" -DefaultColor Green
       #Assert-Correct -chapter Export
     }
+    X { 
+      Clear-Host
+      Write-Output "10 - Advanced Migrations" 
+      code /workspace/Demos/10-AdvancedMigrations.ps1
+      
+      # we need an app login
+      $Password = ConvertTo-SecureString PubsAdmin -AsPlainText -Force
+      New-DbaLogin -SqlInstance $dbatools1 -Login PubsAdmin -SecurePassword $Password | Out-Null
+      New-DbaDbUser -SqlInstance $dbatools1 -Database Pubs -Login PubsAdmin -Username PubsAdmin  | Out-Null
+      Add-DbaDbRoleMember -SqlInstance $dbatools1 -Database Pubs -User PubsAdmin -Role db_owner -Confirm:$false  | Out-Null
+            
+      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
+      Assert-Correct -chapter AdvMigration
+      
+      # we also need an app to run in the background
+      #Invoke-PubsApplication
+    }
     'q' {
       Clear-Host
     }
@@ -329,7 +347,8 @@ function Assert-Correct {
       'Copy',
       'SnapShots',
       'Export',
-      'Ags'
+      'Ags',
+      'AdvMigration'
     )]
     [string]
     $chapter = 'initial'
@@ -390,7 +409,7 @@ function Assert-Correct {
       $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' 
       $null = Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' 
 
-      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn1,NoBackupFiles -Show Summary -PassThru
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn1, NoBackupFiles -Show Summary -PassThru
       $results = $check1 +$check2 
       Set-FailedTestMessage
       Write-PSFHostColor -String "Should you create a save point before this chapter?" -DefaultColor Blue
@@ -425,11 +444,10 @@ function Assert-Correct {
       Set-DbcConfig -Name skip.connection.remoting -Value $true  | Out-Null
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
-
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases, DatabaseStatus, NoSnapshots
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
-      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs','tempdb' | Out-Null
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus
     }
     'Export' { 
@@ -454,6 +472,7 @@ function Assert-Correct {
 
       $null = Reset-DbcConfig 
 
+      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
       Set-DbcConfig -Name app.sqlinstance -Value $containers
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       Set-DbcConfig -Name skip.connection.remoting -Value $true
@@ -461,14 +480,33 @@ function Assert-Correct {
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
-
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabases, DatabaseStatus, NoSnapshots, NoAgs
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots, NoAgs
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus
 
       Write-PSFHostColor -String "If you get database missing failures - Chapter 2 will be your friend" -DefaultColor Magenta
+    }
+    'AdvMigration' {
+      # Valid estate is as we expect
+
+      $null = Reset-DbcConfig 
+
+      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
+      Set-DbcConfig -Name app.sqlinstance -Value $containers
+      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      Set-DbcConfig -Name skip.connection.remoting -Value $true
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots, NoAgs
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus
+
     }
     Default {
       # Valid estate is as we expect
@@ -526,4 +564,30 @@ Function Compare-SPConfig {
 
 }
 
-Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false -Initialize -Description "Whether to ask or not" -ModuleExport 
+function Invoke-PubsApplication {
+  # This will randomly insert rows into the pubs.dbo.sales table on dbatools1 to simulate sales activity
+  # It'll run until you kill it
+  
+  #Write-PSFHostColor -String "Pubs application is running...forever... Ctrl+C to get out of here" -DefaultColor Green
+
+  # app connection
+  $securePassword = ('PubsAdmin' | ConvertTo-SecureString -asPlainText -Force)
+  $appCred = New-Object System.Management.Automation.PSCredential('PubsAdmin', $securePassword)
+  $appConnection = Connect-DbaInstance -SqlInstance $dbatools1 -SqlCredential $appCred -ClientName 'PubsApplication'
+
+  while ($true) {   
+    $newOrder = [PSCustomObject]@{
+      stor_id = Get-Random (Invoke-DbaQuery -SqlInstance $appConnection -Database pubs -Query 'select stor_id from stores').stor_id
+      ord_num = Get-DbaRandomizedValue -DataType int -Min 1000 -Max 99999
+      ord_date = get-date
+      qty = Get-Random -Minimum 1 -Maximum 30
+      payterms = Get-Random (Invoke-DbaQuery -SqlInstance $appConnection -Database pubs -Query 'select distinct payterms from pubs.dbo.sales').payterms
+      title_id = Get-Random (Invoke-DbaQuery -SqlInstance $appConnection -Database pubs -Query 'select title_id from titles').title_id
+    }
+    Write-DbaDataTable -SqlInstance $appConnection -Database pubs -InputObject $newOrder -Table sales
+    
+    Start-sleep -Seconds (Get-Random -Maximum 10)
+  }
+}
+  
+  Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false -Initialize -Description "Whether to ask or not" -ModuleExport 
