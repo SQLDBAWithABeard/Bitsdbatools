@@ -202,17 +202,23 @@ function Get-Index {
   switch ($IndexChoice) {
     1 { 
       Clear-Host
-      Write-Output "1 - Introduction to dbatools" 
       code /workspace/Demos/01-introduction.ps1
       #reset anbd run tests
-      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
+      Write-PSFHostColor -String "It was a dark and stormy morning and ripe for learning about dbatools" -DefaultColor DarkCyan
+      Write-PSFHostColor -String "The teachers arrived in the class first thing and ran some tests" -DefaultColor DarkYellow
+      Write-PSFHostColor -String "They needed to ensure that nothing was wrong before" -DefaultColor DarkRed
+      Write-PSFHostColor -String "The Introduction to dbatools" -DefaultColor DarkMagenta
+      Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter intro
     }
     2 { 
       Clear-Host
-      Write-Output "2 - Backup and Restore" 
       code /workspace/Demos/02-BackUpRestore.ps1
-      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
+      Write-PSFHostColor -String "All the students knew that backups and restores were so very important" -DefaultColor DarkCyan
+      Write-PSFHostColor -String "To ensure the safety and security of their employees data" -DefaultColor DarkYellow
+      Write-PSFHostColor -String "The instructors need to ensure that everything is ok before" -DefaultColor DarkRed
+      Write-PSFHostColor -String "2 - Backup and Restore" -DefaultColor DarkMagenta
+      Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter Backup
     }
     3 { 
@@ -299,6 +305,19 @@ function Set-ConnectionInfo {
 }
 
 Set-ConnectionInfo
+
+function Set-FailedTestMessage {
+  $FailedTests = ($results | Measure-Object -Property FailedCount -Sum).Sum
+  if($FailedTests -gt 0){
+    Write-PSFHostColor -String "NARRATOR - A thing went wrong" -DefaultColor DarkMagenta
+    Write-PSFHostColor -String "NARRATOR - It MUST be fixed before we can continue" -DefaultColor DarkMagenta
+    $Failures = $results.TestResult| Where Result -eq 'Failed'  | Select Describe,Context,Name,FailureMessage
+    $Failures.ForEach{
+      $Message = '{0} at {1} in {2}' -f $_.FailureMessage,  $_.Name, $_.Describe
+      Write-PSFHostColor -String $Message -DefaultColor DarkCyan
+    }
+  }
+}
 function Assert-Correct {
   param (
     # Parameter help description
@@ -339,34 +358,45 @@ function Assert-Correct {
 
       $null = Reset-DbcConfig 
 
-      Set-DbcConfig -Name app.sqlinstance -Value $containers
-      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
-      Set-DbcConfig -Name skip.connection.remoting -Value $true
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
+      $null = Set-DbcConfig -Name app.sqlinstance -Value $containers
+      $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      $null = Set-DbcConfig -Name skip.connection.remoting -Value $true
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
 
-      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
-      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+      $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
 
-      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
-      Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
-      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+      $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
+      $null = Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
+      $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
+
+      $results = $check1 +$check2 + $check3
+      Set-FailedTestMessage
+
+      Write-PSFHostColor -String "Are you ready to begin your adventure?" -DefaultColor Blue
     }
     'Backup' { 
       # Valid estate is as we expect
 
       $null = Reset-DbcConfig 
-      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append
-      Set-DbcConfig -Name app.sqlinstance -Value $containers | Out-Null
-      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL' | Out-Null
-      Set-DbcConfig -Name skip.connection.remoting -Value $true | Out-Null
+      $null = Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append
+      $null = Set-DbcConfig -Name app.sqlinstance -Value $containers 
+      $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL' 
+      $null = Set-DbcConfig -Name skip.connection.remoting -Value $true 
+      $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' 
 
-      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists -Show Summary -PassThru
 
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists
+      $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' 
+      $null = Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' 
 
-      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
-      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn1,NoBackupFiles
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn1,NoBackupFiles -Show Summary -PassThru
+      $results = $check1 +$check2 
+      Set-FailedTestMessage
+      Write-PSFHostColor -String "Should you create a save point before this chapter?" -DefaultColor Blue
+      Start-Sleep -Seconds 5
+      Write-PSFHostColor -String "Or can you make it to the end?" -DefaultColor DarkRed
+
     }
     'Copy' { 
       # Valid estate is as we expect
