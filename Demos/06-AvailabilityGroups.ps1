@@ -164,6 +164,10 @@ Invoke-DbaAgFailover -SqlInstance $dbatools1 -AvailabilityGroup $AgName -Force
 
 Resume-DbaAgDbDataMovement -SqlInstance $dbatools2 -AvailabilityGroup $AgName -Confirm:$false
 
+# Validate the database status
+
+Get-DbaAgDatabase -SqlInstance $SQLInstances | Format-Table
+
 # and resync
 
 # Lets sync our replicas
