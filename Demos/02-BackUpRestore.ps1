@@ -98,7 +98,7 @@ Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/db
 
 # what were those warnings??????
 
-# You can even restore with the same backup to numerous databases
+# You can even restore with the same backup to numerous databases 23 seconds browser
 
 0..10 | ForEach-Object -Parallel {
     $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
@@ -127,7 +127,7 @@ $databases | Select Name
 $RandomPath = '/var/opt/backups/dbatools1/random'
 Backup-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath -CompressBackup -Database $databases.Name
 
-# Then create a random number of types of backups for our databases - 5.8 seconds Robs desktop
+# Then create a random number of types of backups for our databases - 5.8 seconds Robs desktop - 23 seconds browser
 
 0..50 | ForEach-Object -Parallel {
     $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
@@ -172,7 +172,7 @@ ls -l $RandomPath
 
 # Oh - YOur estate doesnt have all the backups in one directory (we know some that do)
 
-# ok lets backup with create folder and get some more files to play with 9 seconds - Robs desktop
+# ok lets backup with create folder and get some more files to play with 9 seconds - Robs desktop 56 seconds browser
 
 $databases = Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem 
 
