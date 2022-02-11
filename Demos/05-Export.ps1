@@ -9,7 +9,12 @@
            |_|                           |___/                                                                 
 #>
 
-# Documentation for Everyone 50 seconds browser
+# Documenting our SQL Server estates is super important for:
+  # Rebuilding in DR situation
+  # Easier onboarding of new team members
+  # Knowing what's changed from one day to the next (every had someone mysteriously lose access - that they never really had?)
+    # Source control anyone?
+
 # Export all tables
 Get-DbaDbTable -SqlInstance $dbatools1 -Database Northwind | Export-DbaScript -OutVariable Export
 code $export.fullname
@@ -40,10 +45,6 @@ code $export.fullname
 # What if we only need one table
 Get-DbaDbTable -SqlInstance $dbatools1 -Database Northwind -Table Customers | Export-DbaScript -OutVariable Export
 code $export.fullname
-
-
-
-
 
 
 # Documentation your whole environment with one script
