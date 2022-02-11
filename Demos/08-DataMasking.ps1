@@ -66,3 +66,7 @@ Invoke-DbaDbDataMasking @maskData
 
 # View data after!
 Invoke-DbaQuery -SqlInstance $dbatools1 -Database NorthWind -Query 'select top 5 CustomerId, ContactName, Address, City, PostalCode, Phone from dbo.Customers order by CustomerId' | Format-Table
+
+# Choose your adventure
+
+Get-Index

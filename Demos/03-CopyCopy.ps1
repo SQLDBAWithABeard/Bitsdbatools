@@ -128,3 +128,7 @@ Get-DbaLogin -SqlInstance $dbatools1,$dbatools2|Format-Table
 Get-DbaAgentJob  -SqlInstance $dbatools1,$dbatools2|Format-Table
 
 Copy-DbaSpConfigure
+
+# Choose your adventure
+
+Get-Index

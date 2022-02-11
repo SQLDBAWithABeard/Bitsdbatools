@@ -334,3 +334,7 @@ Write-Output ""
 
 
 # To AutoFit column width: Alt + H, then O, and then I.
+
+# Choose your adventure
+
+Get-Index

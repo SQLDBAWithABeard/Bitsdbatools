@@ -79,3 +79,7 @@ Get-DbaDbForeignKey -SqlInstance $dbatools1 -Database Northwind | Where-Object R
 
 # clean up snapshot
 Get-DbaDbSnapshot @snapshotSplat | Remove-DbaDbSnapshot -Confirm:$false
+
+# Choose your adventure
+
+Get-Index

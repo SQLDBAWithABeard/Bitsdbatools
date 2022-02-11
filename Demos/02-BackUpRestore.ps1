@@ -214,6 +214,6 @@ Get-DbaDbRestoreHistory -SqlInstance $dbatools1 | Sort-Object Date | Format-Tabl
 
 Get-Help Invoke-DbaAdvancedRestore
 
-# CHoose your adventure
+# Choose your adventure
 
 Get-Index

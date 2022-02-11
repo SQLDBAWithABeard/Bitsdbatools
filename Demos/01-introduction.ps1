@@ -95,3 +95,7 @@ $Builds | Format-Table
 Get-DbaBuildReference -Build 10.0.6000,10.50.6000 |Format-Table
 
 #endregion
+
+# Choose your adventure
+
+Get-Index

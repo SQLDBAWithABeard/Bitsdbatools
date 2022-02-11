@@ -57,3 +57,7 @@ Export-DbaInstance @instanceSplat
 # Compare the two sp_configure files
 
 # export into a source controlled folder & track changes
+
+# Choose your adventure
+
+Get-Index
