@@ -25,11 +25,23 @@ $AvailabilityGroupConfig = @{
     FailoverMode = 'Manual' # or automatic or External
     Confirm      = $false
 }
-New-DbaAvailabilityGroup @AvailabilityGroupConfig 
+New-DbaAvailabilityGroup @AvailabilityGroupConfig
+
+# lets add a database to the Availabiility Group
+
+$AddAgDbConfig = @{
+    SqlInstance       = $dbatools1 
+    AvailabilityGroup = $AgName  
+    Database          = 'NorthWind'
+    SeedingMode       = 'Automatic' 
+    SharedPath        = '/var/opt/backups' 
+    Secondary         = $dbatools2
+}
+Add-DbaAgDatabase @AddAgDbConfig
 
 # And then how to add some more databases to it 52 seconds browser
 
-$databases = Get-DbaDatabase -SqlInstance $dbatools1  -ExcludeSystem -ExcludeDatabase pubs
+$databases = Get-DbaDatabase -SqlInstance $dbatools1  -ExcludeSystem -ExcludeDatabase pubs, NorthWind
 
 $AddAgDbConfig = @{
     SqlInstance       = $dbatools1 
@@ -48,6 +60,23 @@ Get-DbaAgHadr -SqlInstance $SQLInstances
 # SHow the databases
 
 Get-DbaAgDatabase -SqlInstance $SQLInstances | Format-Table
+
+# The listeners
+
+Get-DbaAgListener -SqlInstance $SQLInstances
+
+# Ah we dont have a listener - Lets fix that
+
+$ListenerConfig = @{
+    SqlInstance       = $dbatools1 
+    AvailabilityGroup = $AgName 
+    Name              = 'Maldives' 
+    IPAddress         = '172.22.0.4' 
+    SubnetMask        = '255.255.255.0' 
+    Port              = 54321 
+}
+Add-DbaAgListener @ListenerConfig
+
 
 # The listeners
 
@@ -150,3 +179,5 @@ Get-DbaLogin -SqlInstance $SQLInstances -ExcludeSystemLogin  | Format-Table
 Get-DbaAgBackupHistory -SqlInstance $SQLInstances -AvailabilityGroup $AgName 
 
 # Choose your adventure
+
+Get-Index
