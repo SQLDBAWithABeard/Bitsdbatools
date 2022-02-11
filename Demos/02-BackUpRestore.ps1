@@ -54,6 +54,8 @@ Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Select Name, Status, La
 
 Get-DbaLastBackup -SqlInstance $dbatools1 
 
+# What was that Warning?
+
 # or 
 
 Get-DbaDbBackupHistory -SqlInstance $dbatools1
@@ -119,8 +121,10 @@ If we were not in PowerShell Core we could do this
 # lets get all of our databases now
 $databases = Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem 
 
+$databases | Select Name
+
 # define a path and do a full backup for each 11 seconds browser
-$RandomPath = '/var/opt/mssql/data/backups/dbatools1/random'
+$RandomPath = '/var/opt/backups/dbatools1/random'
 Backup-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath -CompressBackup -Database $databases.Name
 
 # Then create a random number of types of backups for our databases - 5.8 seconds Robs desktop
@@ -129,7 +133,7 @@ Backup-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath -CompressBackup -Da
     $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
     $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
     $db = Get-Random $Using:databases.Name
-    $type = Get-Random 'Full','Diff','Log'
+    $type = Get-Random 'Full', 'Diff', 'Log'
     Backup-DbaDatabase -SqlInstance $Using:dbatools1 -SqlCredential $continercredential -Database $db -Path $Using:RandomPath -CompressBackup -Type $type
 }
 
@@ -160,7 +164,7 @@ Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Con
 
 # OF
 
-# CODE - 1 minute 6 seconds in the browser
+# CODE - 1 minute 6 seconds in the browser 18 seconds Robs desktop
 
 Restore-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath
 
@@ -170,12 +174,32 @@ ls -l $RandomPath
 
 # ok lets backup with create folder and get some more files to play with 9 seconds - Robs desktop
 
+$databases = Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem 
+
+$databases.Name
+
 0..100 | ForEach-Object -Parallel {
     $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
     $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
     $db = Get-Random $Using:databases.Name
-    $type = Get-Random 'Full','Diff','Log'
+    $type = Get-Random 'Full', 'Diff', 'Log'
     Backup-DbaDatabase -SqlInstance $Using:dbatools1 -SqlCredential $continercredential -Database $db -Path $Using:RandomPath -CompressBackup -Type $type -CreateFolder
+
+    if ($_ % 10 -eq 0) {
+        $BackupName = "{0}_{1}_TestForJA_DoNotDELETE.bak" -f $db, $_
+        Backup-DbaDatabase -SqlInstance $Using:dbatools1 -SqlCredential $continercredential -Database $db -Path $Using:RandomPath -CompressBackup -Type Full -CreateFolder -CopyOnly -FilePath  $BackupName 
+        Write-Output "I did a special backup $BackupName"
+    }
+    if ($_ % 15 -eq 0) {
+        $BackupName = "{0}_{1}_ForUpgrade.bak" -f $db, $_
+        Backup-DbaDatabase -SqlInstance $Using:dbatools1 -SqlCredential $continercredential -Database $db -Path $Using:RandomPath -CompressBackup -Type Full -CreateFolder -CopyOnly -FilePath  $BackupName 
+        Write-Output "I did a special backup $BackupName"
+    }
+    if ($_ % 20 -eq 0) {
+        $BackupName = "{0}_TestingCode_.bak" -f $_
+        Backup-DbaDatabase -SqlInstance $Using:dbatools1 -SqlCredential $continercredential -Database $db -Path $Using:RandomPath -CompressBackup -Type Full -CopyOnly -FilePath  $BackupName 
+        Write-Output "I did a special backup $BackupName"
+    }
 }
 
 <# 
@@ -190,9 +214,22 @@ while ($x -ge 0) {
 }
 #>
 
+## so this is more realistic correct?
+
+# More like the last estate that you worked with (not your current one because you are all pros but your last one)
+
 Get-ChildItem $RandomPath
 
 Get-ChildItem $RandomPath -Recurse
+
+(Get-ChildItem $RandomPath -Recurse).count
+
+<# 
+# run this in Windows Terminal to see the windows explorer view
+
+explorer \\wsl.localhost\docker-desktop-data\version-pack-data\community\docker\volumes\bitsdbatools_devcontainer_mydata\_data\dbatools1
+
+#>
 
 # Remove the databases - no confirm this time
 
