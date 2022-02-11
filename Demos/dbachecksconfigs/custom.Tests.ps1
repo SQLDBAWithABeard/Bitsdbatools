@@ -119,7 +119,7 @@ Describe "There should be no snapshots" -Tags NoSnapshots , $Filename {
 Describe "There should be no backup files in the volume" -Tags NoBackupFiles , $Filename {
     Context "no backup files please" {
         It "Volume Should not have any backup files" {
-           Get-ChildItem '/var/opt/backups/dbatools1'  | Should -BeNullOrEmpty -Because "We dont want too many backup files - run Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force to fix"
+           Get-ChildItem '/var/opt/backups/dbatools1' -ErrorAction SilentlyContinue  | Should -BeNullOrEmpty -Because "We dont want too many backup files - run Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force to fix"
         }
     }
 }
