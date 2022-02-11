@@ -150,6 +150,8 @@ $Global:Italwaysis = @"
 #   }
 # }
 function Start-Game {
+  # Because we are using volumes for the restore demo, need to ensure they are clean before starting the game
+  Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force -ErrorAction SilentlyContinue
   Clear-Host
   $title = "Joshua Says" 
   $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Will continue" 
@@ -180,7 +182,10 @@ function Get-Index {
     ("&3 - Copy Copy Copy", "3 - Copy Copy Copy"),
     ("&4 - SnapShots", "4 - SnapShots"),
     ("&5 - Export", "5 - Export"),
-    ("&6 - Availability Groups", "5 - Availability Groups"),
+    ("&6 - Availability Groups", "6 - Availability Groups"),
+    ("&7 - Finding Things", "7 - Finding Things"),
+    ("&8 - Data Masking", "8 - Data Masking"),
+    ("&9 - Logins", "9 - Logins"),
     ("&Q - Quit", "Quit")
   )
 
@@ -237,6 +242,27 @@ function Get-Index {
       code /workspace/Demos/05-Export.ps1
       Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
       Assert-Correct -chapter Export
+    }
+    7 { 
+      Clear-Host
+      Write-Output "7 - Finding Things" 
+      code /workspace/Demos/07-FindingThings.ps1
+      Write-PSFHostColor -String "Just running some tests a mo - I'm not - there arent any" -DefaultColor Green
+      #Assert-Correct -chapter Export
+    }
+    8 { 
+      Clear-Host
+      Write-Output "8 - Data Masking" 
+      code /workspace/Demos/08-DataMasking.ps1
+      Write-PSFHostColor -String "Just running some tests a mo - I'm not - there arent any" -DefaultColor Green
+      #Assert-Correct -chapter Export
+    }
+    9 { 
+      Clear-Host
+      Write-Output "9 - Logins" 
+      code /workspace/Demos/09-Logins.ps1
+      Write-PSFHostColor -String "Just running some tests a mo - I'm not - there arent any" -DefaultColor Green
+      #Assert-Correct -chapter Export
     }
     'q' {
       Clear-Host
@@ -468,4 +494,4 @@ Function Compare-SPConfig {
 
 }
 
-Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $true -Initialize -Description "Whether to ask or not" -ModuleExport 
+Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false -Initialize -Description "Whether to ask or not" -ModuleExport 
