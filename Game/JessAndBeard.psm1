@@ -437,6 +437,8 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
       Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus
+
+      Write-PSFHostColor -String "If you get database missing failures - Chapter 2 will be your friend" -DefaultColor Magenta
     }
     Default {
       # Valid estate is as we expect
