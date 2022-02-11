@@ -93,7 +93,7 @@ $Global:PSDefaultParameterValues = @{
 Write-Output "has been sent"
 #endregion
 
-# SUer enough the user is back pretty quickly
+# Sure enough the user is back pretty quickly
 
 # CHeck the error log (if we were on windows we would do this)
 
@@ -235,7 +235,7 @@ $Global:PSDefaultParameterValues = @{
 
 
 
-#Check for modules and install - Here i ssome code to help you if you need to install modules
+#Check for modules and install - Here is some code to help you if you need to install modules
 $Modules = 'dbatools', 'ImportExcel'
 
 if ((Get-PsRepository -Name PSGallery).InstallationPolicy -ne 'Trusted') {
