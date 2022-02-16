@@ -50,3 +50,9 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/dbatoolsprecon:${{ steps.bump.outputs.new_tag }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/dbatoolsprecon:${{ steps.bump.outputs.new_tag }},${{ secrets.DOCKERHUB_USERNAME }}/dbatoolsprecon:latest
