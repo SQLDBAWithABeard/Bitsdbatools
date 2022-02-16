@@ -300,3 +300,4 @@ function whatsmyip {
             (Invoke-WebRequest -Uri "http://ifconfig.me/ip").Content
     }
 }
+
