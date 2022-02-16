@@ -13,8 +13,7 @@ services:
       hostname: dbatools1
       
     dbatools2:
-      image: "dbatools/sqlinstance2"
-      
+      image: "dbatools/sqlinstance2:latest"      
       volumes:
         - mydata:/var/opt/backups
         - shared:/shared
@@ -25,6 +24,7 @@ services:
         - "7432:1433"
       container_name: dbatools2
       hostname: dbatools2
+
 
 volumes:
   mydata:
