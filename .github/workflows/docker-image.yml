@@ -23,13 +23,14 @@ jobs:
 
 steps:
 
-    - name: Bump version and push tag
-      id: bump
-      uses: anothrNick/github-tag-action@1.36.0
-      env:
-        DEFAULT_BUMP: minor
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
+      - 
+        name: Bump version and push tag
+        id: bump
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          DEFAULT_BUMP: minor
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
