@@ -186,7 +186,7 @@ function Get-Index {
     ("&7 - Finding Things", "7 - Finding Things"),
     ("&8 - Data Masking", "8 - Data Masking"),
     ("&9 - Logins", "9 - Logins"),
-    ("&X - Advanced Migrations", "10 - Advanced Migrations"),
+    ("&M - Advanced Migrations", "10 - Advanced Migrations"),
     ("&Q - Quit", "Quit")
   )
 
@@ -590,4 +590,4 @@ function Invoke-PubsApplication {
   }
 }
   
-  Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false -Initialize -Description "Whether to ask or not" -ModuleExport 
+  Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $true -Initialize -Description "Whether to ask or not" -ModuleExport 
