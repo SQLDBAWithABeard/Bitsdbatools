@@ -3,8 +3,7 @@
 - Creating Availability Groups - done
 - Complex instance migrations - done
 - Simplify application upgrades with database snapshots - done
-
-- Syncing Agent Jobs and Logins between replicas
+- Syncing Agent Jobs and Logins between replicas - done
 - Finding SQL Instances on your estate
 - Working with Central Management Server
 - Disaster Recovery 
@@ -15,3 +14,9 @@
 - Encompassing dbatools in DevOps 
 - Validating your estate 
 - Using dbatools in the cloud (ie working with Azure SQL Database) 
+
+Only way to "rebuild" is to
+
+cd to .devcontainer in a diff window
+
+docker-compose -f "docker-compose.yml" -p "bitsdbatools_devcontainer" down
