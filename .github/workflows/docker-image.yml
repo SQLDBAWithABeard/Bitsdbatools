@@ -20,6 +20,16 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+
+steps:
+
+    - name: Bump version and push tag
+      id: bump
+      uses: anothrNick/github-tag-action@1.36.0
+      env:
+        DEFAULT_BUMP: minor
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -38,4 +48,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: sqldbawithabeard/dbatoolsprecon:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/dbatoolsprecon:${{ steps.bump.outputs.new_tag }}
