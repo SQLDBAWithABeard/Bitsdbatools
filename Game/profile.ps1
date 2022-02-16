@@ -1,18 +1,11 @@
-if ($Host.Name -eq 'Visual Studio Code Host') {
-    if (Get-Module -Name EditorServicesCommandSuite -ListAvailable) {
-        Import-Module EditorServicesCommandSuite -ErrorAction SilentlyContinue #workaround
-        Import-Module EditorServicesCommandSuite
-        Import-EditorCommand -Module EditorServicesCommandSuite -ErrorAction SilentlyContinue
-    }
-}
 
 Import-Module /workspace/Game/JessAndBeard.psm1
 #region Set up connection
-$securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
+$securePassword = ('dbatools.IO' | ConvertTo-SecureString -AsPlainText -Force)
 $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
  
 $Global:PSDefaultParameterValues = @{
-    "*dba*:SqlCredential"      = $continercredential
+    "*dba*:SqlCredential"            = $continercredential
     "*dba*:SourceSqlCredential"      = $continercredential
     "*dba*:DestinationSqlCredential" = $continercredential
     "*dba*:PrimarySqlCredential"     = $continercredential
@@ -24,14 +17,18 @@ $Global:PSDefaultParameterValues["*dba*:SqlCredential"] = $continercredential
 $containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
 #endregion
 
-$ShallWePlayAGame = Get-PSFConfigValue -Name JessAndBeard.shallweplayagame 
+Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force -ErrorAction SilentlyContinue
 
-if ($ShallWePlayAGame ) {
-    Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false 
-    Start-Game
-} else {
-    Get-Index
-}
+$ShallWePlayAGameSetting = Get-PSFConfigValue -Name JessAndBeard.shallweplayagame 
+
+if ($Host.Name -eq 'ConsoleHost') {
+    if ($ShallWePlayAGameSetting ) {
+        Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false 
+        Start-Game
+    } else {
+        Get-Index
+    }
+} 
 
 ######## POSH-GIT
 # with props to https://bradwilson.io/blog/prompt/powershell
@@ -114,7 +111,7 @@ $GitPromptSettings.ShowStatusWhenZero = $false
 
 ######## PROMPT
 
-set-content Function:prompt {
+Set-Content Function:prompt {
     if ($ShowDate) {
         Write-Host " $(Get-Date -Format "ddd dd MMM HH:mm:ss")" -ForegroundColor Black -BackgroundColor DarkGray -NoNewline
     }
@@ -123,23 +120,23 @@ set-content Function:prompt {
     $Host.UI.RawUI.ForegroundColor = $GitPromptSettings.DefaultColor.ForegroundColor
 
     if ($ShowUser) {
-        Write-Host " " -NoNewLine
-        Write-Host "  " -NoNewLine -BackgroundColor DarkYellow -ForegroundColor Black
-        Write-Host  (whoami)  -NoNewLine -BackgroundColor DarkYellow -ForegroundColor Black
+        Write-Host " " -NoNewline
+        Write-Host "  " -NoNewline -BackgroundColor DarkYellow -ForegroundColor Black
+        Write-Host  (whoami)  -NoNewline -BackgroundColor DarkYellow -ForegroundColor Black
     }
     # Write ERR for any PowerShell errors
     if ($ShowError) {
         if ($Error.Count -ne 0) {
-            Write-Host " " -NoNewLine
-            Write-Host " $($Error.Count) ERR " -NoNewLine -BackgroundColor DarkRed -ForegroundColor Yellow
+            Write-Host " " -NoNewline
+            Write-Host " $($Error.Count) ERR " -NoNewline -BackgroundColor DarkRed -ForegroundColor Yellow
             # $Error.Clear()
         }
     }
 
     # Write non-zero exit code from last launched process
     if ($LASTEXITCODE -ne "") {
-        Write-Host " " -NoNewLine
-        Write-Host " x $LASTEXITCODE " -NoNewLine -BackgroundColor DarkRed -ForegroundColor Yellow
+        Write-Host " " -NoNewline
+        Write-Host " x $LASTEXITCODE " -NoNewline -BackgroundColor DarkRed -ForegroundColor Yellow
         $LASTEXITCODE = ""
     }
 
@@ -149,11 +146,11 @@ set-content Function:prompt {
             $currentContext = (& kubectl config current-context 2> $null)
             $nodes = kubectl get nodes -o json | ConvertFrom-Json
 
-            $nodename = ($nodes.items.metadata | Where labels  -like '*master*').name
-            Write-Host " " -NoNewLine
-            Write-Host "" -NoNewLine -BackgroundColor DarkGray -ForegroundColor Green
+            $nodename = ($nodes.items.metadata | where labels  -Like '*master*').name
+            Write-Host " " -NoNewline
+            Write-Host "" -NoNewline -BackgroundColor DarkGray -ForegroundColor Green
             #Write-Host " $currentContext " -NoNewLine -BackgroundColor DarkYellow -ForegroundColor Black
-            Write-Host " $([char]27)[38;5;112;48;5;242m  $([char]27)[38;5;254m$currentContext - $nodename $([char]27)[0m" -NoNewLine
+            Write-Host " $([char]27)[38;5;112;48;5;242m  $([char]27)[38;5;254m$currentContext - $nodename $([char]27)[0m" -NoNewline
         }
     }
 
@@ -163,18 +160,17 @@ set-content Function:prompt {
         if (Test-Path ~/.azure/clouds.config) {
             if ((Get-Command "sed" -ErrorAction Ignore) -ne $null) {
                 $currentSub = & sed -nr "/^\[AzureCloud\]/ { :l /^subscription[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" ~/.azure/clouds.config
-            }
-            else {
+            } else {
                 $file = Get-Content ~/.azure/clouds.config
                 $currentSub = ([regex]::Matches($file, '^.*subscription\s=\s(.*)').Groups[1].Value).Trim()
             }
             if ($null -ne $currentSub) {
                 $currentAccount = (Get-Content ~/.azure/azureProfile.json | ConvertFrom-Json).subscriptions | Where-Object { $_.id -eq $currentSub }
                 if ($null -ne $currentAccount) {
-                    Write-Host " " -NoNewLine
-                    Write-Host "" -NoNewLine -BackgroundColor DarkCyan -ForegroundColor Yellow
-                    $currentAccountName = ($currentAccount.Name.Split(' ') | Foreach { $_[0..5] -join '' }) -join ' '
-                    Write-Host "$([char]27)[38;5;227;48;5;30m  $([char]27)[38;5;254m$($currentAccount.name) $([char]27)[0m"  -NoNewLine -BackgroundColor DarkBlue -ForegroundColor Yellow
+                    Write-Host " " -NoNewline
+                    Write-Host "" -NoNewline -BackgroundColor DarkCyan -ForegroundColor Yellow
+                    $currentAccountName = ($currentAccount.Name.Split(' ') | foreach { $_[0..5] -join '' }) -join ' '
+                    Write-Host "$([char]27)[38;5;227;48;5;30m  $([char]27)[38;5;254m$($currentAccount.name) $([char]27)[0m"  -NoNewline -BackgroundColor DarkBlue -ForegroundColor Yellow
                 }
             }
         }
@@ -182,13 +178,13 @@ set-content Function:prompt {
 
     if ($ShowAzure) {
         $context = Get-AzContext
-        Write-Host "$([char]27)[38;5;227;48;5;30m  $([char]27)[38;5;254m$($context.Account.Id) in $($context.subscription.name) $([char]27)[0m"  -NoNewLine -BackgroundColor DarkBlue -ForegroundColor Yellow
+        Write-Host "$([char]27)[38;5;227;48;5;30m  $([char]27)[38;5;254m$($context.Account.Id) in $($context.subscription.name) $([char]27)[0m"  -NoNewline -BackgroundColor DarkBlue -ForegroundColor Yellow
     }
     if ($ShowGit) {
         # Write the current Git information
         if ((Get-Command "Get-GitDirectory" -ErrorAction Ignore) -ne $null) {
             if (Get-GitDirectory -ne $null) {
-                Write-Host (Write-VcsStatus) -NoNewLine
+                Write-Host (Write-VcsStatus) -NoNewline
             }
         }
     }
@@ -200,11 +196,10 @@ set-content Function:prompt {
         # if ($idx -gt -1) { $currentPath = $currentPath.Substring($idx + 2) }
         if ($IsLinux) {
             $currentPath = $($pwd.path.Split('/')[-2..-1] -join '/')
-        }
-        else {
+        } else {
             $currentPath = $($pwd.path.Split('\')[-2..-1] -join '\')
         }
-        Write-Host " " -NoNewLine
+        Write-Host " " -NoNewline
         Write-Host "$([char]27)[38;5;227;48;5;28m  $([char]27)[38;5;254m$currentPath $([char]27)[0m " -NoNewline -BackgroundColor DarkGreen -ForegroundColor Black
 
     }
@@ -219,19 +214,17 @@ set-content Function:prompt {
                 if (([System.Management.Automation.PSTypeName]'Sqlcollaborative.Dbatools.Utility.DbaTimeSpanPretty').Type) {
                     $timemessage = " " + ( [Sqlcollaborative.Dbatools.Utility.DbaTimeSpanPretty]($history[-1].EndExecutionTime - $history[-1].StartExecutionTime))
                     Write-Host $timemessage -ForegroundColor DarkYellow -BackgroundColor DarkGray -NoNewline
-                }
-                else {
+                } else {
                     Write-Host " $([Math]::Round(($history[-1].EndExecutionTime - $history[-1].StartExecutionTime).TotalMilliseconds,2))" -ForegroundColor DarkYellow -BackgroundColor DarkGray  -NoNewline
                 }
             }
             Write-Host " " -ForegroundColor DarkBlue -NoNewline
-        }
-        catch { }
+        } catch { }
     }
     # Write one + for each level of the pushd stack
-    if ((get-location -stack).Count -gt 0) {
-        Write-Host " " -NoNewLine
-        Write-Host (("+" * ((get-location -stack).Count))) -NoNewLine -ForegroundColor Cyan
+    if ((Get-Location -Stack).Count -gt 0) {
+        Write-Host " " -NoNewline
+        Write-Host (("+" * ((Get-Location -Stack).Count))) -NoNewline -ForegroundColor Cyan
     }
 
     # Newline
@@ -271,10 +264,9 @@ set-content Function:prompt {
 
     if ($isDesktop -or $IsWindows) {
         $windowsIdentity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
-        $windowsPrincipal = new-object 'System.Security.Principal.WindowsPrincipal' $windowsIdentity
+        $windowsPrincipal = New-Object 'System.Security.Principal.WindowsPrincipal' $windowsIdentity
         $isAdmin = $windowsPrincipal.IsInRole("Administrators") -eq 1
-    }
-    else {
+    } else {
         $isAdmin = ((& id -u) -eq 0)
     }
 
@@ -284,12 +276,11 @@ set-content Function:prompt {
 
     # Write PS> for desktop PowerShell, pwsh> for PowerShell Core
     if ($isDesktop) {
-        Write-Host " PS5>" -NoNewLine -ForegroundColor $color
-    }
-    else {
+        Write-Host " PS5>" -NoNewline -ForegroundColor $color
+    } else {
         $version = $PSVersionTable.PSVersion.ToString()
         #Write-Host " pwsh $Version>" -NoNewLine -ForegroundColor $color
-        Write-Host "$($color)pwsh $Version>" -NoNewLine
+        Write-Host "$($color)pwsh $Version>" -NoNewline
     }
 
     # Always have to return something or else we get the default prompt
@@ -304,9 +295,8 @@ function whatsmyip {
         $clip
     )
     if ($clip) {
-            (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content | Set-Clipboard
-    }
-    else {
-            (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
+            (Invoke-WebRequest -Uri "http://ifconfig.me/ip").Content | Set-Clipboard
+    } else {
+            (Invoke-WebRequest -Uri "http://ifconfig.me/ip").Content
     }
 }
