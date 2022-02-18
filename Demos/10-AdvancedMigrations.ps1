@@ -9,6 +9,20 @@
                                                          |___/                                 
 #>
 
+# Hey Jess and Rob - Rebuild the containers right now (properly - so that everything goes)
+
+# Let's see what databases we have available here
+Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Select-Object SqlInstance, Name, Status, SizeMB
+Get-DbaAgentJob -SqlInstance $SQLInstances | Format-Table
+
+# Somethign something - this is simple
+
+Start-DbaMigration -Source $dbatools1 -Destination $dbatools2 -Verbose -BackupRestore -SharedPath '/shared' 
+
+# Hey Jess and Rob - Rebuild the containers again (properly - so that everything goes)
+
+# AUDIENCE PLEASE HELP Jess and Rob here - they will probably forget
+
 # What if things are a little more complicated?
     # Our database is too big to wait for the backup\restore
     # The business can't afford *any* downtime
@@ -19,6 +33,8 @@
 
 # Let's see what databases we have available here
 Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Select-Object SqlInstance, Name, Status, SizeMB
+
+
 
 # before downtime we'll stage most of the data
 $copySplat = @{
