@@ -30,7 +30,7 @@ $maskConfig = @{
     SqlInstance   = $dbatools1
     Database      = 'Northwind'
     Table         = "Customers"
-    Column        = "Address", "PostalCode", "Phone" #, "City"
+    Column        = "Address", "PostalCode", "Phone" 
     Path          = ".\Masking\"
 }
 New-DbaDbMaskingConfig @maskConfig
@@ -59,7 +59,7 @@ $maskData = @{
     FilePath      = '.\Masking\dbatools1.Northwind.DataMaskingConfig.json'
     Confirm       = $false
 }
-Invoke-DbaDbDataMasking @maskData
+Invoke-DbaDbDataMasking @maskData -verbose  -enableexception
 
 ##TODO - issue masking country column
  # also add contactName?
