@@ -224,54 +224,76 @@ function Get-Index {
     }
     3 { 
       Clear-Host
-      Write-Output "3 - Copy Copy Copy" 
       code /workspace/Demos/03-CopyCopy.ps1
-      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
+      Write-PSFHostColor -String "Entering this chapter carefully" -DefaultColor DarkCyan
+      Write-PSFHostColor -String "the players realised that is all looked the same" -DefaultColor DarkYellow
+      Write-PSFHostColor -String "It's almost like it has been copied over" -DefaultColor DarkRed
+      Write-PSFHostColor -String "3 - Copy Copy Copy" -DefaultColor DarkMagenta
+      Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter Copy
     }
     4 { 
       Clear-Host
-      Write-Output "4 - SnapShots" 
       code /workspace/Demos/04-Snapshots.ps1
-      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
+      Write-PSFHostColor -String "The sound of a gun echoed down the corridor" -DefaultColor DarkCyan
+      Write-PSFHostColor -String "But as the mist cleared they realised that it was not that sort of shot" -DefaultColor DarkYellow
+      Write-PSFHostColor -String "Welcome, said the deep voice, come on in" -DefaultColor DarkRed
+      Write-PSFHostColor -String "4 - SnapShots"  -DefaultColor DarkMagenta
+      Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter SnapShots
     }
     6 { 
       Clear-Host
-      Write-Output "6 - Availability Groups" 
       code /workspace/Demos/06-AvailabilityGroups.ps1
-      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
+      Write-PSFHostColor -String "The noise was getting louder" -DefaultColor DarkCyan
+      Write-PSFHostColor -String "This machine can no longer take the strain of the app and the reporting" -DefaultColor DarkYellow
+      Write-PSFHostColor -String "I need many copies of this data the voice shouted and quickly now" -DefaultColor DarkRed
+      Write-PSFHostColor -String "6 - Availability Groups"  -DefaultColor DarkMagenta
+      Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter Ags
     }
     5 { 
       Clear-Host
-      Write-Output "5 - Export" 
       code /workspace/Demos/05-Export.ps1
-      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
+      Write-PSFHostColor -String "As they stomped through the swamp" -DefaultColor DarkCyan
+      Write-PSFHostColor -String "They wished the path was easier" -DefaultColor DarkYellow
+      Write-PSFHostColor -String "If only someone had written it all down where it could be found.........." -DefaultColor DarkRed
+      Write-PSFHostColor -String "5 - Export"  -DefaultColor DarkMagenta
+      Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter Export
     }
     7 { 
       Clear-Host
-      Write-Output "7 - Finding Things" 
       code /workspace/Demos/07-FindingThings.ps1
-      Write-PSFHostColor -String "Just running some tests a mo - I'm not - there arent any" -DefaultColor Green
+      Write-PSFHostColor -String "Lost, said the wispy voices" -DefaultColor DarkCyan
+      Write-PSFHostColor -String "and unless you can locate the right things" -DefaultColor DarkYellow
+      Write-PSFHostColor -String "~~~~~~~  YOU SHALL BE LOST FOREVER  ~~~~~~~" -DefaultColor DarkRed
+      Write-PSFHostColor -String "7 - Finding Things"  -DefaultColor DarkMagenta
+      Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       #Assert-Correct -chapter Export
     }
     8 { 
-      Clear-Host
-      Write-Output "8 - Data Masking" 
+      Clear-Host 
       code /workspace/Demos/08-DataMasking.ps1
-      Write-PSFHostColor -String "Just running some tests a mo - I'm not - there arent any" -DefaultColor Green
+      Write-PSFHostColor -String "They could hear them rushing towards them" -DefaultColor DarkCyan
+      Write-PSFHostColor -String "shouting and hollering in a dreadful manner" -DefaultColor DarkYellow
+      Write-PSFHostColor -String "But what was on those faces? Are those ....... Masks?" -DefaultColor DarkRed
+      Write-PSFHostColor -String "8 - Data Masking"  -DefaultColor DarkMagenta
+      Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       #Assert-Correct -chapter Export
     }
     9 { 
       Clear-Host
-      Write-Output "9 - Logins" 
       code /workspace/Demos/09-Logins.ps1
-      Write-PSFHostColor -String "Just running some tests a mo - I'm not - there arent any" -DefaultColor Green
+      Write-PSFHostColor -String "They saw a house int eh distance and picked up speed" -DefaultColor DarkCyan
+      Write-PSFHostColor -String "A massive wooden door faced them, they rang the bell" -DefaultColor DarkYellow
+      Write-PSFHostColor -String "The monsters were close though ~~~ LET US IN" -DefaultColor DarkRed
+      Write-PSFHostColor -String "PLEASE ~~~ LET US IN" -DefaultColor DarkRed
+      Write-PSFHostColor -String "9 - Logins"  -DefaultColor DarkMagenta
+      Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       #Assert-Correct -chapter Export
     }
-    X { 
+    M { 
       Clear-Host
       Write-Output "10 - Advanced Migrations" 
       code /workspace/Demos/10-AdvancedMigrations.ps1
@@ -325,7 +347,7 @@ function Set-ConnectionInfo {
 Set-ConnectionInfo
 
 function Set-FailedTestMessage {
-  $FailedTests = ($results | Measure-Object -Property FailedCount -Sum).Sum
+  $FailedTests = ($results.FailedCount | Measure-Object -Sum).Sum
   if($FailedTests -gt 0){
     Write-PSFHostColor -String "NARRATOR - A thing went wrong" -DefaultColor DarkMagenta
     Write-PSFHostColor -String "NARRATOR - It MUST be fixed before we can continue" -DefaultColor DarkMagenta
@@ -389,7 +411,7 @@ function Assert-Correct {
       $null = Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
 
-      $results = $check1 +$check2 + $check3
+      $results = @($check1,$check2,$check3)
       Set-FailedTestMessage
 
       Write-PSFHostColor -String "Are you ready to begin your adventure?" -DefaultColor Blue
@@ -410,7 +432,7 @@ function Assert-Correct {
       $null = Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' 
 
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn1, NoBackupFiles -Show Summary -PassThru
-      $results = $check1 +$check2 
+      $results = @($check1,$check2)
       Set-FailedTestMessage
       Write-PSFHostColor -String "Should you create a save point before this chapter?" -DefaultColor Blue
       Start-Sleep -Seconds 5
@@ -428,11 +450,14 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
 
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2
-
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2 -Show Summary -PassThru
+      
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists -Show Summary -PassThru
+      $results = @($check1,$check2)
+      Set-FailedTestMessage
+      Write-PSFHostColor -String "If you get database missing failures - Chapter 2 will be your friend" -DefaultColor Magenta
     }
     'Snapshots' { 
       # Valid estate is as we expect
@@ -444,11 +469,13 @@ function Assert-Correct {
       Set-DbcConfig -Name skip.connection.remoting -Value $true  | Out-Null
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots -Show Summary -PassThru
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs','tempdb' | Out-Null
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
+      $results = @($check1,$check2)
+      Set-FailedTestMessage
     }
     'Export' { 
       # Valid estate is as we expect
@@ -458,14 +485,16 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value $containers
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       Set-DbcConfig -Name skip.connection.remoting -Value $true
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
-      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
       Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
-      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+      $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
+      $results = @($check1,$check2,$check3)
+      Set-FailedTestMessage
     }
     'Ags' { 
       # Valid estate is as we expect
@@ -476,17 +505,19 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value $containers
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       Set-DbcConfig -Name skip.connection.remoting -Value $true
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots, NoAgs
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots, NoAgs -Show Summary -PassThru
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus
-
+      $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
+      $results = @($check1,$check2,$check3)
+      Set-FailedTestMessage
       Write-PSFHostColor -String "If you get database missing failures - Chapter 2 will be your friend" -DefaultColor Magenta
+      
     }
     'AdvMigration' {
       # Valid estate is as we expect
@@ -497,16 +528,17 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value $containers
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       Set-DbcConfig -Name skip.connection.remoting -Value $true
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Verbose
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots, NoAgs
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots, NoAgs -Show Summary -PassThru
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus
-
+      $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
+      $results = @($check1,$check2,$check3)
+      Set-FailedTestMessage
     }
     Default {
       # Valid estate is as we expect
@@ -514,17 +546,19 @@ function Assert-Correct {
       $null = Reset-DbcConfig 
 
       $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-config.json
-      Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection 
+      $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection  -Show Summary -PassThru
 
       $null = Reset-DbcConfig 
 
       $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-dbatools1-config.json
-      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
 
       $null = Reset-DbcConfig 
 
       $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-dbatools2-config.json
-      Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
+      $results = @($check1,$check2,$check3)
+      Set-FailedTestMessage
     }
   }
   $Global:PSDefaultParameterValues = @{
