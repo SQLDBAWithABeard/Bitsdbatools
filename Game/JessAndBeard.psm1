@@ -187,6 +187,8 @@ function Get-Index {
     ("&8 - Data Masking", "8 - Data Masking"),
     ("&9 - Logins", "9 - Logins"),
     ("&M - Advanced Migrations", "10 - Advanced Migrations"),
+    ("&T - TIC TAC TOE", "98 - TIC TAC TOE"),
+    ("&G - GLOBAL THERMONUCLEAR WAR", "99 - GLOBAL THERMONUCLEAR WAR"),
     ("&Q - Quit", "Quit")
   )
 
@@ -211,6 +213,7 @@ function Get-Index {
       Write-PSFHostColor -String "The Introduction to dbatools" -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter intro
+      Get-GameTimeRemaining
     }
     2 { 
       Clear-Host
@@ -221,6 +224,7 @@ function Get-Index {
       Write-PSFHostColor -String "2 - Backup and Restore" -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter Backup
+      Get-GameTimeRemaining
     }
     3 { 
       Clear-Host
@@ -231,6 +235,7 @@ function Get-Index {
       Write-PSFHostColor -String "3 - Copy Copy Copy" -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter Copy
+      Get-GameTimeRemaining
     }
     4 { 
       Clear-Host
@@ -241,6 +246,7 @@ function Get-Index {
       Write-PSFHostColor -String "4 - SnapShots"  -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter SnapShots
+      Get-GameTimeRemaining
     }
     6 { 
       Clear-Host
@@ -251,6 +257,7 @@ function Get-Index {
       Write-PSFHostColor -String "6 - Availability Groups"  -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter Ags
+      Get-GameTimeRemaining
     }
     5 { 
       Clear-Host
@@ -261,6 +268,7 @@ function Get-Index {
       Write-PSFHostColor -String "5 - Export"  -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       Assert-Correct -chapter Export
+      Get-GameTimeRemaining
     }
     7 { 
       Clear-Host
@@ -271,6 +279,7 @@ function Get-Index {
       Write-PSFHostColor -String "7 - Finding Things"  -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       #Assert-Correct -chapter Export
+      Get-GameTimeRemaining
     }
     8 { 
       Clear-Host 
@@ -281,6 +290,7 @@ function Get-Index {
       Write-PSFHostColor -String "8 - Data Masking"  -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       #Assert-Correct -chapter Export
+      Get-GameTimeRemaining
     }
     9 { 
       Clear-Host
@@ -292,8 +302,10 @@ function Get-Index {
       Write-PSFHostColor -String "9 - Logins"  -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       #Assert-Correct -chapter Export
+      Get-GameTimeRemaining
     }
-    M { 
+    #even though you choose M
+    10 { 
       Clear-Host
       Write-Output "10 - Advanced Migrations" 
       code /workspace/Demos/10-AdvancedMigrations.ps1
@@ -306,9 +318,28 @@ function Get-Index {
             
       Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
       Assert-Correct -chapter AdvMigration
+      Get-GameTimeRemaining
       
-      # we also need an app to run in the background
-      #Invoke-PubsApplication
+      Write-PSFHostColor -String "we also need an app to run in the background" -DefaultColor Green
+      Write-PSFHostColor -String "In a new session run Invoke-PubsApplication" -DefaultColor Green
+    }
+    # even though you choose G
+    12 {
+      Clear-Host
+      $Message = ' GREETINGS PROFESSOR FALKEN                                       
+                                                                   
+      HELLO                                                            
+                                                                       
+      A STRANGE GAME.                                                  
+      THE ONLY WINNING MOVE IS NOT TO PLAY.                            
+                                                                       
+      HOW ABOUT A NICE GAME OF CHESS?                                  
+                                                                       '
+      Write-Host $message -BackgroundColor 03fcf4 -ForegroundColor Black
+    }
+    # even though you choose T
+    11 {
+      Start-TicTacToe
     }
     'q' {
       Clear-Host
@@ -623,5 +654,291 @@ function Invoke-PubsApplication {
     Start-sleep -Seconds (Get-Random -Maximum 10)
   }
 }
+
+function Get-GameTimeRemaining {
+  $StartDate = Get-Date -Hour 9 -Minute 40 -Second 0
+  $Date = Get-Date
+  $Diff = $Date - $StartDate
+
+  $MorningBreak = Get-Date -Hour 10 -Minute 30 -Second 0
+  $Lunch = Get-Date -Hour 12 -Minute 30 -Second 0
+  $AfternoonBreak = Get-Date -Hour 15 -Minute 00 -Second 0
+  $TheEnd = Get-Date -Hour 17 -Minute 00 -Second 0
+
+  switch ($Date) {
+      {$Date -lt $TheEnd} { 
+          $Remaining = $TheEnd -$Date
+          $Reason = 'THE END'
+       }
+       {$Date -lt $AfternoonBreak} { 
+          $Remaining = $AfternoonBreak -$Date
+          $Reason = 'AFTERNOON BREAK'
+       }
+       {$Date -lt $Lunch} { 
+          $Remaining = $Lunch -$Date
+          $Reason = 'LUNCH BREAK'
+       }
+       {$Date -lt $MorningBreak} {
+          $Remaining = $MorningBreak - $Date
+          $Reason = 'MORNING BREAK'
+        }
+      Default {}
+  }
+  $message = '
+_______________________   _______________________                                                                                                 
+| GAME TIME ELAPSED    |  | GAME TIME REMAINING  |                                                                                                
+|        {0}  HRS        |  |       {3} HRS          |                                                                                                 
+|  {1} MINS  {2} SECS    |  |  {4} MINS  {5} SECS    |                                                                                                
+|                      |  | UNTIL {6}                                                                                                                 
+|______________________|  |______________________|                                                                                                
+                                                                                                                                                  
+' -f $Diff.Hours , ("{0:D2}" -f $diff.Minutes) , ("{0:D2}" -f  $diff.Seconds), $Remaining.Hours , ("{0:D2}" -f $Remaining.Minutes) , ("{0:D2}" -f  $Remaining.Seconds), $Reason
+
+Write-Host $message -BackgroundColor 03fcf4 -ForegroundColor Black
   
+}
+
+Function TicTacToe {
+  Param(
+      $Sleep
+  )
+  $message = '
+       |         |
+       |         |
+       |         |
+       |         |
+------------------------------
+       |         |
+       |         |
+       |         |
+       |         |
+       |         |
+------------------------------
+       |         |
+       |         |
+       |         |
+       |         |
+'
+  Clear-Host
+  Write-Host $message
+
+  Start-Sleep -Milliseconds $Sleep
+  $message = '
+       |         |
+       |         |
+       |         |
+       |         |
+------------------------------
+       |         |
+       |  X   X  |
+       |    X    |
+       |  X   X  |
+       |         |
+------------------------------
+       |         |
+       |         |
+       |         |
+       |         |
+'
+  Clear-Host
+  Write-Host $message
+
+  Start-Sleep -Milliseconds $Sleep
+  $message = '
+  O    |         |
+O   O  |         |
+  O    |         |
+       |         |
+------------------------------
+       |         |
+       |  X   X  |
+       |    X    |
+       |  X   X  |
+       |         |
+------------------------------
+       |         |
+       |         |
+       |         |
+       |         |
+       |         |
+'
+  Clear-Host
+  Write-Host $message
+
+  Start-Sleep -Milliseconds $Sleep
+  $message = '
+  O    |         |
+O   O  |         |
+  O    |         |
+       |         |
+------------------------------
+       |         |
+       |  X   X  |
+       |    X    |
+       |  X   X  |
+       |         |
+------------------------------
+       |         |
+       |  X   X  |
+       |    X    |
+       |  X   X  |
+       |         |
+'
+  Clear-Host
+  Write-Host $message
+
+  Start-Sleep -Milliseconds $Sleep
+  $message = '
+  O    |    O    |
+O   O  |  O   O  |
+  O    |    O    |
+       |         |
+------------------------------
+       |         |
+       |  X   X  |
+       |    X    |
+       |  X   X  |
+       |         |
+------------------------------
+       |         |
+       |  X   X  |
+       |    X    |
+       |  X   X  |
+       |         |
+'
+  Clear-Host
+  Write-Host $message
+
+  Start-Sleep -Milliseconds $Sleep
+ 
+  $message = '
+  O    |    O    |  X   X
+O   O  |  O   O  |    X
+  O    |    O    |  X   X
+       |         |
+------------------------------
+       |         |
+       |  X   X  |
+       |    X    |
+       |  X   X  |
+       |         |
+------------------------------
+       |         |
+       |  X   X  |
+       |    X    |
+       |  X   X  |
+       |         |
+'
+  Clear-Host
+  Write-Host $message
+
+  Start-Sleep -Milliseconds $Sleep
+  $message = '
+  O    |    O    |  X   X
+O   O  |  O   O  |    X
+  O    |    O    |  X   X
+       |         |
+------------------------------
+       |         |
+       |  X   X  |
+       |    X    |
+       |  X   X  |
+       |         |
+------------------------------
+       |         |
+  O    |  X   X  |
+O   O  |    X    |
+  O    |  X   X  |
+       |         |
+'
+  Clear-Host
+  Write-Host $message
+
+  Start-Sleep -Milliseconds $Sleep
+  $message = '
+  O    |    O    |  X   X
+O   O  |  O   O  |    X
+  O    |    O    |  X   X
+       |         |
+------------------------------
+       |         |
+X   X  |  X   X  |
+  X    |    X    |
+X   X  |  X   X  |
+       |         |
+------------------------------
+       |         |
+  O    |  X   X  |
+O   O  |    X    |
+  O    |  X   X  |
+       |         |
+'
+  Clear-Host
+  Write-Host $message
+
+  Start-Sleep -Milliseconds $Sleep
+  $message = '
+  O    |    O    |  X   X
+O   O  |  O   O  |    X
+  O    |    O    |  X   X
+       |         |
+------------------------------
+       |         |
+X   X  |  X   X  |    O
+  X    |    X    |  O   O
+X   X  |  X   X  |    O
+       |         |
+------------------------------
+       |         |
+  O    |  X   X  |
+O   O  |    X    |
+  O    |  X   X  |
+       |         |
+'
+  Clear-Host
+  Write-Host $message
+
+  Start-Sleep -Milliseconds $Sleep
+  $message = '
+  O    |    O    |  X   X
+O   O  |  O   O  |    X
+  O    |    O    |  X   X
+       |         |
+------------------------------
+       |         |
+X   X  |  X   X  |    O
+  X    |    X    |  O   O
+X   X  |  X   X  |    O
+       |         |
+------------------------------
+       |         |
+  O    |  X   X  |  X   X
+O   O  |    X    |    X
+  O    |  X   X  |  X   X
+       |         |
+'
+  Clear-Host
+  Write-Host $message
+
+
+  Start-Sleep -Milliseconds $Sleep
+}
+
+function Start-TicTacToe {
+  $Options = 500, 200, 200, 100, 100, 100, 50, 50, 50, 50, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10
+  $Options | ForEach-Object {
+      TicTacToe -Sleep $_
+  }
+  Clear-Host
+  $Message = ' GREETINGS PROFESSOR FALKEN                                       
+                                                                   
+  HELLO                                                            
+                                                                   
+  A STRANGE GAME.                                                  
+  THE ONLY WINNING MOVE IS NOT TO PLAY.                            
+                                                                   
+  HOW ABOUT A NICE GAME OF CHESS?                                  
+                                                                   '
+  Write-Host $message -BackgroundColor 03fcf4 -ForegroundColor Black
+}
   Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $true -Initialize -Description "Whether to ask or not" -ModuleExport 
