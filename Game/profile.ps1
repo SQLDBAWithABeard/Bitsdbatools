@@ -18,7 +18,7 @@ $containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
 #endregion
 
 Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force -ErrorAction SilentlyContinue
-
+Import-Module Pansies
 $ShallWePlayAGameSetting = Get-PSFConfigValue -Name JessAndBeard.shallweplayagame 
 
 if ($Host.Name -eq 'ConsoleHost') {
@@ -37,6 +37,7 @@ ipmo posh-git
 
 Import-Module dbatools
 Import-Module dbachecks
+
 
 
 
