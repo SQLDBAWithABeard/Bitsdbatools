@@ -164,7 +164,7 @@ Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Con
 
 # OF
 
-# CODE - 1 minute 6 seconds in the browser 18 seconds Robs desktop
+# CODE - 1 minute 6 seconds in the browser 18 seconds Robs desktop 46 seconds Robs laptop
 
 Restore-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath
 
@@ -246,6 +246,145 @@ Get-DbaDbRestoreHistory -SqlInstance $dbatools1 | Format-Table
 # There is no sorting here so
 
 Get-DbaDbRestoreHistory -SqlInstance $dbatools1 | Sort-Object Date | Format-Table
+
+# So we can take backups, we can perform restores but 
+
+# we dont know if the backups are valid until we have tested them
+
+# Far better to ensure that they are ok and dbatools just loves to help you with that
+
+# Even if you only have a single instance, you can still test your backups. There is no excuse
+
+Test-DbaLastBackup -SqlInstance $dbatools1
+
+# What did it do?
+
+# Maybe we want to put it into a database and we have a dedicated instance for testing?
+
+Test-DbaLastBackup -SqlInstance $dbatools1 -Destination $dbatools2 | Write-DbaDataTable -SqlInstance $dbatools1 -Database pubs -Table BackupTests -AutoCreateTable
+
+$Query = "SELECT  [SourceServer]
+,[TestServer]
+,[Database]
+,[FileExists]
+,[Size]
+,[RestoreResult]
+,[DbccResult]
+,[RestoreStart]
+,[RestoreEnd]
+,[RestoreElapsed]
+,[DbccMaxDop]
+,[DbccStart]
+,[DbccEnd]
+,[DbccElapsed]
+,[BackupDates]
+,[BackupFiles]
+FROM [pubs].[dbo].[BackupTests]
+"
+
+Invoke-DbaQuery -SqlInstance $dbatools1 -Database pubs -Query $Query
+
+
+
+# So the databases were backed up to a place that was not avaialble to the second instance. 
+# Lets make it work so you can see, but this is something you willneed to consider.
+
+Backup-DbaDatabase -SqlInstance $dbatools1 -Path /shared/BackupTest
+
+Test-DbaLastBackup -SqlInstance $dbatools1 -Destination $dbatools2 | Write-DbaDataTable -SqlInstance $dbatools1 -Database pubs -Table BackupTests -AutoCreateTable
+
+# Check in ADS or with PowerShell :-)
+
+# Lets really mess with it and see what happens
+# http://stevestedman.com/2015/04/corruption-challenge-1-how-i-corrupted-the-database/
+
+# First lets create a database to corrupt
+
+Restore-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/dbatools1/pubs -DatabaseName corruptme -DestinationFilePrefix corrupt -ReplaceDbNameInFile 
+
+# Lets find the page of a Clustered index to break
+
+$Page = (Invoke-DbaQuery -SqlInstance $dbatools1 -Query "DBCC IND(corruptme,'authors', 1) with no_infomsgs;" |Where-Object IndexLevel -eq 0 |Where-Object Pagetype -eq 1).PagePID
+
+# Lets turn on DBCC TRACEON -- 3604 turn on the DBCC output for commands like DBCC page
+
+Enable-DbaTraceFlag -SqlInstance $dbatools1 -TraceFlag 3604 
+
+# I'm going to make a guess at 128 as the location as that has worked
+
+# This is using DBCC WritePage SO BE CAREFUL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# I MEAN IT
+
+
+
+
+
+
+
+
+
+
+
+
+# NO I REALLY MEAN IT
+
+
+
+# YOu have to choose to run this by uncommenting or selecting
+
+
+
+
+# # Invoke-DbaQuery -SqlInstance $dbatools1 -Query "DBCC WritePage(corruptme, 1, $Page , 128, 3, 0x616161)"
+
+# Awesome a failure
+
+Invoke-DbaQuery -SqlInstance $dbatools1 -Query "DBCC CheckDB();" -Database corruptme
+
+# SO we have a corrupt database, but we have not noticed and have backed it up
+
+Backup-DbaDatabase -SqlInstance $dbatools1 -Database corruptme -Path /shared/BackupTest
+
+Test-DbaLastBackup -SqlInstance $dbatools1 -Destination $dbatools2 | Write-DbaDataTable -SqlInstance $dbatools1 -Database pubs -Table BackupTests -AutoCreateTable
+
+$Query = "SELECT  [SourceServer]
+,[TestServer]
+,[Database]
+,[FileExists]
+,[Size]
+,[RestoreResult]
+,[DbccResult]
+,[RestoreStart]
+,[RestoreEnd]
+,[RestoreElapsed]
+,[DbccMaxDop]
+,[DbccStart]
+,[DbccEnd]
+,[DbccElapsed]
+,[BackupDates]
+,[BackupFiles]
+FROM [pubs].[dbo].[BackupTests]
+WHERE [Database] = 'corruptme'
+"
+
+Invoke-DbaQuery -SqlInstance $dbatools1 -Database pubs -Query $Query
+
+# You can just set this running as an agent job and run a report on the data or an alert when a corrupt database was found
+
 
 # Those were the simple ones - How complex do you want to get ?
 
