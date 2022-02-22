@@ -32,6 +32,7 @@ $Global:PSDefaultParameterValues = @{
     "*dba*:SqlCredential"            = $continercredential
     "*dba*:SourceSqlCredential"      = $continercredential
     "*dba*:DestinationSqlCredential" = $continercredential
+    "*dba*:DestinationCredential"    = $continercredential
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
 }
@@ -87,6 +88,7 @@ $Global:PSDefaultParameterValues = @{
     "*dba*:SqlCredential"            = $continercredential
     "*dba*:SourceSqlCredential"      = $continercredential
     "*dba*:DestinationSqlCredential" = $continercredential
+    "*dba*:DestinationCredential"    = $continercredential
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
 }
@@ -97,7 +99,7 @@ Write-Output "has been sent"
 
 # CHeck the error log (if we were on windows we would do this)
 
-Get-DbaErrorLog -SqlInstance $dbatools1 -Text  Login | Select LogDate,Source,Text  | Format-List
+Get-DbaErrorLog -SqlInstance $dbatools1 -Text  Login | Select LogDate, Source, Text  | Format-List
 
 # but we are in a container so we use our T-SQL Knowledge and
 
@@ -220,6 +222,7 @@ $Global:PSDefaultParameterValues = @{
     "*dba*:SqlCredential"            = $continercredential
     "*dba*:SourceSqlCredential"      = $continercredential
     "*dba*:DestinationSqlCredential" = $continercredential
+    "*dba*:DestinationCredential"    = $continercredential
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
 }
@@ -250,14 +253,16 @@ if ((Get-PsRepository -Name PSGallery).InstallationPolicy -ne 'Trusted') {
         Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
     }
     
-} else {
+}
+else {
     Write-Output "The PowerShell Gallery is trusted I will continue"
 }
 $Modules.ForEach{
     If (-not(Get-Module $psitem -ListAvailable)) {
         Write-Output "We don't have the $psitem module so we will install it"
         Install-Module $psitem -Scope CurrentUser -Force
-    } else {
+    }
+    else {
         Write-Output "We have the $psitem module already"
     }
 }
@@ -275,22 +280,22 @@ Write-Output "    FileName is $ExcelFile"
 
 $WorkSheetName = "Permissions"
 
-    $excel = Get-DbaUserPermission -SqlInstance $sqlinstance | Export-Excel -Path $ExcelFile -WorksheetName $WorkSheetName -AutoSize -FreezeTopRow -AutoFilter -PassThru
+$excel = Get-DbaUserPermission -SqlInstance $sqlinstance | Export-Excel -Path $ExcelFile -WorksheetName $WorkSheetName -AutoSize -FreezeTopRow -AutoFilter -PassThru
   
-    $rulesparam = @{
-        Address   = $excel.Workbook.Worksheets[$WorkSheetName].Dimension.Address
-        WorkSheet = $excel.Workbook.Worksheets[$WorkSheetName] 
-        RuleType  = 'Expression'      
-    }
+$rulesparam = @{
+    Address   = $excel.Workbook.Worksheets[$WorkSheetName].Dimension.Address
+    WorkSheet = $excel.Workbook.Worksheets[$WorkSheetName] 
+    RuleType  = 'Expression'      
+}
 
-    Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("sysadmin",$G1)))' -BackgroundColor Yellow -StopIfTrue
-    Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("db_owner",$G1)))' -BackgroundColor Yellow -StopIfTrue
-    Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("SERVER LOGINS",$E1)))' -BackgroundColor PaleGreen 
-    Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("SERVER SECURABLES",$E1)))' -BackgroundColor PowderBlue 
-    Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("DB ROLE MEMBERS",$E1)))' -BackgroundColor GoldenRod 
-    Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("DB SECURABLES",$E1)))' -BackgroundColor BurlyWood 
+Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("sysadmin",$G1)))' -BackgroundColor Yellow -StopIfTrue
+Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("db_owner",$G1)))' -BackgroundColor Yellow -StopIfTrue
+Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("SERVER LOGINS",$E1)))' -BackgroundColor PaleGreen 
+Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("SERVER SECURABLES",$E1)))' -BackgroundColor PowderBlue 
+Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("DB ROLE MEMBERS",$E1)))' -BackgroundColor GoldenRod 
+Add-ConditionalFormatting @rulesparam -ConditionValue 'NOT(ISERROR(FIND("DB SECURABLES",$E1)))' -BackgroundColor BurlyWood 
 
-    Close-ExcelPackage $excel
+Close-ExcelPackage $excel
 
 
 Write-Output ""
