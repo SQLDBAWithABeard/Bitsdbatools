@@ -366,9 +366,10 @@ function Set-ConnectionInfo {
     "*dba*:SqlCredential"            = $continercredential
     "*dba*:SourceSqlCredential"      = $continercredential
     "*dba*:DestinationSqlCredential" = $continercredential
+    "*dba*:DestinationCredential"    = $continercredential
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
-  }
+}
 
 
   $containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
@@ -596,9 +597,10 @@ function Assert-Correct {
     "*dba*:SqlCredential"            = $continercredential
     "*dba*:SourceSqlCredential"      = $continercredential
     "*dba*:DestinationSqlCredential" = $continercredential
+    "*dba*:DestinationCredential"    = $continercredential
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
-  }
+}
 }
 
 Function Compare-SPConfig {
