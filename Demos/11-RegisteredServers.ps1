@@ -61,27 +61,68 @@ $regServer = @{
 }
 Add-DbaRegServer @regServer
 
+# We can also add new groups
+$regServerGroup = @{
+    SqlInstance = $dbatools1
+    Name        = 'Test-2022'
+    Description = 'This is test servers that are SQL 2022'
+}
+Add-DbaRegServerGroup @regServerGroup
+
+# and then add a server to the group
+$regServer = @{
+    SqlInstance = $dbatools1
+    ServerName  = $dbatools1 # note I'm reusing dbatools1 for this server as don't have a third container to play with
+    Name        = 'Shiny 2022 Test Server'
+    Group       = 'Test-2022'
+}
+Add-DbaRegServer @regServer
+
+# Get all registered server groups again - they are now our training day containers
+Get-DbaRegServerGroup -SqlInstance $dbatools1 | Format-Table
+
+
 # Now that we have registered servers in a group we can use them as a group
+Get-DbaRegServer -SqlInstance $dbatools1 -Group 'Production' 
+
+## Broken on Linux - but would work for windows...
+
+    # Get all the databases on the instances
+    Get-DbaRegServer -SqlInstance $dbatools1 -Group 'Production' | Get-DbaDatabase 
+
+    # Make sure they are patched to the latest version
+    Get-DbaRegServer -SqlInstance $dbatools1 -Group 'Production' | Test-DbaBuild -Latest
+
+# We can also move registered servers between groups 
+Move-DbaRegServer -SqlInstance $dbatools1 -Name dbatools1 -Group Test
+
+# We can also move groups - if we want to nest the Test-2022 group in the Test group
+Move-DbaRegServerGroup -SqlInstance $dbatools1 -Group 'Test-2022' -NewGroup 'Test'
+
+# Let's review the groups again
+Get-DbaRegServerGroup -SqlInstance $dbatools1 | Format-Table
+
+# What about migrations?!
+Get-DbaRegServerGroup -SqlInstance $SQLInstances | Format-Table
+
+Copy-DbaRegServer -Source $dbatools1 -Destination $dbatools2
+
+Get-DbaRegServerGroup -SqlInstance $SQLInstances | Format-Table
+
+# Post migration we'll nede to clean up the old server - dbatools1
+# Remove all registered servers 
+Remove-DbaRegServer -SqlInstance $dbatools1 -Confirm:$false
+
+# Remove all groups too
+Remove-DbaRegServerGroup -SqlInstance $dbatools1 -Confirm:$false
 
 
-## BROKEN BITS!!
+# How do we find instances in our environment to add to our CMS?
 
-# Get all the databases on the instances
-Get-DbaRegServer -SqlInstance $dbatools1 -Group 'Production' | Get-DbaDatabase 
+Find-DbaInstance -ComputerName $SQLInstances -OutVariable discoveredInstances
 
-# Make sure they are patched to the latest version
-Get-DbaRegServer -SqlInstance $dbatools1 -Group 'Production' | Test-DbaBuild -Latest
+Get-Help Find-DbaInstance -Full | Out-String | code -
 
-
-
-
-
-Copy-DbaRegServer
-
-
-Move-DbaRegServer
-Move-DbaRegServerGroup
-
-Remove-DbaRegServer
-Remove-DbaRegServerGroup
-
+$discoveredInstances.foreach{
+    Add-DbaRegServer -SqlInstance $dbatools1 -ServerName $psitem.SqlInstance 
+}
