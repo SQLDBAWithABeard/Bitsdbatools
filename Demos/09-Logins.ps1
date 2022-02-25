@@ -268,7 +268,7 @@ $Modules.ForEach{
 }
 
 
-$ExcelDirectory = '/tmp' # Alter this to the directory you want the file created
+$ExcelDirectory = '/shared' # Alter this to the directory you want the file created
 $SQlinstance = $dbatools1  # Alter this for the SQL Instance you want to get permissions for
 
 Write-Output "Processing $sqlinstance"
@@ -337,8 +337,11 @@ Write-Output "        FileName is $ExcelFile            "
 Write-Output "                ###############                  "
 Write-Output ""
 
+# run this in Windows Terminal to see the windows explorer view
 
-# To AutoFit column width: Alt + H, then O, and then I.
+# explorer \\wsl.localhost\docker-desktop-data\version-pack-data\community\docker\volumes\bitsdbatools_devcontainer_shared\_data
+
+# To AutoFit column width:CTRL A and then Alt + H, then O, and then I.
 
 # Choose your adventure
 
