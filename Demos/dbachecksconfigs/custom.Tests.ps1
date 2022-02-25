@@ -52,8 +52,8 @@ Describe "dbatools2 should not have the databases already" -Tags NoDatabasesOn2 
     }
 }
 
-Describe "dbatools1 should not have the additional databases already" -Tags NoDatabasesOn1 , $Filename {
-    Context  "Databases Should not exist" {
+Describe "Should not have the additional databases already" -Tags NoDatabasesOn1 , $Filename {
+    Context  "Databases Should not exist on dbatools1" {
         BeforeAll {
             $Databasesondbatools1 = (Get-DbaDatabase -SqlInstance $dbatools1).Name
         }
@@ -99,45 +99,30 @@ Describe "dbatools1 should not have the additional databases already" -Tags NoDa
     }
 }
 
+foreach($sqlInstance in @('dbatools1', 'dbatools2')){
 Describe "There should be no snapshots" -Tags NoSnapshots , $Filename {
-    Context "No Snapshots Here please" {
-        It "<SqlInstance> Should not have any snapshots" -testCases @(
-            @{
-                SqlInstance = 'dbatools1'
-            },
-            @{
-                SqlInstance = 'dbatools2'
-            }
-        ) {
-            Param(
-                $SqlInstance
-            )
+    Context "No Snapshots on $SqlInstance" {
+        It "$SqlInstance Should not have any snapshots" {
             Get-DbaDbSnapshot -SqlInstance $SqlInstance | Should -BeNullOrEmpty -Because "We dont want none of them snapshots here wasting our space"
         }
     }
 }
+}
 Describe "There should be no backup files in the volume" -Tags NoBackupFiles , $Filename {
-    Context "no backup files please" {
+    Context "no backup files on dbatools1" {
         It "Volume Should not have any backup files" {
-           Get-ChildItem '/var/opt/backups/dbatools1' -ErrorAction SilentlyContinue  | Should -BeNullOrEmpty -Because "We dont want too many backup files - run Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force to fix"
+            Get-ChildItem '/var/opt/backups/dbatools1' -ErrorAction SilentlyContinue  | Should -BeNullOrEmpty -Because "We dont want too many backup files - run Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force to fix"
         }
     }
 }
 
-Describe "There should be no Availabiity Groups" -Tags NoAgs , $Filename {
-    Context "No Ags Here please" {
-        It "<SqlInstance> Should not have any Availability Groups" -testCases @(
-            @{
-                SqlInstance = 'dbatools1'
-            },
-            @{
-                SqlInstance = 'dbatools2'
+
+foreach($sqlInstance in @('dbatools1', 'dbatools2')){
+    Describe "There should be no Availabiity Groups" -Tags NoAgs , $Filename {
+        Context "No Ags on $sqlInstance" {
+            It "$sqlInstance Should not have any Availability Groups" {
+                Get-DbaAvailabilityGroup -SqlInstance $SqlInstance | Should -BeNullOrEmpty -Because "We dont want none of them snapshots here wasting our space"
             }
-        ) {
-            Param(
-                $SqlInstance
-            )
-            Get-DbaAvailabilityGroup -SqlInstance $SqlInstance | Should -BeNullOrEmpty -Because "We dont want none of them snapshots here wasting our space"
         }
     }
 }
