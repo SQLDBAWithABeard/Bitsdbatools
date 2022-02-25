@@ -352,12 +352,6 @@ function Get-Index {
       Clear-Host
       Write-Output "10 - Advanced Migrations" 
       code /workspace/Demos/10-AdvancedMigrations.ps1
-      
-      # we need an app login
-      $Password = ConvertTo-SecureString PubsAdmin -AsPlainText -Force
-      New-DbaLogin -SqlInstance $dbatools1 -Login PubsAdmin -SecurePassword $Password | Out-Null
-      New-DbaDbUser -SqlInstance $dbatools1 -Database Pubs -Login PubsAdmin -Username PubsAdmin  | Out-Null
-      Add-DbaDbRoleMember -SqlInstance $dbatools1 -Database Pubs -User PubsAdmin -Role db_owner -Confirm:$false  | Out-Null
             
       Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
       Assert-Correct -chapter AdvMigration
