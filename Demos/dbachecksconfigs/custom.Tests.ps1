@@ -127,5 +127,145 @@ foreach($sqlInstance in @('dbatools1', 'dbatools2')){
     }
 }
 
+Describe "There should be expected Logins" -Tags NeedLogins , $Filename {
+    Context "Need Logins on dbatools1" {
+        $TestCases = @(
+            @{
+                Name = 'AppAdmin'
+            }
+            @{
+                Name = 'distributor_admin'
+            }
+            @{
+                Name = 'storageuser'
+            }
+            @{
+                Name = 'testlogin'
+            }
+            @{
+                Name = 'TestOrphan1'
+            }
+            @{
+                Name = 'TestOrphan2'
+            }
+            @{
+                Name = 'testuser2'
+            }
+            @{
+                Name = 'webuser'
+            }
+        )
+        It "dbatools1 should have login <Name>" -TestCases $TestCases  {
+            param(
+                $Name
+            )
+            Get-DbaLogin -SqlInstance dbatools1 -Login $Name | Should -Not -BeNullOrEmpty -Because "We need to have $Name on dbatools1 for this to work"
+        }
+    }
+}
+Describe "There should be expected Stored Procedures" -Tags NeedSps , $Filename {
+    Context "Need Stored Procedures on dbatools1" {
+        $TestCases = @(
+            @{
+                Name = 'SP_FindMe' 
+            }
+        )
+        It "dbatools1 should have stored procedure named <Name>" -TestCases $TestCases  {
+            param(
+                $Name
+            )
+            Find-DbaStoredProcedure -SqlInstance $dbatools1 -Pattern  $Name | Should -Not -BeNullOrEmpty -Because "We need to have $Name on dbatools1 for this to work"
+        }
+    }
+}
+Describe "There should be expected Triggers" -Tags NeedTriggers , $Filename {
+    Context "Need triggers on dbatools1" {
+        $TestCases = @(
+            @{
+                Name = 'trg_chaos_monkey' 
+            }
+        )
+        It "dbatools1 should have stored procedure named <Name>" -TestCases $TestCases  {
+            param(
+                $Name
+            )
+            Find-DbaTrigger -SqlInstance dbatools1  -Pattern $Name | Should -Not -BeNullOrEmpty -Because "We need to have $Name on dbatools1 for this to work"
+        }
+    }
+}
+Describe "There should be expected UDFs" -Tags NeedUDfs , $Filename {
+    Context "Need UDFs on dbatools1" {
+        $TestCases = @(
+            @{
+                Name = 'udf_findme' 
+            }
+        )
+        It "dbatools1 should have UDF named <Name>" -TestCases $TestCases  {
+            param(
+                $Name
+            )
+            Get-DbaDbUdf -SqlInstance dbatools1 -Name $Name | Should -Not -BeNullOrEmpty -Because "We need to have the UDF $Name on dbatools1 for this to work"
+        }
+    }
+}
+Describe "There should be expected Agent Jobs" -Tags NeedJobs , $Filename {
+    Context "Need Agent Jobs on dbatools2" {
+        $TestCases = @(
+            @{
+                Name = 'IamBroke' 
+            }
+        )
+        It "dbatools2 should haven Agent Job named <Name>" -TestCases $TestCases  {
+            param(
+                $Name
+            )
+            Get-DbaAgentJob -SqlInstance dbatools2 -Name $Name | Should -Not -BeNullOrEmpty -Because "We need to have the job $Name on dbatools2 for this to work"
+        }
+    }
+}
+Describe "There should be failed Agent Jobs - Odd I know" -Tags NeedFailedJobs , $Filename {
+    Context "Need Agent Jobs to have failed on dbatools2" {
+        It "dbatools2 should have failed jobs"  {
+            Find-DbaAgentJob -SqlInstance $SQLInstances -IsFailed | Should -Not -BeNullOrEmpty -Because "We need to have failed jobs on dbatools2 for this to work"
+        }
+    }
+}
+
+Describe "There should not be expected Logins" -Tags NeedNoLogins , $Filename {
+    Context "Cant have these Logins on dbatools2" {
+        $TestCases = @(
+            @{
+                Name = 'AppAdmin'
+            }
+            @{
+                Name = 'distributor_admin'
+            }
+            @{
+                Name = 'storageuser'
+            }
+            @{
+                Name = 'testlogin'
+            }
+            @{
+                Name = 'TestOrphan1'
+            }
+            @{
+                Name = 'TestOrphan2'
+            }
+            @{
+                Name = 'testuser2'
+            }
+            @{
+                Name = 'webuser'
+            }
+        )
+        It "dbatools2 should not have login <Name>" -TestCases $TestCases  {
+            param(
+                $Name
+            )
+            Get-DbaLogin -SqlInstance dbatools2 -Login $Name | Should -BeNullOrEmpty -Because "We need to not have $Name on dbatools2 otherwise how will wee copy them?"
+        }
+    }
+}
 
 
