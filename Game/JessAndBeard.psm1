@@ -150,13 +150,62 @@ $Global:Italwaysis = @"
 #   }
 # }
 function Start-Game {
+
+  #region set-up
   # Because we are using volumes for the restore demo, need to ensure they are clean before starting the game
   Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force -ErrorAction SilentlyContinue
   
   $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
   $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
 
-  New-DbaDatabase -SqlInstance $dbatools1 -SqlCredential $continercredential -Name Validation -RecoveryModel Full
+  New-DbaDatabase -SqlInstance $dbatools1 -SqlCredential $continercredential -Name Validation -RecoveryModel Full -WarningAction SilentlyContinue | Out-Null
+
+  # we need an app login
+  $Password = ConvertTo-SecureString PubsAdmin -AsPlainText -Force
+  New-DbaLogin -SqlInstance $dbatools1 -SqlCredential $continercredential  -Login PubsAdmin -SecurePassword $Password -WarningAction SilentlyContinue | Out-Null
+  New-DbaDbUser -SqlInstance $dbatools1 -SqlCredential $continercredential -Database Pubs -Login PubsAdmin -Username PubsAdmin -WarningAction SilentlyContinue  | Out-Null
+  Add-DbaDbRoleMember -SqlInstance $dbatools1 -SqlCredential $continercredential -Database Pubs -User PubsAdmin -Role db_owner -Confirm:$false  | Out-Null
+
+  # Let's add some things to find
+  Invoke-DbaQuery -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Northwind -WarningAction SilentlyContinue -Query "
+  CREATE PROCEDURE SP_FindMe AS BEGIN 
+    with cte as (
+      select top 1 OrderID, ProductID
+      FROM dbo.[Order Details]
+      ORDER BY NEWID()
+    )
+    DELETE 
+    FROM cte 
+  END
+  
+  GO
+  
+  CREATE TRIGGER dbo.trg_chaos_monkey
+    ON  dbo.[order details]
+    INSTEAD OF UPDATE
+  AS 
+  BEGIN
+    print 'no update for you'
+  END
+  GO
+  CREATE FUNCTION udf_FindMe 
+  (@test int = 1)
+  RETURNS int
+  AS
+  -- For the order details
+  BEGIN
+    RETURN @test
+  END"
+
+  # Add a failed job
+  $job = New-DbaAgentJob -SqlInstance $dbatools2 -SqlCredential $continercredential -Job IamBroke -WarningAction SilentlyContinue
+  if ($job) {
+    $null = New-DbaAgentJobStep -SqlInstance $dbatools2 -SqlCredential $continercredential -Job $job.Name -Subsystem TransactSql -Command 'Select * from MissingTable' -StepName 'Step One'
+    $null = $job | Start-DbaAgentJob
+  }
+
+
+  #endregion
 
   Clear-Host
   $title = "Joshua Says" 
@@ -287,41 +336,7 @@ function Get-Index {
       Write-PSFHostColor -String "7 - Finding Things"  -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
       
-      # Let's add some things to find
-      Invoke-DbaQuery -SqlInstance $dbatools1 -Database Northwind -Query "
-        CREATE PROCEDURE SP_FindMe AS BEGIN 
-          with cte as (
-            select top 1 OrderID, ProductID
-            FROM dbo.[Order Details]
-            ORDER BY NEWID()
-          )
-          DELETE 
-          FROM cte 
-        END
-        
-        GO
-        
-        CREATE TRIGGER dbo.trg_chaos_monkey
-          ON  dbo.[order details]
-          INSTEAD OF UPDATE
-        AS 
-        BEGIN
-          print 'no update for you'
-        END
-        GO
-        CREATE FUNCTION udf_FindMe (@test int = )
-        RETURNS int
-        AS
-        BEGIN
-          RETURN @test
-        END"
-      
-      # Add a failed job
-      $job = New-DbaAgentJob -SqlInstance $dbatools2 -Job IamBroke
-      $null = New-DbaAgentJobStep -SqlInstance $dbatools2 -Job $job.Name -Subsystem TransactSql -Command 'Select * from MissingTable' -StepName 'Step One'
-      $job.Start()
-      
-      #Assert-Correct -chapter Export
+      Assert-Correct -chapter Found
       Get-GameTimeRemaining
     }
     8 { 
@@ -426,7 +441,7 @@ function Set-ConnectionInfo {
     "*dba*:DestinationCredential"    = $continercredential
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
-}
+  }
 
 
   $containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
@@ -437,12 +452,12 @@ Set-ConnectionInfo
 
 function Set-FailedTestMessage {
   $FailedTests = ($results.FailedCount | Measure-Object -Sum).Sum
-  if($FailedTests -gt 0){
+  if ($FailedTests -gt 0) {
     Write-PSFHostColor -String "NARRATOR - A thing went wrong" -DefaultColor DarkMagenta
     Write-PSFHostColor -String "NARRATOR - It MUST be fixed before we can continue" -DefaultColor DarkMagenta
-    $Failures = $results.TestResult| Where Result -eq 'Failed'  | Select Describe,Context,Name,FailureMessage 
+    $Failures = $results.TestResult | Where Result -eq 'Failed'  | Select Describe, Context, Name, FailureMessage 
     $Failures.ForEach{
-      $Message = '{0} at {1} in {2}' -f $_.FailureMessage,  $_.Name, $_.Describe
+      $Message = '{0} at {1} in {2}' -f $_.FailureMessage, $_.Name, $_.Describe
       Write-PSFHostColor -String $Message -DefaultColor DarkCyan
     }
   }
@@ -459,7 +474,8 @@ function Assert-Correct {
       'SnapShots',
       'Export',
       'Ags',
-      'AdvMigration'
+      'AdvMigration',
+      'Found'
     )]
     [string]
     $chapter = 'initial'
@@ -495,18 +511,18 @@ function Assert-Correct {
       $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       $null = Set-DbcConfig -Name skip.connection.remoting -Value $true
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
-      $check1 |Convert-DbcResult -Label Intro -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check1 | Convert-DbcResult -Label Intro -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
-      $check2 |Convert-DbcResult -Label Intro -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check2 | Convert-DbcResult -Label Intro -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
       $null = Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
-      $check3 |Convert-DbcResult -Label Intro -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check3 | Convert-DbcResult -Label Intro -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
-      $results = @($check1,$check2,$check3)
+      $results = @($check1, $check2, $check3)
       Set-FailedTestMessage
 
       Write-PSFHostColor -String "Are you ready to begin your adventure?" -DefaultColor Blue
@@ -524,15 +540,15 @@ function Assert-Correct {
       $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' 
 
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists -Show Summary -PassThru
-      $check1 |Convert-DbcResult -Label Backup -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check1 | Convert-DbcResult -Label Backup -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' 
       $null = Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' 
 
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn1, NoBackupFiles -Show Summary -PassThru
-      $check2 |Convert-DbcResult -Label Backup -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check2 | Convert-DbcResult -Label Backup -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
-      $results = @($check1,$check2)
+      $results = @($check1, $check2)
       Set-FailedTestMessage
       Write-PSFHostColor -String "Should you create a save point before this chapter?" -DefaultColor Blue
       Start-Sleep -Seconds 5
@@ -552,15 +568,15 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
 
-      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2 -Show Summary -PassThru
-      $check1 |Convert-DbcResult -Label Copy -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, NeedNoLogins -Show Summary -PassThru
+      $check1 | Convert-DbcResult -Label Copy -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists -Show Summary -PassThru
-      $check2 |Convert-DbcResult -Label Copy -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check2 | Convert-DbcResult -Label Copy -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
-      $results = @($check1,$check2)
+      $results = @($check1, $check2)
       Set-FailedTestMessage
       Write-PSFHostColor -String "If you get database missing failures - Chapter 2 will be your friend" -DefaultColor Magenta
       $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false # reset
@@ -577,13 +593,13 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots -Show Summary -PassThru
-      $check1 |Convert-DbcResult -Label SnapShots -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check1 | Convert-DbcResult -Label SnapShots -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
-      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs','tempdb' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
-      $check1 |Convert-DbcResult -Label SnapShots -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
-      $results = @($check1,$check2)
+      $check1 | Convert-DbcResult -Label SnapShots -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $results = @($check1, $check2)
       Set-FailedTestMessage
       $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false # reset
     }
@@ -596,17 +612,17 @@ function Assert-Correct {
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       Set-DbcConfig -Name skip.connection.remoting -Value $true
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
-      $check1 |Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check1 | Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
-      $check2 |Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check2 | Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
       Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
-      $check3 |Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
-      $results = @($check1,$check2,$check3)
+      $check3 | Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $results = @($check1, $check2, $check3)
       Set-FailedTestMessage
       $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false
     }
@@ -620,18 +636,18 @@ function Assert-Correct {
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       Set-DbcConfig -Name skip.connection.remoting -Value $true
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
-      $check1 |Convert-DbcResult -Label AvailabilityGroups -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check1 | Convert-DbcResult -Label AvailabilityGroups -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots, NoAgs -Show Summary -PassThru
-      $check2 |Convert-DbcResult -Label AvailabilityGroups -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check2 | Convert-DbcResult -Label AvailabilityGroups -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
-      $check3 |Convert-DbcResult -Label AvailabilityGroups -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
-      $results = @($check1,$check2,$check3)
+      $check3 | Convert-DbcResult -Label AvailabilityGroups -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $results = @($check1, $check2, $check3)
       Set-FailedTestMessage
       Write-PSFHostColor -String "If you get database missing failures - Chapter 2 will be your friend" -DefaultColor Magenta
       $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false
@@ -642,23 +658,49 @@ function Assert-Correct {
       $null = Reset-DbcConfig 
       $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
       Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
-      Set-DbcConfig -Name app.sqlinstance -Value $containers
-      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
-      Set-DbcConfig -Name skip.connection.remoting -Value $true
+      $null = Set-DbcConfig -Name app.sqlinstance -Value $containers
+      $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      $null = Set-DbcConfig -Name skip.connection.remoting -Value $true
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
-      $check1 |Convert-DbcResult -Label AdvancedMigration -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check1 | Convert-DbcResult -Label AdvancedMigration -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots, NoAgs -Show Summary -PassThru
-      $check2 |Convert-DbcResult -Label AdvancedMigration -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check2 | Convert-DbcResult -Label AdvancedMigration -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
-      $check3 |Convert-DbcResult -Label AdvancedMigration -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      $check3 | Convert-DbcResult -Label AdvancedMigration -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
       
-      $results = @($check1,$check2,$check3)
+      $results = @($check1, $check2, $check3)
+      Set-FailedTestMessage
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false
+    }
+    'Found' {
+      # Valid estate is as we expect
+
+      $null = Reset-DbcConfig 
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
+      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
+      $null = Set-DbcConfig -Name app.sqlinstance -Value $containers
+      $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      $null = Set-DbcConfig -Name skip.connection.remoting -Value $true
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
+      $check1 | Convert-DbcResult -Label Found -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists,NeedJobs, NeedFailedJobs  -Show Summary -PassThru
+      $check2 | Convert-DbcResult -Label Found -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+      $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus, NeedSps,NeedUDfs,NeedTriggers,NeedLogins -Show Summary -PassThru
+      $check3 | Convert-DbcResult -Label Found -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      
+      $results = @($check1, $check2, $check3)
       Set-FailedTestMessage
       $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false
     }
@@ -679,7 +721,7 @@ function Assert-Correct {
 
       $null = Import-DbcConfig /workspace/Demos/dbachecksconfigs/initial-dbatools2-config.json
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
-      $results = @($check1,$check2,$check3)
+      $results = @($check1, $check2, $check3)
       Set-FailedTestMessage
     }
   }
@@ -690,7 +732,7 @@ function Assert-Correct {
     "*dba*:DestinationCredential"    = $continercredential
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
-}
+  }
 }
 
 Function Compare-SPConfig {
@@ -734,10 +776,10 @@ function Invoke-PubsApplication {
 
   while ($true) {   
     $newOrder = [PSCustomObject]@{
-      stor_id = Get-Random (Invoke-DbaQuery -SqlInstance $appConnection -Database pubs -Query 'select stor_id from stores').stor_id
-      ord_num = Get-DbaRandomizedValue -DataType int -Min 1000 -Max 99999
+      stor_id  = Get-Random (Invoke-DbaQuery -SqlInstance $appConnection -Database pubs -Query 'select stor_id from stores').stor_id
+      ord_num  = Get-DbaRandomizedValue -DataType int -Min 1000 -Max 99999
       ord_date = get-date
-      qty = Get-Random -Minimum 1 -Maximum 30
+      qty      = Get-Random -Minimum 1 -Maximum 30
       payterms = Get-Random (Invoke-DbaQuery -SqlInstance $appConnection -Database pubs -Query 'select distinct payterms from pubs.dbo.sales').payterms
       title_id = Get-Random (Invoke-DbaQuery -SqlInstance $appConnection -Database pubs -Query 'select title_id from titles').title_id
     }
@@ -758,23 +800,23 @@ function Get-GameTimeRemaining {
   $TheEnd = Get-Date -Hour 17 -Minute 00 -Second 0
 
   switch ($Date) {
-      {$Date -lt $TheEnd} { 
-          $Remaining = $TheEnd -$Date
-          $Reason = 'THE END'
-       }
-       {$Date -lt $AfternoonBreak} { 
-          $Remaining = $AfternoonBreak -$Date
-          $Reason = 'AFTERNOON BREAK'
-       }
-       {$Date -lt $Lunch} { 
-          $Remaining = $Lunch -$Date
-          $Reason = 'LUNCH BREAK'
-       }
-       {$Date -lt $MorningBreak} {
-          $Remaining = $MorningBreak - $Date
-          $Reason = 'MORNING BREAK'
-        }
-      Default {}
+    { $Date -lt $TheEnd } { 
+      $Remaining = $TheEnd - $Date
+      $Reason = 'THE END'
+    }
+    { $Date -lt $AfternoonBreak } { 
+      $Remaining = $AfternoonBreak - $Date
+      $Reason = 'AFTERNOON BREAK'
+    }
+    { $Date -lt $Lunch } { 
+      $Remaining = $Lunch - $Date
+      $Reason = 'LUNCH BREAK'
+    }
+    { $Date -lt $MorningBreak } {
+      $Remaining = $MorningBreak - $Date
+      $Reason = 'MORNING BREAK'
+    }
+    Default {}
   }
   $message = '
 _______________________   _______________________                                                                                                 
@@ -784,15 +826,15 @@ _______________________   _______________________
 |                      |  | UNTIL {6}                                                                                                                 
 |______________________|  |______________________|                                                                                                
                                                                                                                                                   
-' -f $Diff.Hours , ("{0:D2}" -f $diff.Minutes) , ("{0:D2}" -f  $diff.Seconds), $Remaining.Hours , ("{0:D2}" -f $Remaining.Minutes) , ("{0:D2}" -f  $Remaining.Seconds), $Reason
+' -f $Diff.Hours , ("{0:D2}" -f $diff.Minutes) , ("{0:D2}" -f $diff.Seconds), $Remaining.Hours , ("{0:D2}" -f $Remaining.Minutes) , ("{0:D2}" -f $Remaining.Seconds), $Reason
 
-Write-Host $message -BackgroundColor 03fcf4 -ForegroundColor Black
+  Write-Host $message -BackgroundColor 03fcf4 -ForegroundColor Black
   
 }
 
 Function TicTacToe {
   Param(
-      $Sleep
+    $Sleep
   )
   $message = '
        |         |
@@ -1019,7 +1061,7 @@ O   O  |    X    |    X
 function Start-TicTacToe {
   $Options = 500, 200, 200, 100, 100, 100, 50, 50, 50, 50, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10
   $Options | ForEach-Object {
-      TicTacToe -Sleep $_
+    TicTacToe -Sleep $_
   }
   Clear-Host
   $Message = ' GREETINGS PROFESSOR FALKEN                                       
@@ -1033,4 +1075,4 @@ function Start-TicTacToe {
                                                                    '
   Write-Host $message -BackgroundColor 03fcf4 -ForegroundColor Black
 }
-  Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $true -Initialize -Description "Whether to ask or not" -ModuleExport 
+Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $true -Initialize -Description "Whether to ask or not" -ModuleExport 
