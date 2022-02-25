@@ -21,7 +21,11 @@ ______ _           _ _               _____ _     _
 
 # Let's first look at our stored procedures - and see if there is any code we should be concerned with!
 
-# Find commands
+# Find Find commands
+
+Find-DbaCommand -Pattern 'find-'
+
+# Find Storec
 Find-DbaCommand '*Stored Procedures*'
 
 # Look for procedures the touch the [order details] table
@@ -35,6 +39,7 @@ $FindMeSP
 $FindMeSP | Get-Member 
 $FindMeSP | Format-List TextHeader, TextBody
 
+# WAIT - where did $FindMeSP come from Jess ?
 
 # What if there are other objects that aren't SP's? Perhaps Functions, Triggers, etc.
 
@@ -48,13 +53,18 @@ $NorthwindDB | Get-Member
 # Database triggers
 $NorthwindDB.Triggers
 
+# NB - You can also use Find-DbaTrigger of course
+# Find-DbaTrigger -SqlInstance dbatools1 -Database Northwind -Pattern 'trg'
+
 # Functions
+
 $NorthwindDB.UserDefinedFunctions | 
     Where-Object TextBody -like '*order details*' | 
     Select-Object Name, TextHeader, TextBody | 
     Format-List
 
 # What about table level triggers
+# NB - You can also use Find-DbaTrigger of course
 $NorthwindDB.Tables[0] | Get-Member
 
 $NorthwindDB.Tables.Where{$_.Name -eq 'order details'}.Triggers | 
