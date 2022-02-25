@@ -152,6 +152,12 @@ $Global:Italwaysis = @"
 function Start-Game {
   # Because we are using volumes for the restore demo, need to ensure they are clean before starting the game
   Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force -ErrorAction SilentlyContinue
+  
+  $securePassword = ('dbatools.IO' | ConvertTo-SecureString -asPlainText -Force)
+  $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
+
+  New-DbaDatabase -SqlInstance $dbatools1 -SqlCredential $continercredential -Name Validation -RecoveryModel Full
+
   Clear-Host
   $title = "Joshua Says" 
   $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Will continue" 
@@ -187,6 +193,8 @@ function Get-Index {
     ("&8 - Data Masking", "8 - Data Masking"),
     ("&9 - Logins", "9 - Logins"),
     ("&M - Advanced Migrations", "10 - Advanced Migrations"),
+    ("&R - Registered Servers", "11 - Registered Servers"),
+    ("&E - Estate Validation", "12 - Estate Validation"),
     ("&T - TIC TAC TOE", "98 - TIC TAC TOE"),
     ("&G - GLOBAL THERMONUCLEAR WAR", "99 - GLOBAL THERMONUCLEAR WAR"),
     ("&Q - Quit", "Quit")
@@ -323,8 +331,29 @@ function Get-Index {
       Write-PSFHostColor -String "we also need an app to run in the background" -DefaultColor Green
       Write-PSFHostColor -String "In a new session run Invoke-PubsApplication" -DefaultColor Green
     }
+    #even though you choose R
+    11 { 
+      Clear-Host
+      Write-Output "11 - Registered Servers" 
+      code /workspace/Demos/11-RegisteredServers.ps1
+            
+      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
+      Assert-Correct -chapter AdvMigration
+      Get-GameTimeRemaining
+    }
+    #even though you choose E
+    12 { 
+      Clear-Host
+      Write-Output "12 - Estate Validation"
+
+      Get-GameTimeRemaining
+    }
+    # even though you choose T
+    13 {
+      Start-TicTacToe
+    }
     # even though you choose G
-    12 {
+    14 {
       Clear-Host
       $Message = ' GREETINGS PROFESSOR FALKEN                                       
                                                                    
@@ -336,10 +365,6 @@ function Get-Index {
       HOW ABOUT A NICE GAME OF CHESS?                                  
                                                                        '
       Write-Host $message -BackgroundColor 03fcf4 -ForegroundColor Black
-    }
-    # even though you choose T
-    11 {
-      Start-TicTacToe
     }
     'q' {
       Clear-Host
@@ -413,6 +438,7 @@ function Assert-Correct {
       # Valid estate is as we expect
 
       $null = Reset-DbcConfig 
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
 
       Set-DbcConfig -Name app.sqlinstance -Value $containers
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
@@ -425,33 +451,40 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
       Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
       Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists
+
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false  # reset
     }
     'Intro' { 
       # Valid estate is as we expect
 
       $null = Reset-DbcConfig 
-
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
       $null = Set-DbcConfig -Name app.sqlinstance -Value $containers
       $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       $null = Set-DbcConfig -Name skip.connection.remoting -Value $true
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
+      $check1 |Convert-DbcResult -Label Intro -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
+      $check2 |Convert-DbcResult -Label Intro -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
       $null = Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
+      $check3 |Convert-DbcResult -Label Intro -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       $results = @($check1,$check2,$check3)
       Set-FailedTestMessage
 
       Write-PSFHostColor -String "Are you ready to begin your adventure?" -DefaultColor Blue
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false  # reset
     }
     'Backup' { 
       # Valid estate is as we expect
 
       $null = Reset-DbcConfig 
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
       $null = Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append
       $null = Set-DbcConfig -Name app.sqlinstance -Value $containers 
       $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL' 
@@ -459,22 +492,27 @@ function Assert-Correct {
       $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' 
 
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists -Show Summary -PassThru
+      $check1 |Convert-DbcResult -Label Backup -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' 
       $null = Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' 
 
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn1, NoBackupFiles -Show Summary -PassThru
+      $check2 |Convert-DbcResult -Label Backup -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+
       $results = @($check1,$check2)
       Set-FailedTestMessage
       Write-PSFHostColor -String "Should you create a save point before this chapter?" -DefaultColor Blue
       Start-Sleep -Seconds 5
       Write-PSFHostColor -String "Or can you make it to the end?" -DefaultColor DarkRed
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false # reset
 
     }
     'Copy' { 
       # Valid estate is as we expect
 
       $null = Reset-DbcConfig 
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
       Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append
       Set-DbcConfig -Name app.sqlinstance -Value $containers  | Out-Null
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'  | Out-Null
@@ -483,18 +521,23 @@ function Assert-Correct {
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
 
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2 -Show Summary -PassThru
-      
+      $check1 |Convert-DbcResult -Label Copy -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists -Show Summary -PassThru
+      $check2 |Convert-DbcResult -Label Copy -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+
       $results = @($check1,$check2)
       Set-FailedTestMessage
       Write-PSFHostColor -String "If you get database missing failures - Chapter 2 will be your friend" -DefaultColor Magenta
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false # reset
     }
     'Snapshots' { 
       # Valid estate is as we expect
       Write-PSFHostColor -String "Running the SnapShot Chapter checks" -DefaultColor Green
       $null = Reset-DbcConfig 
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
       Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
       Set-DbcConfig -Name app.sqlinstance -Value $containers  | Out-Null
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'  | Out-Null
@@ -502,75 +545,90 @@ function Assert-Correct {
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots -Show Summary -PassThru
+      $check1 |Convert-DbcResult -Label SnapShots -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs','tempdb' | Out-Null
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
+      $check1 |Convert-DbcResult -Label SnapShots -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
       $results = @($check1,$check2)
       Set-FailedTestMessage
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false # reset
     }
     'Export' { 
       # Valid estate is as we expect
 
       $null = Reset-DbcConfig 
-
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
       Set-DbcConfig -Name app.sqlinstance -Value $containers
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       Set-DbcConfig -Name skip.connection.remoting -Value $true
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
+      $check1 |Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
+      $check2 |Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
       Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
+      $check3 |Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
       $results = @($check1,$check2,$check3)
       Set-FailedTestMessage
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false
     }
     'Ags' { 
       # Valid estate is as we expect
 
       $null = Reset-DbcConfig 
-
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
       Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
       Set-DbcConfig -Name app.sqlinstance -Value $containers
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       Set-DbcConfig -Name skip.connection.remoting -Value $true
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
+      $check1 |Convert-DbcResult -Label AvailabilityGroups -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots, NoAgs -Show Summary -PassThru
+      $check2 |Convert-DbcResult -Label AvailabilityGroups -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'pubs-0', 'pubs-1', 'pubs-10', 'pubs-2', 'pubs-3', 'pubs-4', 'pubs-5', 'pubs-6', 'pubs-7', 'pubs-8', 'pubs-9', 'tempdb' | Out-Null
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
+      $check3 |Convert-DbcResult -Label AvailabilityGroups -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
       $results = @($check1,$check2,$check3)
       Set-FailedTestMessage
       Write-PSFHostColor -String "If you get database missing failures - Chapter 2 will be your friend" -DefaultColor Magenta
-      
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false
     }
     'AdvMigration' {
       # Valid estate is as we expect
 
       $null = Reset-DbcConfig 
-
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
       Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
       Set-DbcConfig -Name app.sqlinstance -Value $containers
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
       Set-DbcConfig -Name skip.connection.remoting -Value $true
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
+      $check1 |Convert-DbcResult -Label AdvancedMigration -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, NoDatabasesOn2, DatabaseStatus, NoSnapshots, NoAgs -Show Summary -PassThru
+      $check2 |Convert-DbcResult -Label AdvancedMigration -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
       Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
+      $check3 |Convert-DbcResult -Label AdvancedMigration -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      
       $results = @($check1,$check2,$check3)
       Set-FailedTestMessage
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false
     }
     Default {
       # Valid estate is as we expect
