@@ -139,8 +139,8 @@ $Global:Italwaysis = @"
 "@
 #endregion
 
-# If we are not using the ocnfig files becuase they take too long even though they are the correct wya to do things
-# we dont need this replace inhere
+# If we are not using the config files because they take too long even though they are the correct wya to do things
+# we don't need this replace inhere
 # [version]$dbachecksversioninconfig = (Get-DbcConfigValue -Name app.checkrepos).Split('/')[-1].Split('\')[0]
 # [version]$dbachecksmodulevarsion = (Get-Module dbachecks).Version
 # 
@@ -194,7 +194,7 @@ function Get-Index {
     ("&9 - Logins", "9 - Logins"),
     ("&M - Advanced Migrations", "10 - Advanced Migrations"),
     ("&R - Registered Servers", "11 - Registered Servers"),
-    ("&E - Estate Validation", "12 - Estate Validation"),
+    ("&C - Estate Validation", "12 - Estate Validation"),
     ("&T - TIC TAC TOE", "98 - TIC TAC TOE"),
     ("&G - GLOBAL THERMONUCLEAR WAR", "99 - GLOBAL THERMONUCLEAR WAR"),
     ("&Q - Quit", "Quit")
@@ -214,7 +214,7 @@ function Get-Index {
     1 { 
       Clear-Host
       code /workspace/Demos/01-introduction.ps1
-      #reset anbd run tests
+      #reset and run tests
       Write-PSFHostColor -String "It was a dark and stormy morning and ripe for learning about dbatools" -DefaultColor DarkCyan
       Write-PSFHostColor -String "The teachers arrived in the class first thing and ran some tests" -DefaultColor DarkYellow
       Write-PSFHostColor -String "They needed to ensure that nothing was wrong before" -DefaultColor DarkRed
@@ -286,6 +286,41 @@ function Get-Index {
       Write-PSFHostColor -String "~~~~~~~  YOU SHALL BE LOST FOREVER  ~~~~~~~" -DefaultColor DarkRed
       Write-PSFHostColor -String "7 - Finding Things"  -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
+      
+      # Let's add some things to find
+      Invoke-DbaQuery -SqlInstance $dbatools1 -Database Northwind -Query "
+        CREATE PROCEDURE SP_FindMe AS BEGIN 
+          with cte as (
+            select top 1 OrderID, ProductID
+            FROM dbo.[Order Details]
+            ORDER BY NEWID()
+          )
+          DELETE 
+          FROM cte 
+        END
+        
+        GO
+        
+        CREATE TRIGGER dbo.trg_chaos_monkey
+          ON  dbo.[order details]
+          INSTEAD OF UPDATE
+        AS 
+        BEGIN
+          print 'no update for you'
+        END
+        GO
+        CREATE FUNCTION udf_FindMe (@test int = )
+        RETURNS int
+        AS
+        BEGIN
+          RETURN @test
+        END"
+      
+      # Add a failed job
+      $job = New-DbaAgentJob -SqlInstance $dbatools2 -Job IamBroke
+      $null = New-DbaAgentJobStep -SqlInstance $dbatools2 -Job $job.Name -Subsystem TransactSql -Command 'Select * from MissingTable' -StepName 'Step One'
+      $job.Start()
+      
       #Assert-Correct -chapter Export
       Get-GameTimeRemaining
     }
@@ -303,7 +338,7 @@ function Get-Index {
     9 { 
       Clear-Host
       code /workspace/Demos/09-Logins.ps1
-      Write-PSFHostColor -String "They saw a house int eh distance and picked up speed" -DefaultColor DarkCyan
+      Write-PSFHostColor -String "They saw a house in the distance and picked up speed" -DefaultColor DarkCyan
       Write-PSFHostColor -String "A massive wooden door faced them, they rang the bell" -DefaultColor DarkYellow
       Write-PSFHostColor -String "The monsters were close though ~~~ LET US IN" -DefaultColor DarkRed
       Write-PSFHostColor -String "PLEASE ~~~ LET US IN" -DefaultColor DarkRed
@@ -336,21 +371,20 @@ function Get-Index {
       Clear-Host
       Write-Output "11 - Registered Servers" 
       code /workspace/Demos/11-RegisteredServers.ps1
-            
+                  
       Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
-      Assert-Correct -chapter AdvMigration
+      # Assert-Correct -chapter RegisterdServers
       Get-GameTimeRemaining
     }
-    #even though you choose E
+    #even though you choose C
     12 { 
       Clear-Host
-      Write-Output "12 - Estate Validation"
-
+      Write-Output "12 - Estate Validation" 
+      code /workspace/Demos/12-EstateValidation.ps1
+                  
+      Write-PSFHostColor -String "Just running some tests a mo" -DefaultColor Green
+      # Assert-Correct -chapter RegisterdServers
       Get-GameTimeRemaining
-    }
-    # even though you choose T
-    13 {
-      Start-TicTacToe
     }
     # even though you choose G
     14 {
@@ -365,6 +399,10 @@ function Get-Index {
       HOW ABOUT A NICE GAME OF CHESS?                                  
                                                                        '
       Write-Host $message -BackgroundColor 03fcf4 -ForegroundColor Black
+    }
+    # even though you choose T
+    13 {
+      Start-TicTacToe
     }
     'q' {
       Clear-Host
@@ -408,7 +446,7 @@ function Set-FailedTestMessage {
   if($FailedTests -gt 0){
     Write-PSFHostColor -String "NARRATOR - A thing went wrong" -DefaultColor DarkMagenta
     Write-PSFHostColor -String "NARRATOR - It MUST be fixed before we can continue" -DefaultColor DarkMagenta
-    $Failures = $results.TestResult| Where Result -eq 'Failed'  | Select Describe,Context,Name,FailureMessage
+    $Failures = $results.TestResult| Where Result -eq 'Failed'  | Select Describe,Context,Name,FailureMessage 
     $Failures.ForEach{
       $Message = '{0} at {1} in {2}' -f $_.FailureMessage,  $_.Name, $_.Describe
       Write-PSFHostColor -String $Message -DefaultColor DarkCyan
