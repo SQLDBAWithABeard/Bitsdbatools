@@ -1,8 +1,15 @@
 
 Import-Module /workspace/Game/JessAndBeard.psm1
+$containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
 #region Set up connection
 $securePassword = ('dbatools.IO' | ConvertTo-SecureString -AsPlainText -Force)
 $continercredential = New-Object System.Management.Automation.PSCredential('sqladmin', $securePassword)
+
+# we need an app login
+$Password = ConvertTo-SecureString PubsAdmin -AsPlainText -Force
+New-DbaLogin -SqlInstance $dbatools1 -SqlCredential $continercredential  -Login PubsAdmin -SecurePassword $Password | Out-Null
+New-DbaDbUser -SqlInstance $dbatools1 -SqlCredential $continercredential -Database Pubs -Login PubsAdmin -Username PubsAdmin  | Out-Null
+Add-DbaDbRoleMember -SqlInstance $dbatools1 -SqlCredential $continercredential -Database Pubs -User PubsAdmin -Role db_owner -Confirm:$false  | Out-Null
  
 $Global:PSDefaultParameterValues = @{
     "*dba*:SqlCredential"            = $continercredential
@@ -13,7 +20,7 @@ $Global:PSDefaultParameterValues = @{
     "*dba*:SecondarySqlCredential"   = $continercredential
 }
  
-$containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
+
 #endregion
 
 Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force -ErrorAction SilentlyContinue
