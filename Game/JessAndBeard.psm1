@@ -347,7 +347,7 @@ function Get-Index {
       Write-PSFHostColor -String "But what was on those faces? Are those ....... Masks?" -DefaultColor DarkRed
       Write-PSFHostColor -String "8 - Data Masking"  -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
-      #Assert-Correct -chapter Export
+      Assert-Correct -chapter Masking
       Get-GameTimeRemaining
     }
     9 { 
@@ -359,7 +359,7 @@ function Get-Index {
       Write-PSFHostColor -String "PLEASE ~~~ LET US IN" -DefaultColor DarkRed
       Write-PSFHostColor -String "9 - Logins"  -DefaultColor DarkMagenta
       Write-PSFHostColor -String "Narrator - The Tests are running" -DefaultColor Blue
-      #Assert-Correct -chapter Export
+      Assert-Correct -chapter Logins
       Get-GameTimeRemaining
     }
     #even though you choose M
@@ -474,8 +474,10 @@ function Assert-Correct {
       'SnapShots',
       'Export',
       'Ags',
-      'AdvMigration',
-      'Found'
+      'Found',
+      'Masking',
+      'Logins',
+      'AdvMigration'
     )]
     [string]
     $chapter = 'initial'
@@ -699,6 +701,58 @@ function Assert-Correct {
       Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus, NeedSps,NeedUDfs,NeedTriggers,NeedLogins -Show Summary -PassThru
       $check3 | Convert-DbcResult -Label Found -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      
+      $results = @($check1, $check2, $check3)
+      Set-FailedTestMessage
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false
+    }
+    'Masking' {
+      # Valid estate is as we expect
+
+      $null = Reset-DbcConfig 
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
+      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
+      $null = Set-DbcConfig -Name app.sqlinstance -Value $containers
+      $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      $null = Set-DbcConfig -Name skip.connection.remoting -Value $true
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
+      $check1 | Convert-DbcResult -Label Masking -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists -Show Summary -PassThru
+      $check2 | Convert-DbcResult -Label Masking -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+      $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
+      $check3 | Convert-DbcResult -Label Masking -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+      
+      $results = @($check1, $check2, $check3)
+      Set-FailedTestMessage
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $false
+    }
+    'Logins' {
+      # Valid estate is as we expect
+
+      $null = Reset-DbcConfig 
+      $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
+      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
+      $null = Set-DbcConfig -Name app.sqlinstance -Value $containers
+      $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      $null = Set-DbcConfig -Name skip.connection.remoting -Value $true
+      $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
+      $check1 | Convert-DbcResult -Label Logins -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'tempdb' | Out-Null
+      $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists -Show Summary -PassThru
+      $check2 | Convert-DbcResult -Label Logins -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
+
+      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1' | Out-Null
+      Set-DbcConfig -Name database.exists -Value 'master', 'model', 'msdb', 'Northwind', 'pubs', 'tempdb' | Out-Null
+      $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection, DatabaseExists, DatabaseStatus -Show Summary -PassThru
+      $check3 | Convert-DbcResult -Label Logins -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
       
       $results = @($check1, $check2, $check3)
       Set-FailedTestMessage
