@@ -7,7 +7,7 @@
 - Finding SQL Instances on your estate - Jess to do this
 - Working with Central Management Server - Jess to do this
 - Disaster Recovery - done
-- Backup Testing - Rob to add to backup adn restore chapter
+- Backup Testing - Rob to add to backup adn restore chapter - done
 - Simple instance migrations - done
 - Tracking Activity 
 - Working with other community tools with dbatools 
