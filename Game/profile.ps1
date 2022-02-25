@@ -19,6 +19,7 @@ $Global:PSDefaultParameterValues = @{
 #endregion
 
 Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item '/shared' -Recurse -Force -ErrorAction SilentlyContinue
 Import-Module Pansies
 $ShallWePlayAGameSetting = Get-PSFConfigValue -Name JessAndBeard.shallweplayagame 
 
