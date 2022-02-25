@@ -69,29 +69,3 @@ module database 'database.bicep' = {
     sqlserver
   ]
 }
-module database2 'database.bicep' = {
-  scope: resourceGroup
-  name: '${dbName}2-deploy'
-  params: {
-    location: location
-    dbName: '${dbName}WWIFull'
-    sqlServerName: name
-    sampleName: 'WideWorldImportersFull'
-  }
-  dependsOn: [
-    sqlserver
-  ]
-}
-module database3 'database.bicep' = {
-  scope: resourceGroup
-  name: '${dbName}3-deploy'
-  params: {
-    location: location
-    dbName: '${dbName}WWIStd'
-    sqlServerName: name
-    sampleName: 'WideWorldImportersStd'
-  }
-  dependsOn: [
-    sqlserver
-  ]
-}
