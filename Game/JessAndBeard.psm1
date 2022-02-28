@@ -563,7 +563,7 @@ function Assert-Correct {
 
       $null = Reset-DbcConfig 
       $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
-      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append
+      $null = Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append
       Set-DbcConfig -Name app.sqlinstance -Value $containers  | Out-Null
       Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'  | Out-Null
       Set-DbcConfig -Name skip.connection.remoting -Value $true  | Out-Null
