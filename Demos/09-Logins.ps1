@@ -92,7 +92,8 @@ $Global:PSDefaultParameterValues = @{
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
 }
-Write-Output "has been sent"
+Clear-Host
+Write-Output "Email has been sent"
 #endregion
 
 # Sure enough the user is back pretty quickly

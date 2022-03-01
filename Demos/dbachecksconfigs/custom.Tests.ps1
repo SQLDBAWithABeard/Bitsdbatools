@@ -215,11 +215,11 @@ Describe "There should be expected Agent Jobs" -Tags NeedJobs , $Filename {
                 Name = 'IamBroke' 
             }
         )
-        It "dbatools2 should haven Agent Job named <Name>" -TestCases $TestCases  {
+        It "dbatools2 should have an Agent Job named <Name>" -TestCases $TestCases  {
             param(
                 $Name
             )
-            Get-DbaAgentJob -SqlInstance dbatools2 -Name $Name | Should -Not -BeNullOrEmpty -Because "We need to have the job $Name on dbatools2 for this to work"
+            Get-DbaAgentJob -SqlInstance dbatools2 -Job $Name | Should -Not -BeNullOrEmpty -Because "We need to have the job $Name on dbatools2 for this to work"
         }
     }
 }

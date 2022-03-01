@@ -29,6 +29,18 @@ Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Format-Tabl
 
 # Wait?
 
+
+
+
+
+
+
+
+
+
+
+
+
 # You dont want to have both versions in play and available at the same time ?
 
 # We got you.
@@ -45,7 +57,27 @@ Copy-DbaDatabase -Source $dbatools1 -Destination $dbatools2 -BackupRestore -Shar
 
 Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Format-Table
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 # NO NO NO NO - NOt offline - I meant ReadOnly
+
+
+
+
+
+
+
 
 # No confirm - remove them from dbatools2
 
@@ -102,7 +134,7 @@ code $export.FullName
 
 # lets set the value back on dbatools1
 
-Set-DbaSpConfigure -SqlInstance $dbatools1 -Name DefaultBackupCompression -Value 1
+Set-DbaSpConfigure -SqlInstance $dbatools1 -Name DefaultBackupCompression -Value 0
 
 # Compare the spconfig on two instances
 
@@ -114,7 +146,7 @@ Import-DbaSpConfigure -Path $export.FullName -SqlInstance $dbatools1
 
 # Compare the spconfig on two instances
 
-Compare-SPConfig -Source $dbatools1 -Destination $dbatools2 bac
+Compare-SPConfig -Source $dbatools1 -Destination $dbatools2 
 
 
 # Now what else can we copy ....................................
@@ -127,7 +159,6 @@ Get-DbaLogin -SqlInstance $dbatools1,$dbatools2|Format-Table
 
 Get-DbaAgentJob  -SqlInstance $dbatools1,$dbatools2|Format-Table
 
-Copy-DbaSpConfigure
 
 # Choose your adventure
 

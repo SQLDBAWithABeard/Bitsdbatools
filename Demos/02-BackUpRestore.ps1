@@ -44,7 +44,7 @@ Get-DbaFile -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/firstbacku
 
 ls /var/opt/mssql/data/backups/firstbackup
 
-ls -l  /var/opt/mssql/data
+ls -l -R /var/opt/mssql/data
 
 # now if we check the user databases last backup time 
 

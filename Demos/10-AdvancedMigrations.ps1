@@ -9,7 +9,13 @@
                                                          |___/                                 
 #>
 
-# Hey Jess and Rob - Rebuild the containers right now (properly - so that everything goes)
+# Now we canb show some of the other destructive commands :-)
+$Databases = Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem 
+Remove-DbaAgDatabase -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme -Database $Databases
+Remove-DbaAvailabilityGroup -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme
+Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Confirm:$false 
+
+
 
 # Let's see what databases we have available here
 Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Select-Object SqlInstance, Name, Status, SizeMB

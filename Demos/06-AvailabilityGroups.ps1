@@ -39,6 +39,22 @@ $AddAgDbConfig = @{
 }
 Add-DbaAgDatabase @AddAgDbConfig
 
+# POwerShell is not magic ;-)
+
+Backup-DbaDatabase -SqlInstance $dbatools1 -Database Northwind -Path /shared -Type Full
+Backup-DbaDatabase -SqlInstance $dbatools1 -Database Northwind -Path /shared -Type Log
+# lets add a database to the Availabiility Group
+
+$AddAgDbConfig = @{
+    SqlInstance       = $dbatools1 
+    AvailabilityGroup = $AgName  
+    Database          = 'NorthWind'
+    SeedingMode       = 'Automatic' 
+    SharedPath        = '/var/opt/backups' 
+    Secondary         = $dbatools2
+}
+Add-DbaAgDatabase @AddAgDbConfig
+
 # And then how to add some more databases to it 52 seconds browser
 
 $databases = Get-DbaDatabase -SqlInstance $dbatools1  -ExcludeSystem -ExcludeDatabase pubs, NorthWind
@@ -132,7 +148,8 @@ Get-DbaAgDatabase -SqlInstance $SQLInstances | Format-Table
 
 Resume-DbaAgDbDataMovement -SqlInstance $dbatools1 -AvailabilityGroup $AgName -Database pubs-7 
 
-# Keeping things in sync
+# Keeping things in sync - this takes a minute to check all the things ;-)
+# We are doing a WhatIf so you can see what it would do
 
 Sync-DbaAvailabilityGroup -Primary $dbatools2 -Secondary $dbatools1 -AvailabilityGroup $AgName -WhatIf
 
@@ -144,7 +161,7 @@ New-DbaLogin -SqlInstance $dbatools2 -Login arcade -SecurePassword $continercred
 
 Get-DbaLogin -SqlInstance $SQLInstances -ExcludeSystemLogin  | Format-Table
 
-# Lets sync our replicas
+# Lets sync our replicas - takes a few but worth it.
 
 Sync-DbaAvailabilityGroup -Primary $dbatools2 -Secondary $dbatools1 -AvailabilityGroup $AgName 
 

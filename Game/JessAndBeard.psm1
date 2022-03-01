@@ -24,7 +24,7 @@ $ShallWePLayAGame = @"
 "@
 
 $OhNo1 = @"
-██████  ██░ ██  ▄▄▄       ██▓     ██▓        █     █░▓█████     ██▓███   ██▓    ▄▄▄     ▓██   ██▓    ▄▄▄           ▄████  ▄▄▄       ███▄ ▄███▓▓█████ 
+ ██████  ██░ ██  ▄▄▄       ██▓     ██▓        █     █░▓█████     ██▓███   ██▓    ▄▄▄     ▓██   ██▓    ▄▄▄           ▄████  ▄▄▄       ███▄ ▄███▓▓█████ 
 ▒██    ▒ ▓██░ ██▒▒████▄    ▓██▒    ▓██▒       ▓█░ █ ░█░▓█   ▀    ▓██░  ██▒▓██▒   ▒████▄    ▒██  ██▒   ▒████▄        ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀ 
 ░ ▓██▄   ▒██▀▀██░▒██  ▀█▄  ▒██░    ▒██░       ▒█░ █ ░█ ▒███      ▓██░ ██▓▒▒██░   ▒██  ▀█▄   ▒██ ██░   ▒██  ▀█▄     ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███   
   ▒   ██▒░▓█ ░██ ░██▄▄▄▄██ ▒██░    ▒██░       ░█░ █ ░█ ▒▓█  ▄    ▒██▄█▓▒ ▒▒██░   ░██▄▄▄▄██  ░ ▐██▓░   ░██▄▄▄▄██    ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄ 
@@ -62,7 +62,7 @@ $OhNo2 = @"
 "@
 $ChooseYourgame = @"
 
-██████ ██   ██  ██████   ██████  ███████ ███████     ██    ██  ██████  ██    ██ ██████       ██████   █████  ███    ███ ███████              
+ ██████ ██   ██  ██████   ██████  ███████ ███████     ██    ██  ██████  ██    ██ ██████       ██████   █████  ███    ███ ███████              
 ██      ██   ██ ██    ██ ██    ██ ██      ██           ██  ██  ██    ██ ██    ██ ██   ██     ██       ██   ██ ████  ████ ██          ██       
 ██      ███████ ██    ██ ██    ██ ███████ █████         ████   ██    ██ ██    ██ ██████      ██   ███ ███████ ██ ████ ██ █████          █████ 
 ██      ██   ██ ██    ██ ██    ██      ██ ██             ██    ██    ██ ██    ██ ██   ██     ██    ██ ██   ██ ██  ██  ██ ██          ██       
@@ -70,7 +70,7 @@ $ChooseYourgame = @"
 "@
 $wrongChoice = @"
 
-█     █░ ██▀███   ▒█████   ███▄    █   ▄████ 
+ █     █░ ██▀███   ▒█████   ███▄    █   ▄████ 
 ▓█░ █ ░█░▓██ ▒ ██▒▒██▒  ██▒ ██ ▀█   █  ██▒ ▀█▒
 ▒█░ █ ░█ ▓██ ░▄█ ▒▒██░  ██▒▓██  ▀█ ██▒▒██░▄▄▄░
 ░█░ █ ░█ ▒██▀▀█▄  ▒██   ██░▓██▒  ▐▌██▒░▓█  ██▓
@@ -610,18 +610,18 @@ function Assert-Correct {
 
       $null = Reset-DbcConfig 
       $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
-      Set-DbcConfig -Name app.sqlinstance -Value $containers
-      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
-      Set-DbcConfig -Name skip.connection.remoting -Value $true
+      $null = Set-DbcConfig -Name app.sqlinstance -Value $containers
+      $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      $null = Set-DbcConfig -Name skip.connection.remoting -Value $true
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
       $check1 | Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
-      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
+      $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools2'
       $check2 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
       $check2 | Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
-      Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
-      Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
+      $null = Set-DbcConfig -Name app.sqlinstance -Value 'dbatools1'
+      $null = Set-DbcConfig -Name database.exists -Value 'pubs', 'NorthWind' -Append
       $check3 = Invoke-DbcCheck -SqlCredential $continercredential -Check DatabaseExists -Show Summary -PassThru
       $check3 | Convert-DbcResult -Label Export -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
       $results = @($check1, $check2, $check3)
@@ -633,10 +633,10 @@ function Assert-Correct {
 
       $null = Reset-DbcConfig 
       $null = Set-PSFConfig -FullName PSFramework.Message.ConsoleOutput.Disable -value $true  # so we dont get silly output from convert-dbcresult
-      Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
-      Set-DbcConfig -Name app.sqlinstance -Value $containers
-      Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
-      Set-DbcConfig -Name skip.connection.remoting -Value $true
+      $null = Set-DbcConfig -Name app.checkrepos -Value '/workspace/Demos/dbachecksconfigs' -Append | Out-Null
+      $null = Set-DbcConfig -Name app.sqlinstance -Value $containers
+      $null = Set-DbcConfig -Name policy.connection.authscheme -Value 'SQL'
+      $null = Set-DbcConfig -Name skip.connection.remoting -Value $true
       $check1 = Invoke-DbcCheck -SqlCredential $continercredential -Check InstanceConnection -Show Summary -PassThru
       $check1 | Convert-DbcResult -Label AvailabilityGroups -warningaction SilentlyContinue | Write-DbcTable -SqlInstance $dbatools1 -SqlCredential $continercredential  -Database Validation 
 
@@ -795,8 +795,8 @@ Function Compare-SPConfig {
     $Source,
     $Destination
   )
-  $SourceSpConfigure = Get-DbaSpConfigure  -SqlInstance $Source
-  $DestSPConfigure = Get-DbaSpConfigure -SqlInstance $Destination
+  $SourceSpConfigure = Get-DbaSpConfigure  -SqlInstance $Source -SqlCredential $continercredential
+  $DestSPConfigure = Get-DbaSpConfigure -SqlInstance $Destination -SqlCredential  $continercredential
 
   $propcompare = foreach ($prop in $SourceSpConfigure) {
     [pscustomobject]@{
