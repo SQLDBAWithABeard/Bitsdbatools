@@ -12,11 +12,11 @@
 # Copying things is where dbatools made its entry into the world
 
 # What databases do we have on our instances?
-# Also even thoguh it is named SqlInstance it can accept many Sql Instances !
+# Also even though it is named SqlInstance it can accept many Sql Instances !
 
 Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Format-Table
 
-# ok so everythign on one side.
+# ok so everything on one side.
 
 # How about if we copied them all to our new instance >? 41 seconds browser
 
@@ -41,7 +41,7 @@ Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Format-Tabl
 
 
 
-# You dont want to have both versions in play and available at the same time ?
+# You don't want to have both versions in play and available at the same time ?
 
 # We got you.
 
@@ -49,7 +49,7 @@ Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Format-Tabl
 
 Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Confirm:$false
 
-# ok copy and leeave the source offline - 41 seconds browser
+# ok copy and leave the source offline - 41 seconds browser
 
 Copy-DbaDatabase -Source $dbatools1 -Destination $dbatools2 -BackupRestore -SharedPath $sharedPath -AllDatabases -SetSourceOffline
 
@@ -87,7 +87,7 @@ Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Con
 
 Set-DbaDbState -SqlInstance $dbatools1 -Online -AllDatabases
 
-# ok now copy and leeave the source readonly 48 seconds browser
+# ok now copy and leave the source readonly 48 seconds browser
 
 Copy-DbaDatabase -Source $dbatools1 -Destination $dbatools2 -BackupRestore -SharedPath $sharedPath -AllDatabases -SetSourceReadOnly
 

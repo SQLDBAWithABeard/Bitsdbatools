@@ -103,7 +103,7 @@ foreach($sqlInstance in @('dbatools1', 'dbatools2')){
 Describe "There should be no snapshots" -Tags NoSnapshots , $Filename {
     Context "No Snapshots on $SqlInstance" {
         It "$SqlInstance Should not have any snapshots" {
-            Get-DbaDbSnapshot -SqlInstance $SqlInstance | Should -BeNullOrEmpty -Because "We dont want none of them snapshots here wasting our space"
+            Get-DbaDbSnapshot -SqlInstance $SqlInstance | Should -BeNullOrEmpty -Because "We don't want none of them snapshots here wasting our space"
         }
     }
 }
@@ -111,17 +111,17 @@ Describe "There should be no snapshots" -Tags NoSnapshots , $Filename {
 Describe "There should be no backup files in the volume" -Tags NoBackupFiles , $Filename {
     Context "no backup files on dbatools1" {
         It "Volume Should not have any backup files" {
-            Get-ChildItem '/var/opt/backups/dbatools1' -ErrorAction SilentlyContinue  | Should -BeNullOrEmpty -Because "We dont want too many backup files - run Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force to fix"
+            Get-ChildItem '/var/opt/backups/dbatools1' -ErrorAction SilentlyContinue  | Should -BeNullOrEmpty -Because "We don't want too many backup files - run Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force to fix"
         }
     }
 }
 
 
 foreach($sqlInstance in @('dbatools1', 'dbatools2')){
-    Describe "There should be no Availabiity Groups" -Tags NoAgs , $Filename {
+    Describe "There should be no Availability Groups" -Tags NoAgs , $Filename {
         Context "No Ags on $sqlInstance" {
             It "$sqlInstance Should not have any Availability Groups" {
-                Get-DbaAvailabilityGroup -SqlInstance $SqlInstance | Should -BeNullOrEmpty -Because "We dont want none of them snapshots here wasting our space"
+                Get-DbaAvailabilityGroup -SqlInstance $SqlInstance | Should -BeNullOrEmpty -Because "We don't want none of them snapshots here wasting our space"
             }
         }
     }

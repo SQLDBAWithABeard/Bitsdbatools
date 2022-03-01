@@ -27,7 +27,7 @@ $AvailabilityGroupConfig = @{
 }
 New-DbaAvailabilityGroup @AvailabilityGroupConfig
 
-# lets add a database to the Availabiility Group
+# lets add a database to the Availability Group
 
 $AddAgDbConfig = @{
     SqlInstance       = $dbatools1 
@@ -43,7 +43,7 @@ Add-DbaAgDatabase @AddAgDbConfig
 
 Backup-DbaDatabase -SqlInstance $dbatools1 -Database Northwind -Path /shared -Type Full
 Backup-DbaDatabase -SqlInstance $dbatools1 -Database Northwind -Path /shared -Type Log
-# lets add a database to the Availabiility Group
+# lets add a database to the Availability Group
 
 $AddAgDbConfig = @{
     SqlInstance       = $dbatools1 
@@ -81,7 +81,7 @@ Get-DbaAgDatabase -SqlInstance $SQLInstances | Format-Table
 
 Get-DbaAgListener -SqlInstance $SQLInstances
 
-# Ah we dont have a listener - Lets fix that
+# Ah we don't have a listener - Lets fix that
 
 $ListenerConfig = @{
     SqlInstance       = $dbatools1 
@@ -112,7 +112,7 @@ Invoke-DbaAgFailover -SqlInstance $dbatools1 -AvailabilityGroup $AgName
 
 Invoke-DbaAgFailover -SqlInstance $dbatools1 -AvailabilityGroup $AgName -Force
 
-# But we tell you if you are doing wrong and that you need to conenct to the other instance
+# But we tell you if you are doing wrong and that you need to connect to the other instance
 
 Invoke-DbaAgFailover -SqlInstance $dbatools2 -AvailabilityGroup $AgName -Force
 

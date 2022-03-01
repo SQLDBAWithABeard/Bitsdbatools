@@ -60,7 +60,7 @@ Get-DbaLastBackup -SqlInstance $dbatools1
 
 Get-DbaDbBackupHistory -SqlInstance $dbatools1
 
-# Lets back up the entire instance in one quick line of code but this time put things in seperate directories
+# Lets back up the entire instance in one quick line of code but this time put things in separate directories
 
 Backup-DbaDatabase -SqlInstance $dbatools1 -Path /var/opt/mssql/data/backups/dbatools1 -CreateFolder
 
@@ -154,7 +154,7 @@ Get-ChildItem $RandomPath
 
 # Looks complicated to get those all restored in the right order ?
 
-# Remve the databases - no confirm this time
+# Remove the databases - no confirm this time
 
 Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Remove-DbaDatabase -Confirm:$false
 
@@ -170,7 +170,7 @@ Restore-DbaDatabase -SqlInstance $dbatools1 -Path $RandomPath
 
 ls -l $RandomPath
 
-# Oh - YOur estate doesnt have all the backups in one directory (we know some that do)
+# Oh - Your estate doesn't have all the backups in one directory (we know some that do)
 
 # ok lets backup with create folder and get some more files to play with 9 seconds - Robs desktop 56 seconds browser
 
@@ -249,7 +249,7 @@ Get-DbaDbRestoreHistory -SqlInstance $dbatools1 | Sort-Object Date | Format-Tabl
 
 # So we can take backups, we can perform restores but 
 
-# we dont know if the backups are valid until we have tested them
+# we don't know if the backups are valid until we have tested them
 
 # Far better to ensure that they are ok and dbatools just loves to help you with that
 
@@ -286,8 +286,8 @@ Invoke-DbaQuery -SqlInstance $dbatools1 -Database pubs -Query $Query
 
 
 
-# So the databases were backed up to a place that was not avaialble to the second instance. 
-# Lets make it work so you can see, but this is something you willneed to consider.
+# So the databases were backed up to a place that was not available to the second instance. 
+# Lets make it work so you can see, but this is something you will need to consider.
 
 Backup-DbaDatabase -SqlInstance $dbatools1 -Path /shared/BackupTest
 

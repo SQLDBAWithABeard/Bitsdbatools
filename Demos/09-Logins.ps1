@@ -228,7 +228,7 @@ $Global:PSDefaultParameterValues = @{
     "*dba*:SecondarySqlCredential"   = $continercredential
 }
 
-# Now this instance is (or isnt if you chose a different path)
+# Now this instance is (or isn't if you chose a different path)
 # part of an availability group
 # so if we fail over what would happen?
 # How could we fix it?
@@ -275,7 +275,7 @@ $SQlinstance = $dbatools1  # Alter this for the SQL Instance you want to get per
 Write-Output "Processing $sqlinstance"
 
 $InstanceName = $SQlinstance.Split('\').Split('.').Split('\').Split(',') -join '_'
-$ExcelFile = $ExcelDirectory + '\' + $InstanceName + '_Permssions_OneTab_' + (Get-Date).ToString('yyyy-MM-dd') + '.xlsx'
+$ExcelFile = $ExcelDirectory + '\' + $InstanceName + '_Permissions_OneTab_' + (Get-Date).ToString('yyyy-MM-dd') + '.xlsx'
 
 Write-Output "    FileName is $ExcelFile"
 

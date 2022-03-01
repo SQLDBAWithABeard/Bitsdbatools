@@ -25,7 +25,7 @@ ______ _           _ _               _____ _     _
 
 Find-DbaCommand -Pattern 'find-'
 
-# Find Storec
+# Find commands relating to stored procedures
 Find-DbaCommand '*Stored Procedures*'
 
 # Look for procedures the touch the [order details] table

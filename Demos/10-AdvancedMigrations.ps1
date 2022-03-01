@@ -9,7 +9,7 @@
                                                          |___/                                 
 #>
 
-# Now we canb show some of the other destructive commands :-)
+# Now we can show some of the other destructive commands :-)
 $Databases = Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem 
 Remove-DbaAgDatabase -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme -Database $Databases
 Remove-DbaAvailabilityGroup -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme
@@ -21,7 +21,7 @@ Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Con
 Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Select-Object SqlInstance, Name, Status, SizeMB
 Get-DbaAgentJob -SqlInstance $SQLInstances | Format-Table
 
-# Somethign something - this is simple
+# Something something - this is simple
 
 Start-DbaMigration -Source $dbatools1 -Destination $dbatools2 -Verbose -BackupRestore -SharedPath '/shared' 
 
@@ -66,7 +66,7 @@ Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Select-Obje
 #################################
 # App team will stop the app running...
 
-# Activity hasn't stopped from our applciation 
+# Activity hasn't stopped from our application
 # Get Processes
 $processSplat = @{
     SqlInstance = $dbatools1, $dbatools2

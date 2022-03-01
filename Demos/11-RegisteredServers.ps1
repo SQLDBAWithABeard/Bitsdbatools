@@ -109,7 +109,7 @@ Copy-DbaRegServer -Source $dbatools1 -Destination $dbatools2
 
 Get-DbaRegServerGroup -SqlInstance $SQLInstances | Format-Table
 
-# Post migration we'll nede to clean up the old server - dbatools1
+# Post migration we'll need to clean up the old server - dbatools1
 # Remove all registered servers 
 Remove-DbaRegServer -SqlInstance $dbatools1 -Confirm:$false
 

@@ -1,7 +1,7 @@
 # dbachecks is the sister module to dbatools
 # It is Rob's baby and uses the PowerShell module Pester
 # to validate the estate
-# we have been using it all day, you just havent seen it!
+# we have been using it all day, you just haven't seen it!
 
 # You install it in the same way as any PowerShell module
 
