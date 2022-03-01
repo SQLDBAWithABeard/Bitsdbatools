@@ -6,17 +6,24 @@ We recommend downloading the repo and getting the local demo environment setup o
 
 ## Prerequisites:
 
-- [VSCode](https://code.visualstudio.com/download)
 - [git](https://git-scm.com/downloads)
+- [VSCode](https://code.visualstudio.com/download)
 - [`Remote - Containers` Extension for VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 ## Setup
 
 1. Download the repo from GitHub
     ```PowerShell
+    # change directory to where you'd like the repo to go
     cd C:\GitHub\
-    https://github.com/SQLDBAWithABeard/Bitsdbatools
+
+    # clone the repo from GitHub
+    git clone https://github.com/SQLDBAWithABeard/Bitsdbatools
+
+    # move into the folder
     cd .\Bitsdbatools\
+
+    # open VSCode
     code .
     ```
 
