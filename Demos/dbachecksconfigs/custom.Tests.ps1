@@ -1,6 +1,6 @@
 $filename = $MyInvocation.MyCommand.Name.Replace(".Tests.ps1", "")
 Describe "dbatools2 should not have the databases already" -Tags NoDatabasesOn2 , $Filename {
-    Context  "Databases Should not exist" {
+    Context  "Databases Should not existon dbatools2" {
         BeforeAll {
             $Databasesondbatools2 = (Get-DbaDatabase -SqlInstance $dbatools2).Name
         }
