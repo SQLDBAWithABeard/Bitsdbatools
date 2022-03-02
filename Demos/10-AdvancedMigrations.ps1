@@ -10,28 +10,54 @@
 #>
 
 # Now we can show some of the other destructive commands :-)
-$Databases = Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem 
-Remove-DbaAgDatabase -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme -Database $Databases
-Remove-DbaAvailabilityGroup -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme
+$Databases = Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem 
+
+Remove-DbaAgDatabase -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme -Database $Databases.Name -WhatIf
+
+Remove-DbaAgDatabase -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme -Database $Databases.Name -Confirm:$false
+
+Remove-DbaAgReplica -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme -Replica mssql2 -WhatIf
+
+Remove-DbaAgReplica -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme -Replica mssql2 -Confirm:$false
+
+Remove-DbaAvailabilityGroup -SqlInstance $dbatools1 -AvailabilityGroup $AgNAme -Confirm:$false
+
 Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Confirm:$false 
-
-
 
 # Let's see what databases we have available here
 Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Select-Object SqlInstance, Name, Status, SizeMB
 Get-DbaAgentJob -SqlInstance $SQLInstances | Format-Table
 
-# Something something - this is simple
+# Remember dbatools started as a migration script and Start-DbaMigration will migrate ALL OF THE THINGS from 
+# one instance to another
 
 Start-DbaMigration -Source $dbatools1 -Destination $dbatools2 -Verbose -BackupRestore -SharedPath '/shared' 
 
-# Hey Jess and Rob - Rebuild the containers again (properly - so that everything goes)
+# lets reset all of that
 
-# AUDIENCE PLEASE HELP Jess and Rob here - they will probably forget
+Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem | Remove-DbaDatabase -Confirm:$false 
+
+Get-DbaLogin -SqlInstance $dbatools2 -ExcludeSystemLogin -Type SQL -ExcludeLogin '##MS_PolicyEventProcessingLogin##', '##MS_PolicyTsqlExecutionLogin##', 'sqladmin'  | Remove-DbaLogin -Confirm:$false
+
+Get-DbaXESession -SqlInstance $dbatools2 | ForEach-Object {
+    Remove-DbaXESession  -SqlInstance $dbatools2 -Session $_.Name  -Confirm:$false
+} 
+
+Get-DbaAgentOperator -SqlInstance $dbatools2 | Remove-DbaAgentOperator  -Confirm:$false
+
+Get-DbaAgentAlert -SqlInstance $dbatools2 | ForEach-Object { 
+    Remove-DbaAgentAlert -SqlInstance $dbatools2 -Alert $_.Name -Confirm:$false
+}
+
+Get-DbaAgentSchedule -SqlInstance $dbatools2 | ForEach-Object { 
+    Remove-DbaAgentSchedule -SqlInstance $dbatools2 -Schedule $_.Name -Confirm:$false
+}
+
+Get-DbaAgentJob -SqlInstance $dbatools2 | Remove-DbaAgentJob -Confirm:$false
 
 # What if things are a little more complicated?
-    # Our database is too big to wait for the backup\restore
-    # The business can't afford *any* downtime
+# Our database is too big to wait for the backup\restore
+# The business can't afford *any* downtime
 
 ##################################################################################
 # Jess - go start the application - otherwise this is going to be a bit boring...#
@@ -44,14 +70,14 @@ Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Select-Obje
 
 # before downtime we'll stage most of the data
 $copySplat = @{
-    Source          = $dbatools1
-    Destination     = $dbatools2
-    Database        = 'Pubs'
-    SharedPath      = '/shared'
-    BackupRestore   = $true
-    NoRecovery      = $true # leave the database ready to receive more restores
-    NoCopyOnly      = $true # this will break our backup chain!
-    OutVariable     = 'CopyResults'
+    Source        = $dbatools1
+    Destination   = $dbatools2
+    Database      = 'Pubs'
+    SharedPath    = '/shared'
+    BackupRestore = $true
+    NoRecovery    = $true # leave the database ready to receive more restores
+    NoCopyOnly    = $true # this will break our backup chain!
+    OutVariable   = 'CopyResults'
 }
 Copy-DbaDatabase @copySplat
 
@@ -73,7 +99,7 @@ $processSplat = @{
     Database    = 'Pubs'
 }
 Get-DbaProcess @processSplat |
-    Select-Object Host, login, Program
+Select-Object Host, login, Program
 
 # Kill any left over processes
 Get-DbaProcess @processSplat | Stop-DbaProcess
@@ -101,6 +127,10 @@ Set-DbaDbState @offlineSplat
 
 # Let's check on our databases
 Get-DbaDatabase -SqlInstance $dbatools1, $dbatools2 -ExcludeSystem | Select-Object SqlInstance, Name, Status, SizeMB
+
+##############################################################
+#      JESS Check the other session too!!                    #
+##############################################################
 
 # restore the differential and bring the destination online
 $restoreSplat = @{
