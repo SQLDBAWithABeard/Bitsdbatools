@@ -821,7 +821,6 @@ function Invoke-PubsApplication {
   # This will randomly insert rows into the pubs.dbo.sales table on dbatools1 to simulate sales activity
   # It'll run until you kill it
   
-  #Write-PSFHostColor -String "Pubs application is running...forever... Ctrl+C to get out of here" -DefaultColor Green
 
   # app connection
   $securePassword = ('PubsAdmin' | ConvertTo-SecureString -asPlainText -Force)
@@ -829,6 +828,8 @@ function Invoke-PubsApplication {
   $appConnection = Connect-DbaInstance -SqlInstance $dbatools1 -SqlCredential $appCred -ClientName 'PubsApplication'
 
   while ($true) {   
+  Write-PSFHostColor -String "Pubs application is running...forever... Ctrl+C to get out of here" -DefaultColor Green
+
     $newOrder = [PSCustomObject]@{
       stor_id  = Get-Random (Invoke-DbaQuery -SqlInstance $appConnection -Database pubs -Query 'select stor_id from stores').stor_id
       ord_num  = Get-DbaRandomizedValue -DataType int -Min 1000 -Max 99999
