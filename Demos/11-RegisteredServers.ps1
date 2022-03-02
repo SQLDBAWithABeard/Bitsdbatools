@@ -126,3 +126,7 @@ Get-Help Find-DbaInstance -Full | Out-String | code -
 $discoveredInstances.foreach{
     Add-DbaRegServer -SqlInstance $dbatools1 -ServerName $psitem.SqlInstance 
 }
+
+# Choose your adventure
+
+Get-Index
