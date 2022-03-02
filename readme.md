@@ -6,9 +6,10 @@ We recommend downloading the repo and getting the local demo environment setup o
 
 ## Prerequisites:
 
+- [Docker](https://www.docker.com/get-started)
 - [git](https://git-scm.com/downloads)
 - [VSCode](https://code.visualstudio.com/download)
-- [`Remote - Containers` Extension for VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- [`Remote Development` Extension for VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
 
 ## Setup
 
