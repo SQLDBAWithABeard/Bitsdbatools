@@ -128,5 +128,6 @@ $discoveredInstances.foreach{
 }
 
 # Choose your adventure
+Get-GameTimeRemaining
 
 Get-Index

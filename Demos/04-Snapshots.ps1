@@ -83,5 +83,6 @@ Get-DbaDbForeignKey -SqlInstance $dbatools1 -Database Northwind | Where-Object R
 Get-DbaDbSnapshot @snapshotSplat | Remove-DbaDbSnapshot -Confirm:$false
 
 # Choose your adventure
+Get-GameTimeRemaining
 
 Get-Index

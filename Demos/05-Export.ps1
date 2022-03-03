@@ -60,5 +60,6 @@ Export-DbaInstance @instanceSplat
 # export into a source controlled folder & track changes
 
 # Choose your adventure
+Get-GameTimeRemaining
 
 Get-Index

@@ -200,5 +200,6 @@ Get-DbaLogin -SqlInstance $SQLInstances -ExcludeSystemLogin  | Format-Table
 Get-DbaAgBackupHistory -SqlInstance $SQLInstances -AvailabilityGroup $AgName 
 
 # Choose your adventure
+Get-GameTimeRemaining
 
 Get-Index

@@ -161,5 +161,6 @@ Get-DbaAgentJob  -SqlInstance $dbatools1,$dbatools2|Format-Table
 
 
 # Choose your adventure
+Get-GameTimeRemaining
 
 Get-Index

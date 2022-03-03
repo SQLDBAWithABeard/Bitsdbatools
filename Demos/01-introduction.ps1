@@ -75,5 +75,6 @@ $Builds | Format-Table
 Get-DbaBuildReference -Build 10.0.6000,10.50.6000 |Format-Table
 
 # Choose your adventure
+Get-GameTimeRemaining
 
 Get-Index

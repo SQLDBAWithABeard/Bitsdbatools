@@ -345,5 +345,6 @@ Write-Output ""
 # To AutoFit column width:CTRL A and then Alt + H, then O, and then I.
 
 # Choose your adventure
+Get-GameTimeRemaining
 
 Get-Index

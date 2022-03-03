@@ -155,5 +155,6 @@ Invoke-DbaQuery -SqlInstance $dbatools2 -Database Pubs -Query 'select @@serverna
 $sourceSales, $destSales
 
 # Choose your adventure
+Get-GameTimeRemaining
 
 Get-Index

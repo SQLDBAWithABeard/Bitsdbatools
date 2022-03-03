@@ -87,4 +87,6 @@ Find-DbaAgentJob -SqlInstance $SQLInstances -IsFailed
 Get-DbaAgentJobHistory -SqlInstance $dbatools2 -Job IamBroke
 
 # Choose your adventure
+Get-GameTimeRemaining
+
 Get-Index 
