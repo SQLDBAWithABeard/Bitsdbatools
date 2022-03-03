@@ -172,3 +172,7 @@ Get-DbaDbTable -SqlInstance $dbatools1 -Database Validation | Format-Table
 Get-GameTimeRemaining
 
 # What else would you like to learn ?
+
+# Choose your adventure
+
+Get-Index
