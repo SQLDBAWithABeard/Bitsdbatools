@@ -33,18 +33,18 @@ $maskConfig = @{
     Column        = "Address", "PostalCode", "Phone" 
     Path          = ".\Masking\"
 }
-New-DbaDbMaskingConfig @maskConfig
+New-DbaDbMaskingConfig @maskConfig -OutVariable configFile
 
 ## Modify the file manually
+code $configFile.FullName
 
 ## check your file - returns nothing if good - errors if errors
-Test-DbaDbDataMaskingConfig  -FilePath .\Masking\dbatools1.Northwind.DataMaskingConfig.json
+Test-DbaDbDataMaskingConfig  -FilePath $configFile.FullName
 
 <#
 Table    Column           Value    Error
 -----    ------           -----    -----
 Customers Address         KeepNull The column does not contain all the required properties. Please check the column
-Customers City            KeepNull The column does not contain all the required properties. Please check the column
 Customers PostalCode      KeepNull The column does not contain all the required properties. Please check the column
 Customers Phone           KeepNull The column does not contain all the required properties. Please check the column
 #>
@@ -60,9 +60,6 @@ $maskData = @{
     Confirm       = $false
 }
 Invoke-DbaDbDataMasking @maskData -verbose  -enableexception
-
-##TODO - issue masking country column
- # also add contactName?
 
 # View data after!
 Invoke-DbaQuery -SqlInstance $dbatools1 -Database NorthWind -Query 'select top 5 CustomerId, ContactName, Address, City, PostalCode, Phone from dbo.Customers order by CustomerId' | Format-Table
