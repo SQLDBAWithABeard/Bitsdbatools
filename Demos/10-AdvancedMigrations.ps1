@@ -107,6 +107,10 @@ Get-DbaProcess @processSplat | Stop-DbaProcess
 # What's our newest order?
 Invoke-DbaQuery -SqlInstance $dbatools1 -Database Pubs -Query 'select @@servername AS [SqlInstance], count(*)NumberOfOrders, max(ord_date) as NewestOrder from pubs.dbo.sales' -OutVariable 'sourceSales'
 
+# Remember the date from our full backup!
+$CopyResults | Select-Object *
+
+
 # Let's take a differential to get any changes
 $diffSplat = @{
     SqlInstance = $dbatools1
