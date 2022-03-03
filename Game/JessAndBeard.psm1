@@ -896,13 +896,15 @@ Function TicTacToe {
        |         |
        |         |
        |         |
-------------------------------
-       |         |
-       |         |
-       |         |
-       |         |
        |         |
 ------------------------------
+       |         |
+       |         |
+       |         |
+       |         |
+       |         |
+------------------------------
+       |         |
        |         |
        |         |
        |         |
@@ -913,6 +915,7 @@ Function TicTacToe {
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
+       |         |
        |         |
        |         |
        |         |
@@ -928,12 +931,14 @@ Function TicTacToe {
        |         |
        |         |
        |         |
+       |         |
 '
   Clear-Host
   Write-Host $message
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
+       |         |
   O    |         |
 O   O  |         |
   O    |         |
@@ -956,6 +961,7 @@ O   O  |         |
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
+       |         |
   O    |         |
 O   O  |         |
   O    |         |
@@ -978,6 +984,7 @@ O   O  |         |
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
+       |         |
   O    |    O    |
 O   O  |  O   O  |
   O    |    O    |
@@ -1001,6 +1008,7 @@ O   O  |  O   O  |
   Start-Sleep -Milliseconds $Sleep
  
   $message = '
+       |         |
   O    |    O    |  X   X
 O   O  |  O   O  |    X
   O    |    O    |  X   X
@@ -1023,6 +1031,7 @@ O   O  |  O   O  |    X
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
+       |         |
   O    |    O    |  X   X
 O   O  |  O   O  |    X
   O    |    O    |  X   X
@@ -1045,6 +1054,7 @@ O   O  |    X    |
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
+       |         |
   O    |    O    |  X   X
 O   O  |  O   O  |    X
   O    |    O    |  X   X
@@ -1067,6 +1077,7 @@ O   O  |    X    |
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
+       |         |
   O    |    O    |  X   X
 O   O  |  O   O  |    X
   O    |    O    |  X   X
@@ -1089,6 +1100,7 @@ O   O  |    X    |
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
+       |         |
   O    |    O    |  X   X
 O   O  |  O   O  |    X
   O    |    O    |  X   X
