@@ -53,23 +53,25 @@ $NorthwindDB | Get-Member
 # Database triggers
 $NorthwindDB.Triggers
 
-# NB - You can also use Find-DbaTrigger of course
-# Find-DbaTrigger -SqlInstance dbatools1 -Database Northwind -Pattern 'trg'
+# NB - You can also use Get-DbaDbTrigger of course to get database level triggers
+Get-DbaDbTrigger -SqlInstance dbatools1 -Database Northwind
 
 # Functions
-
 $NorthwindDB.UserDefinedFunctions | 
     Where-Object TextBody -like '*order details*' | 
     Select-Object Name, TextHeader, TextBody | 
     Format-List
 
 # What about table level triggers
-# NB - You can also use Find-DbaTrigger of course
 $NorthwindDB.Tables[0] | Get-Member
 
 $NorthwindDB.Tables.Where{$_.Name -eq 'order details'}.Triggers | 
     Select-Object Name, TextHeader, TextBody |
     Format-List
+
+# NB - You can also use Find-DbaTrigger of course
+Find-DbaTrigger -SqlInstance dbatools1 -Database Northwind -Pattern 'trg'
+Get-DbaDbObjectTrigger -SqlInstance dbatools1 -Database Northwind
 
 # We can also look for SQL Agent Jobs - perhaps things are missing or failing
 
