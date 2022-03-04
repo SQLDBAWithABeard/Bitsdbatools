@@ -844,7 +844,7 @@ function Invoke-PubsApplication {
 }
 
 function Get-GameTimeRemaining {
-  $StartDate = Get-Date -Hour 9 -Minute 40 -Second 0
+  $StartDate = Get-Date -Hour 9 -Minute 00 -Second 0
   $Date = Get-Date
   $Diff = $Date - $StartDate
 
