@@ -892,115 +892,115 @@ Function TicTacToe {
     $Sleep
   )
   $message = '
-       |         |
-       |         |
-       |         |
-       |         |
-       |         |
+         |         |
+         |         |
+         |         |
+         |         |
+         |         |
 ------------------------------
-       |         |
-       |         |
-       |         |
-       |         |
-       |         |
+         |         |
+         |         |
+         |         |
+         |         |
+         |         |
 ------------------------------
-       |         |
-       |         |
-       |         |
-       |         |
-       |         |
+         |         |
+         |         |
+         |         |
+         |         |
+         |         |
 '
   Clear-Host
   Write-Host $message
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
-       |         |
-       |         |
-       |         |
-       |         |
-       |         |
+         |         |
+         |         |
+         |         |
+         |         |
+         |         |
 ------------------------------
-       |         |
-       |  X   X  |
-       |    X    |
-       |  X   X  |
-       |         |
+         |         |
+         |  X   X  |
+         |    X    |
+         |  X   X  |
+         |         |
 ------------------------------
-       |         |
-       |         |
-       |         |
-       |         |
-       |         |
+         |         |
+         |         |
+         |         |
+         |         |
+         |         |
 '
   Clear-Host
   Write-Host $message
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
-       |         |
-  O    |         |
-O   O  |         |
-  O    |         |
-       |         |
+         |         |
+    O    |         |
+  O   O  |         |
+    O    |         |
+         |         |
 ------------------------------
-       |         |
-       |  X   X  |
-       |    X    |
-       |  X   X  |
-       |         |
+         |         |
+         |  X   X  |
+         |    X    |
+         |  X   X  |
+         |         |
 ------------------------------
-       |         |
-       |         |
-       |         |
-       |         |
-       |         |
+         |         |
+         |         |
+         |         |
+         |         |
+         |         |
 '
   Clear-Host
   Write-Host $message
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
-       |         |
-  O    |         |
-O   O  |         |
-  O    |         |
-       |         |
+         |         |
+    O    |         |
+  O   O  |         |
+    O    |         |
+         |         |
 ------------------------------
-       |         |
-       |  X   X  |
-       |    X    |
-       |  X   X  |
-       |         |
+         |         |
+         |  X   X  |
+         |    X    |
+         |  X   X  |
+         |         |
 ------------------------------
-       |         |
-       |  X   X  |
-       |    X    |
-       |  X   X  |
-       |         |
+         |         |
+         |  X   X  |
+         |    X    |
+         |  X   X  |
+         |         |
 '
   Clear-Host
   Write-Host $message
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
-       |         |
-  O    |    O    |
-O   O  |  O   O  |
-  O    |    O    |
-       |         |
+         |         |
+    O    |    O    |
+  O   O  |  O   O  |
+    O    |    O    |
+         |         |
 ------------------------------
-       |         |
-       |  X   X  |
-       |    X    |
-       |  X   X  |
-       |         |
+         |         |
+         |  X   X  |
+         |    X    |
+         |  X   X  |
+         |         |
 ------------------------------
-       |         |
-       |  X   X  |
-       |    X    |
-       |  X   X  |
-       |         |
+         |         |
+         |  X   X  |
+         |    X    |
+         |  X   X  |
+         |         |
 '
   Clear-Host
   Write-Host $message
@@ -1008,115 +1008,115 @@ O   O  |  O   O  |
   Start-Sleep -Milliseconds $Sleep
  
   $message = '
-       |         |
-  O    |    O    |  X   X
-O   O  |  O   O  |    X
-  O    |    O    |  X   X
-       |         |
+         |         |
+    O    |    O    |  X   X
+  O   O  |  O   O  |    X
+    O    |    O    |  X   X
+         |         |
 ------------------------------
-       |         |
-       |  X   X  |
-       |    X    |
-       |  X   X  |
-       |         |
+         |         |
+         |  X   X  |
+         |    X    |
+         |  X   X  |
+         |         |
 ------------------------------
-       |         |
-       |  X   X  |
-       |    X    |
-       |  X   X  |
-       |         |
+         |         |
+         |  X   X  |
+         |    X    |
+         |  X   X  |
+         |         |
 '
   Clear-Host
   Write-Host $message
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
-       |         |
-  O    |    O    |  X   X
-O   O  |  O   O  |    X
-  O    |    O    |  X   X
-       |         |
+         |         |
+    O    |    O    |  X   X
+  O   O  |  O   O  |    X
+    O    |    O    |  X   X
+         |         |
 ------------------------------
-       |         |
-       |  X   X  |
-       |    X    |
-       |  X   X  |
-       |         |
+         |         |
+         |  X   X  |
+         |    X    |
+         |  X   X  |
+         |         |
 ------------------------------
-       |         |
-  O    |  X   X  |
-O   O  |    X    |
-  O    |  X   X  |
-       |         |
+         |         |
+    O    |  X   X  |
+  O   O  |    X    |
+    O    |  X   X  |
+         |         |
 '
   Clear-Host
   Write-Host $message
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
-       |         |
-  O    |    O    |  X   X
-O   O  |  O   O  |    X
-  O    |    O    |  X   X
-       |         |
+         |         |
+    O    |    O    |  X   X
+  O   O  |  O   O  |    X
+    O    |    O    |  X   X
+         |         |
 ------------------------------
-       |         |
-X   X  |  X   X  |
-  X    |    X    |
-X   X  |  X   X  |
-       |         |
+         |         |
+  X   X  |  X   X  |
+    X    |    X    |
+  X   X  |  X   X  |
+         |         |
 ------------------------------
-       |         |
-  O    |  X   X  |
-O   O  |    X    |
-  O    |  X   X  |
-       |         |
+         |         |
+    O    |  X   X  |
+  O   O  |    X    |
+    O    |  X   X  |
+         |         |
 '
   Clear-Host
   Write-Host $message
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
-       |         |
-  O    |    O    |  X   X
-O   O  |  O   O  |    X
-  O    |    O    |  X   X
-       |         |
+         |         |
+    O    |    O    |  X   X
+  O   O  |  O   O  |    X
+    O    |    O    |  X   X
+         |         |
 ------------------------------
-       |         |
-X   X  |  X   X  |    O
-  X    |    X    |  O   O
-X   X  |  X   X  |    O
-       |         |
+         |         |
+  X   X  |  X   X  |    O
+    X    |    X    |  O   O
+  X   X  |  X   X  |    O
+         |         |
 ------------------------------
-       |         |
-  O    |  X   X  |
-O   O  |    X    |
-  O    |  X   X  |
-       |         |
+         |         |
+    O    |  X   X  |
+  O   O  |    X    |
+    O    |  X   X  |
+         |         |
 '
   Clear-Host
   Write-Host $message
 
   Start-Sleep -Milliseconds $Sleep
   $message = '
-       |         |
-  O    |    O    |  X   X
-O   O  |  O   O  |    X
-  O    |    O    |  X   X
-       |         |
+         |         |
+    O    |    O    |  X   X
+  O   O  |  O   O  |    X
+    O    |    O    |  X   X
+         |         |
 ------------------------------
-       |         |
-X   X  |  X   X  |    O
-  X    |    X    |  O   O
-X   X  |  X   X  |    O
-       |         |
+         |         |
+  X   X  |  X   X  |    O
+    X    |    X    |  O   O
+  X   X  |  X   X  |    O
+         |         |
 ------------------------------
-       |         |
-  O    |  X   X  |  X   X
-O   O  |    X    |    X
-  O    |  X   X  |  X   X
-       |         |
+         |         |
+    O    |  X   X  |  X   X
+  O   O  |    X    |    X
+    O    |  X   X  |  X   X
+         |         |
 '
   Clear-Host
   Write-Host $message
