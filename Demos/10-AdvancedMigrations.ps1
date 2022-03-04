@@ -9,6 +9,8 @@
                                                          |___/                                 
 #>
 
+cls
+
 # Now we can show some of the other destructive commands :-)
 $Databases = Get-DbaDatabase -SqlInstance $dbatools2 -ExcludeSystem 
 

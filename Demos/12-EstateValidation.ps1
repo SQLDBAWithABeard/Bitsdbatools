@@ -7,6 +7,8 @@ _____    _        _         _   _       _ _     _       _   _
 \____/___/\__\__,_|\__\___|  \___/ \__,_|_|_|\__,_|\__,_|\__|_|\___/|_| |_|
 #>
 
+cls
+
 # How do we know our estate is in the perfect state?
 
 # dbachecks is the sister module to dbatools

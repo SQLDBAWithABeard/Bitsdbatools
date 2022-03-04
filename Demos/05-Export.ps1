@@ -9,6 +9,8 @@
            |_|                           |___/                                                                 
 #>
 
+cls
+
 # Documenting our SQL Server estates is super important for:
   # Rebuilding in DR situation
   # Easier onboarding of new team members

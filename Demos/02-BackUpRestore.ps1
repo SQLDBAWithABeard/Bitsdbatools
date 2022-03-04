@@ -9,6 +9,8 @@ ______            _                                  _  ______          _
                             |_|                                                           
 #>
 
+cls
+
 # Lets take a look at the databases on the first instance
 
 Get-DbaDatabase -SqlInstance $dbatools1

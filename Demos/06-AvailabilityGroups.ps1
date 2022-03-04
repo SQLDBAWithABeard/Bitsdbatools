@@ -9,6 +9,8 @@
                                             |___/                        |_|        
 #>
 
+cls
+
 # OK OK OK - We are running in a container so these are not REAL Availability Groups as many of you wil be used to but
 
 # Lets see how easy it is to create an Availability Group with dbatools - Open SSMS as well here and show the dashboard

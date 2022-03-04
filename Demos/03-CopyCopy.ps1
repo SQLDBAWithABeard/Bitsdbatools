@@ -11,6 +11,8 @@
 
 # Copying things is where dbatools made its entry into the world
 
+cls
+
 # What databases do we have on our instances?
 # Also even though it is named SqlInstance it can accept many Sql Instances !
 

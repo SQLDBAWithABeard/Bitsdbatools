@@ -1153,7 +1153,7 @@ function pacman {
   |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '
   '^^^'    '--'                                                                           
   "
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   $pac = "
@@ -1162,7 +1162,7 @@ function pacman {
    |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   
    '^^^'    '--'                                                                          
   "
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1172,7 +1172,7 @@ function pacman {
     |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'  
     '^^^'    '--'                                                                         
   "
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1182,7 +1182,7 @@ function pacman {
      |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-' 
      '^^^'    '--'                                                                        
   "
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1192,7 +1192,7 @@ function pacman {
       |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'
       '^^^'    '--'                                                                       
   "
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1203,7 +1203,7 @@ function pacman {
        '^^^'    '--'                                                                      
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1214,7 +1214,7 @@ function pacman {
         '^^^'    '--'                                                                    
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1225,7 +1225,7 @@ function pacman {
          '^^^'    '--'                                                                   
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1236,7 +1236,7 @@ function pacman {
           '^^^'    '--'                                                                  
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1247,7 +1247,7 @@ function pacman {
            '^^^'    '--'                                                                 
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1258,7 +1258,7 @@ function pacman {
             '^^^'    '--'                                                                
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1270,7 +1270,7 @@ function pacman {
              '^^^'    '--'                                                                
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1281,7 +1281,7 @@ function pacman {
               '^^^'    '--'                                                               
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1292,7 +1292,7 @@ function pacman {
                '^^^'    '--'                                                              
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   $pac = "
@@ -1302,7 +1302,7 @@ function pacman {
                 '^^^'    '--'                                                             
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1313,7 +1313,7 @@ function pacman {
                  '^^^'    '--'                                                            
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1325,7 +1325,7 @@ function pacman {
                   '^^^'    '--'                                                           
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1336,7 +1336,7 @@ function pacman {
                    '^^^'    '--'                                                          
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1347,7 +1347,7 @@ function pacman {
                     '^^^'    '--'                                                         
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1358,7 +1358,7 @@ function pacman {
                      '^^^'    '--'                                                        
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1369,7 +1369,7 @@ function pacman {
                       '^^^'    '--'                                                       
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1380,7 +1380,7 @@ function pacman {
                        '^^^'    '--'                                                      
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1391,7 +1391,7 @@ function pacman {
                         '^^^'    '--'                                                     
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1403,7 +1403,7 @@ function pacman {
                          '^^^'    '--'                                                    
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1414,7 +1414,7 @@ function pacman {
                           '^^^'    '--'                                                   
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1426,7 +1426,7 @@ function pacman {
                            '^^^'    '--'                                                  
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1436,7 +1436,7 @@ function pacman {
                             |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'  
                             '^^^'    '--'                                                 
   "
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1447,7 +1447,7 @@ function pacman {
                              '^^^'    '--'                                                
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1458,7 +1458,7 @@ function pacman {
                               '^^^'    '--'                                               
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1469,7 +1469,7 @@ function pacman {
                                '^^^'    '--'                                              
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1480,7 +1480,7 @@ function pacman {
                                 '^^^'    '--'                                             
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1491,7 +1491,7 @@ function pacman {
                                  '^^^'    '--'                                            
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1502,7 +1502,7 @@ function pacman {
                                   '^^^'    '--'                                           
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1513,7 +1513,7 @@ function pacman {
                                    '^^^'    '--'                                          
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1524,7 +1524,7 @@ function pacman {
                                     '^^^'    '--'                                         
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1535,7 +1535,7 @@ function pacman {
                                      '^^^'    '--'                                        
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1547,7 +1547,7 @@ function pacman {
                                       '^^^'    '--'                                       
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1558,7 +1558,7 @@ function pacman {
                                        '^^^'    '--'                                      
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1569,7 +1569,7 @@ function pacman {
                                         '^^^'    '--'                                     
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1580,7 +1580,7 @@ function pacman {
                                          '^^^'    '--'                                    
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1591,7 +1591,7 @@ function pacman {
                                           '^^^'    '--'                                   
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1602,7 +1602,7 @@ function pacman {
                                            '^^^'    '--'                                  
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1613,7 +1613,7 @@ function pacman {
                                             '^^^'    '--'                                 
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1624,7 +1624,7 @@ function pacman {
                                              '^^^'    '--'                                
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1635,7 +1635,7 @@ function pacman {
                                               '^^^'    '--'                               
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1646,7 +1646,7 @@ function pacman {
                                                '^^^'    '--'                              
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1657,7 +1657,7 @@ function pacman {
                                                 '^^^'    '--'                             
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1668,7 +1668,7 @@ function pacman {
                                                  '^^^'    '--'                            
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1679,7 +1679,7 @@ function pacman {
                                                   '^^^'    '--'                           
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1690,7 +1690,7 @@ function pacman {
                                                    '^^^'    '--'                          
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1702,7 +1702,7 @@ function pacman {
                                                     '^^^'    '--'                         
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1714,7 +1714,7 @@ function pacman {
                                                      '^^^'    '--'                        
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1726,7 +1726,7 @@ function pacman {
                                                       '^^^'    '--'                       
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1737,7 +1737,7 @@ function pacman {
                                                        '^^^'    '--'                      
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1748,7 +1748,7 @@ function pacman {
                                                         '^^^'    '--'                     
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1759,7 +1759,7 @@ function pacman {
                                                          '^^^'    '--'                    
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1771,7 +1771,7 @@ function pacman {
                                                           '^^^'    '--'                   
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1782,7 +1782,7 @@ function pacman {
                                                            '^^^'    '--'                  
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1794,7 +1794,7 @@ function pacman {
                                                             '^^^'    '--'                 
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
   
@@ -1806,7 +1806,7 @@ function pacman {
                                                              '^^^'    '--'                
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1817,7 +1817,7 @@ function pacman {
                                                               '^^^'    '--'               
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host  
 
@@ -1829,7 +1829,7 @@ function pacman {
                                                                '^^^'    '--'              
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1840,7 +1840,7 @@ function pacman {
                                                                 '^^^'    '--'             
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1852,7 +1852,7 @@ function pacman {
                                                                  '^^^'    '--'            
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1865,7 +1865,7 @@ function pacman {
                                                                   '^^^'    '--'           
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1876,7 +1876,7 @@ function pacman {
                                                                    '^^^'    '--'          
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1887,7 +1887,7 @@ function pacman {
                                                                     '^^^'    '--'         
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1898,7 +1898,7 @@ function pacman {
                                                                      '^^^'    '--'        
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1909,7 +1909,7 @@ function pacman {
                                                                       '^^^'    '--'       
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1920,7 +1920,7 @@ function pacman {
                                                                        '^^^'    '--'      
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1932,7 +1932,7 @@ function pacman {
                                                                         '^^^'    '--'     
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1943,7 +1943,7 @@ function pacman {
                                                                          '^^^'    '--'    
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1954,7 +1954,7 @@ function pacman {
                                                                           '^^^'    '--'   
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1965,7 +1965,7 @@ function pacman {
                                                                            '^^^'    '--'  
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1976,7 +1976,7 @@ function pacman {
                                                                             '^^^'    '--' 
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1987,7 +1987,7 @@ function pacman {
                                                                              '^^^'    '--'
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -1998,7 +1998,7 @@ function pacman {
                                                                               '^^^'    '--
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2009,7 +2009,7 @@ function pacman {
                                                                                '^^^'    '-
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2020,7 +2020,7 @@ function pacman {
                                                                                 '^^^'    '
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2031,7 +2031,7 @@ function pacman {
                                                                                  '^^^'    
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2042,7 +2042,7 @@ function pacman {
                                                                                   '^^^'   
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2053,7 +2053,7 @@ function pacman {
                                                                                    '^^^'  
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2064,7 +2064,7 @@ function pacman {
                                                                                     '^^^' 
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2075,7 +2075,7 @@ function pacman {
                                                                                      '^^^'
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2086,7 +2086,7 @@ function pacman {
                                                                                       '^^^
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2097,7 +2097,7 @@ function pacman {
                                                                                        '^^
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2108,7 +2108,7 @@ function pacman {
                                                                                         '^
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2119,7 +2119,7 @@ function pacman {
                                                                                          '
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 
@@ -2131,7 +2131,7 @@ function pacman {
                                                                                           
   "
   
-  write-host $pac
+  Write-Host $pac -ForegroundColor Yellow
   start-sleep -Milliseconds $sleep
   Clear-Host
 

@@ -9,6 +9,8 @@ ______ _           _ _               _____ _     _
                              |___/                       |___/     
 #>
 
+cls
+
 # This is an ironic chapter because my wife would tell you I can't find any things.. ever.. even if I'm looking right at them
 
 <#

@@ -9,6 +9,8 @@ ______           _     _                    _   _____
            |___/                                                                   
 #>
 
+cls
+
 # What can we do with registered servers>
 Find-DbaCommand 'Registered Servers'
 

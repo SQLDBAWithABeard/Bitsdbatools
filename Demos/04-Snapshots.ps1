@@ -8,6 +8,9 @@
                    | |                            
                    |_|                            
 #> 
+
+cls
+
 Get-DbaDatabase -SqlInstance $dbatools1 -ExcludeSystem | Select-Object SqlInstance, Name, Status, SizeMB
 
 # Take a snapshot - a read-only copy of your database - changes are stored in a sparse file

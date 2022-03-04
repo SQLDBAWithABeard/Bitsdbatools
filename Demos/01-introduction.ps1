@@ -12,6 +12,8 @@
 
 #region Searching and using commands
 
+cls
+
 Return 'Oi Beardy, You may be an MVP but this is a demo, don''t run the whole thing, fool!!'
 
 

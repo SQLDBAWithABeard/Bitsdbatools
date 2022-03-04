@@ -10,6 +10,8 @@
 #>
 # The story of a login
 
+cls
+
 #region set up 
 
 if (-not (Get-DbaDatabase -SqlInstance $dbatools1 -Database SockFactoryApp)) {
