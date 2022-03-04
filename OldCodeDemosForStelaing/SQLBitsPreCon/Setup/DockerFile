@@ -1,5 +1,0 @@
-# escape=`
-FROM "microsoft/mssql-server-windows-developer"
-EXPOSE 1433
-EXPOSE 5985
-EXPOSE 5986

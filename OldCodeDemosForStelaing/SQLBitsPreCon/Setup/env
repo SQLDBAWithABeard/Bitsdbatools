@@ -1,4 +1,0 @@
-ACCEPT_EULA=Y
-SA_Password=Testing11
-DOTNET_CLI_TELEMETRY_OPTOUT=true
-MSSQL_PID=Developer
