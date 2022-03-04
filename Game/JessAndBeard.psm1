@@ -245,7 +245,6 @@ function Get-Index {
     ("&R - Registered Servers", "11 - Registered Servers"),
     ("&C - Estate Validation", "12 - Estate Validation"),
     ("&T - TIC TAC TOE", "98 - TIC TAC TOE"),
-    ("&G - GLOBAL THERMONUCLEAR WAR", "99 - GLOBAL THERMONUCLEAR WAR"),
     ("&Q - Quit", "Quit")
   )
 
