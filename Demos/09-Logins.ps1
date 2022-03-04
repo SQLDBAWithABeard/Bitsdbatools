@@ -36,7 +36,7 @@ $Global:PSDefaultParameterValues = @{
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
 }
-Clear-Host
+cls
 Write-Output "Setup finished"
 #endregion
 
@@ -92,7 +92,8 @@ $Global:PSDefaultParameterValues = @{
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
 }
-Clear-Host
+cls
+Write-Output "Email - Subject - No Worries the Beard Fixed it"
 Write-Output "Email has been sent"
 #endregion
 

@@ -207,7 +207,7 @@ function Start-Game {
 
   #endregion
 
-  Clear-Host
+  Clear-Host # dont use cls here
   $title = "Joshua Says" 
   $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Will continue" 
   $no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "Will exit" 
@@ -215,21 +215,21 @@ function Start-Game {
   $result = $host.ui.PromptForChoice($title, $ShallWePLayAGame, $options, 0) 
   
   if ($result -eq 1) { 
-    Clear-Host
+    cls
     Write-Output $OhNo1
     Start-Sleep -Seconds 1
-    Clear-Host
+    cls
     Start-Sleep -Milliseconds 250
     Write-Output $OhNo2
   }
   elseif ($result -eq 0) { 
-    Clear-Host
+    Clear-Host # Dont use cls here
     Get-Index
   }
 }
 
 function Get-Index {
-  Clear-Host
+  cls
   Write-Output $ChooseYourgame
   $gameChapters = @(
     ("&1 - Introduction to dbatools", "1 - Introduction to dbatools"),
@@ -260,7 +260,7 @@ function Get-Index {
 
   switch ($IndexChoice) {
     1 { 
-      Clear-Host
+      cls
       code /workspace/Demos/01-introduction.ps1
       #reset and run tests
       Write-PSFHostColor -String "It was a dark and stormy morning and ripe for learning about dbatools" -DefaultColor DarkCyan
@@ -272,7 +272,7 @@ function Get-Index {
       Get-GameTimeRemaining
     }
     2 { 
-      Clear-Host
+      cls
       code /workspace/Demos/02-BackUpRestore.ps1
       Write-PSFHostColor -String "All the students knew that backups and restores were so very important" -DefaultColor DarkCyan
       Write-PSFHostColor -String "To ensure the safety and security of their employees data" -DefaultColor DarkYellow
@@ -283,7 +283,7 @@ function Get-Index {
       Get-GameTimeRemaining
     }
     3 { 
-      Clear-Host
+      cls
       code /workspace/Demos/03-CopyCopy.ps1
       Write-PSFHostColor -String "Entering this chapter carefully" -DefaultColor DarkCyan
       Write-PSFHostColor -String "the players realised that is all looked the same" -DefaultColor DarkYellow
@@ -294,7 +294,7 @@ function Get-Index {
       Get-GameTimeRemaining
     }
     4 { 
-      Clear-Host
+      cls
       code /workspace/Demos/04-Snapshots.ps1
       Write-PSFHostColor -String "The sound of a gun echoed down the corridor" -DefaultColor DarkCyan
       Write-PSFHostColor -String "But as the mist cleared they realised that it was not that sort of shot" -DefaultColor DarkYellow
@@ -305,7 +305,7 @@ function Get-Index {
       Get-GameTimeRemaining
     }
     6 { 
-      Clear-Host
+      cls
       code /workspace/Demos/06-AvailabilityGroups.ps1
       Write-PSFHostColor -String "The noise was getting louder" -DefaultColor DarkCyan
       Write-PSFHostColor -String "This machine can no longer take the strain of the app and the reporting" -DefaultColor DarkYellow
@@ -316,7 +316,7 @@ function Get-Index {
       Get-GameTimeRemaining
     }
     5 { 
-      Clear-Host
+      cls
       code /workspace/Demos/05-Export.ps1
       Write-PSFHostColor -String "As they stomped through the swamp" -DefaultColor DarkCyan
       Write-PSFHostColor -String "They wished the path was easier" -DefaultColor DarkYellow
@@ -327,7 +327,7 @@ function Get-Index {
       Get-GameTimeRemaining
     }
     7 { 
-      Clear-Host
+      cls
       code /workspace/Demos/07-FindingThings.ps1
       Write-PSFHostColor -String "Lost, said the wispy voices" -DefaultColor DarkCyan
       Write-PSFHostColor -String "and unless you can locate the right things" -DefaultColor DarkYellow
@@ -339,7 +339,7 @@ function Get-Index {
       Get-GameTimeRemaining
     }
     8 { 
-      Clear-Host 
+      cls
       code /workspace/Demos/08-DataMasking.ps1
       Write-PSFHostColor -String "They could hear them rushing towards them" -DefaultColor DarkCyan
       Write-PSFHostColor -String "shouting and hollering in a dreadful manner" -DefaultColor DarkYellow
@@ -350,7 +350,7 @@ function Get-Index {
       Get-GameTimeRemaining
     }
     9 { 
-      Clear-Host
+      cls
       code /workspace/Demos/09-Logins.ps1
       Write-PSFHostColor -String "They saw a house in the distance and picked up speed" -DefaultColor DarkCyan
       Write-PSFHostColor -String "A massive wooden door faced them, they rang the bell" -DefaultColor DarkYellow
@@ -363,7 +363,7 @@ function Get-Index {
     }
     #even though you choose M
     10 { 
-      Clear-Host
+      cls
       Write-Output "10 - Advanced Migrations" 
       code /workspace/Demos/10-AdvancedMigrations.ps1
             
@@ -376,7 +376,7 @@ function Get-Index {
     }
     #even though you choose R
     11 { 
-      Clear-Host
+      cls
       Write-Output "11 - Registered Servers" 
       code /workspace/Demos/11-RegisteredServers.ps1
                   
@@ -386,7 +386,7 @@ function Get-Index {
     }
     #even though you choose C
     12 { 
-      Clear-Host
+      cls
       Write-Output "12 - Estate Validation" 
       code /workspace/Demos/12-EstateValidation.ps1
                   
@@ -396,7 +396,7 @@ function Get-Index {
     }
     # even though you choose G
     14 {
-      Clear-Host
+      cls
       $Message = ' GREETINGS PROFESSOR FALKEN                                       
                                                                    
       HELLO                                                            
@@ -413,13 +413,13 @@ function Get-Index {
       Start-TicTacToe
     }
     'q' {
-      Clear-Host
+      cls
     }
     Default {
-      Clear-Host
+      cls
       Write-Output $wrongChoice
       Start-Sleep -Seconds 1
-      Clear-Host
+      cls
       Start-Sleep -Milliseconds 250
       Write-Output $OhNo2
       $message = "You chose - {0}" -f $IndexChoice
