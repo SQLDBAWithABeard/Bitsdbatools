@@ -1141,4 +1141,1003 @@ function Start-TicTacToe {
                                                                    '
   Write-Host $message -BackgroundColor 03fcf4 -ForegroundColor Black
 }
+
+function pacman {
+  Clear-Host
+
+  $sleep = 15
+  
+  $pac = "
+   .-.      .--.                                                                          
+  | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .
+  |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '
+  '^^^'    '--'                                                                           
+  "
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  $pac = "
+    .-.      .--.                                                                         
+   | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   
+   |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   
+   '^^^'    '--'                                                                          
+  "
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+     .-.      .--.                                                                        
+    | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.  
+    |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'  
+    '^^^'    '--'                                                                         
+  "
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+      .-.      .--.                                                                       
+     | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-. 
+     |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-' 
+     '^^^'    '--'                                                                        
+  "
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+       .-.      .--.                                                                      
+      | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.
+      |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'
+      '^^^'    '--'                                                                       
+  "
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+        .-.      .--.                                                                     
+       | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-
+       |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-
+       '^^^'    '--'                                                                      
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+         .-.      .--.                                                                   
+        | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   
+        |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   
+        '^^^'    '--'                                                                    
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+          .-.      .--.                                                                  
+         | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.  
+         |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'  
+         '^^^'    '--'                                                                   
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+           .-.      .--.                                                                 
+          | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-. 
+          |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-' 
+          '^^^'    '--'                                                                  
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+            .-.      .--.                                                                
+           | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.
+           |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'
+           '^^^'    '--'                                                                 
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+             .-.      .--.                                                               
+            | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-
+            |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-
+            '^^^'    '--'                                                                
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  
+  $pac = "
+              .-.      .--.                                                               
+             | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-
+             |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-
+             '^^^'    '--'                                                                
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+               .-.      .--.                                                              
+              | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .
+              |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '
+              '^^^'    '--'                                                               
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                .-.      .--.                                                             
+               | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   
+               |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   
+               '^^^'    '--'                                                              
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  $pac = "
+                 .-.      .--.                                                            
+                | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.  
+                |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'  
+                '^^^'    '--'                                                             
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                  .-.      .--.                                                           
+                 | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-. 
+                 |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-' 
+                 '^^^'    '--'                                                            
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  
+  $pac = "
+                   .-.      .--.                                                          
+                  | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.
+                  |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'
+                  '^^^'    '--'                                                           
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                    .-.      .--.                                                         
+                   | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-
+                   |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-
+                   '^^^'    '--'                                                          
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                     .-.      .--.                                                        
+                    | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .
+                    |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '
+                    '^^^'    '--'                                                         
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                      .-.      .--.                                                       
+                     | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   
+                     |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   
+                     '^^^'    '--'                                                        
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                       .-.      .--.                                                      
+                      | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.  
+                      |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'  
+                      '^^^'    '--'                                                       
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                        .-.      .--.                                                     
+                       | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-. 
+                       |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-' 
+                       '^^^'    '--'                                                      
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                         .-.      .--.                                                    
+                        | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.
+                        |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'
+                        '^^^'    '--'                                                     
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  
+  $pac = "
+                          .-.      .--.                                                   
+                         | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-
+                         |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-
+                         '^^^'    '--'                                                    
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                           .-.      .--.                                                  
+                          | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   .
+                          |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   '
+                          '^^^'    '--'                                                   
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  
+  $pac = "
+                            .-.      .--.                                                 
+                           | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.   
+                           |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'   
+                           '^^^'    '--'                                                  
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                             .-.      .--.                                                
+                            | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.  
+                            |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'  
+                            '^^^'    '--'                                                 
+  "
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                              .-.      .--.                                               
+                             | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-. 
+                             |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-' 
+                             '^^^'    '--'                                                
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                               .-.      .--.                                              
+                              | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-.
+                              |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-'
+                              '^^^'    '--'                                               
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                .-.      .--.                                             
+                               | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .-
+                               |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '-
+                               '^^^'    '--'                                              
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                 .-.      .--.                                            
+                                | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   .
+                                |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   '
+                                '^^^'    '--'                                             
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                  .-.      .--.                                           
+                                 | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.   
+                                 |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'   
+                                 '^^^'    '--'                                            
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                   .-.      .--.                                          
+                                  | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.  
+                                  |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'  
+                                  '^^^'    '--'                                           
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                    .-.      .--.                                         
+                                   | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-. 
+                                   |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-' 
+                                   '^^^'    '--'                                          
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                     .-.      .--.                                        
+                                    | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-.
+                                    |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-'
+                                    '^^^'    '--'                                         
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                      .-.      .--.                                       
+                                     | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .-
+                                     |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '-
+                                     '^^^'    '--'                                        
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  
+  $pac = "
+                                       .-.      .--.                                      
+                                      | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   .
+                                      |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   '
+                                      '^^^'    '--'                                       
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                        .-.      .--.                                     
+                                       | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.   
+                                       |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'   
+                                       '^^^'    '--'                                      
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                         .-.      .--.                                    
+                                        | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.  
+                                        |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'  
+                                        '^^^'    '--'                                     
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                          .-.      .--.                                   
+                                         | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-. 
+                                         |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-' 
+                                         '^^^'    '--'                                    
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                           .-.      .--.                                  
+                                          | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-.
+                                          |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-'
+                                          '^^^'    '--'                                   
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                            .-.      .--.                                 
+                                           | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .-
+                                           |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '-
+                                           '^^^'    '--'                                  
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                             .-.      .--.                                
+                                            | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   .
+                                            |   |   \  '-. '-'   '-'   '-'   '-'   '-'   '
+                                            '^^^'    '--'                                 
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                              .-.      .--.                               
+                                             | OO|   / _.-' .-.   .-.   .-.   .-.   .-.   
+                                             |   |   \  '-. '-'   '-'   '-'   '-'   '-'   
+                                             '^^^'    '--'                                
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                               .-.      .--.                              
+                                              | OO|   / _.-' .-.   .-.   .-.   .-.   .-.  
+                                              |   |   \  '-. '-'   '-'   '-'   '-'   '-'  
+                                              '^^^'    '--'                               
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                                .-.      .--.                             
+                                               | OO|   / _.-' .-.   .-.   .-.   .-.   .-. 
+                                               |   |   \  '-. '-'   '-'   '-'   '-'   '-' 
+                                               '^^^'    '--'                              
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                                 .-.      .--.                            
+                                                | OO|   / _.-' .-.   .-.   .-.   .-.   .-.
+                                                |   |   \  '-. '-'   '-'   '-'   '-'   '-'
+                                                '^^^'    '--'                             
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                                   .-.      .--.                           
+                                                 | OO|   / _.-' .-.   .-.   .-.   .-.   .-
+                                                 |   |   \  '-. '-'   '-'   '-'   '-'   '-
+                                                 '^^^'    '--'                            
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                                   .-.      .--.                          
+                                                  | OO|   / _.-' .-.   .-.   .-.   .-.   .
+                                                  |   |   \  '-. '-'   '-'   '-'   '-'   '
+                                                  '^^^'    '--'                           
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                                    .-.      .--.                         
+                                                   | OO|   / _.-' .-.   .-.   .-.   .-.   
+                                                   |   |   \  '-. '-'   '-'   '-'   '-'   
+                                                   '^^^'    '--'                          
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  
+  $pac = "
+                                                     .-.      .--.                        
+                                                    | OO|   / _.-' .-.   .-.   .-.   .-.  
+                                                    |   |   \  '-. '-'   '-'   '-'   '-'  
+                                                    '^^^'    '--'                         
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+
+  $pac = "
+                                                      .-.      .--.                       
+                                                     | OO|   / _.-' .-.   .-.   .-.   .-. 
+                                                     |   |   \  '-. '-'   '-'   '-'   '-' 
+                                                     '^^^'    '--'                        
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+
+  $pac = "
+                                                       .-.      .--.                      
+                                                      | OO|   / _.-' .-.   .-.   .-.   .-.
+                                                      |   |   \  '-. '-'   '-'   '-'   '-'
+                                                      '^^^'    '--'                       
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                                        .-.      .--.                     
+                                                       | OO|   / _.-' .-.   .-.   .-.   .-
+                                                       |   |   \  '-. '-'   '-'   '-'   '-
+                                                       '^^^'    '--'                      
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                                         .-.      .--.                    
+                                                        | OO|   / _.-' .-.   .-.   .-.   .
+                                                        |   |   \  '-. '-'   '-'   '-'   '
+                                                        '^^^'    '--'                     
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  $pac = "
+                                                          .-.      .--.                   
+                                                         | OO|   / _.-' .-.   .-.   .-.   
+                                                         |   |   \  '-. '-'   '-'   '-'   
+                                                         '^^^'    '--'                    
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+  
+  $pac = "
+                                                           .-.      .--.                  
+                                                          | OO|   / _.-' .-.   .-.   .-.  
+                                                          |   |   \  '-. '-'   '-'   '-'  
+                                                          '^^^'    '--'                   
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                            .-.      .--.                 
+                                                           | OO|   / _.-' .-.   .-.   .-. 
+                                                           |   |   \  '-. '-'   '-'   '-' 
+                                                           '^^^'    '--'                  
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+
+  $pac = "
+                                                             .-.      .--.                
+                                                            | OO|   / _.-' .-.   .-.   .-.
+                                                            |   |   \  '-. '-'   '-'   '-'
+                                                            '^^^'    '--'                 
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+  
+
+  $pac = "
+                                                              .-.      .--.               
+                                                             | OO|   / _.-' .-.   .-.   .-
+                                                             |   |   \  '-. '-'   '-'   '-
+                                                             '^^^'    '--'                
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                               .-.      .--.              
+                                                              | OO|   / _.-' .-.   .-.   .
+                                                              |   |   \  '-. '-'   '-'   '
+                                                              '^^^'    '--'               
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host  
+
+  
+  $pac = "
+                                                                .-.      .--.             
+                                                               | OO|   / _.-' .-.   .-.   
+                                                               |   |   \  '-. '-'   '-'   
+                                                               '^^^'    '--'              
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+      $pac = "
+                                                                 .-.      .--.            
+                                                                | OO|   / _.-' .-.   .-.  
+                                                                |   |   \  '-. '-'   '-'  
+                                                                '^^^'    '--'             
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+
+      $pac = "
+                                                                  .-.      .--.           
+                                                                 | OO|   / _.-' .-.   .-. 
+                                                                 |   |   \  '-. '-'   '-' 
+                                                                 '^^^'    '--'            
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  
+
+      $pac = "
+                                                                   .-.      .--.          
+                                                                  | OO|   / _.-' .-.   .-.
+                                                                  |   |   \  '-. '-'   '-'
+                                                                  '^^^'    '--'           
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+      $pac = "
+                                                                    .-.      .--.         
+                                                                   | OO|   / _.-' .-.   .-
+                                                                   |   |   \  '-. '-'   '-
+                                                                   '^^^'    '--'          
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                     .-.      .--.        
+                                                                    | OO|   / _.-' .-.   .
+                                                                    |   |   \  '-. '-'   '
+                                                                    '^^^'    '--'         
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                      .-.      .--.       
+                                                                     | OO|   / _.-' .-.   
+                                                                     |   |   \  '-. '-'   
+                                                                     '^^^'    '--'        
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                       .-.      .--.      
+                                                                      | OO|   / _.-' .-.  
+                                                                      |   |   \  '-. '-'  
+                                                                      '^^^'    '--'       
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                        .-.      .--.     
+                                                                       | OO|   / _.-' .-. 
+                                                                       |   |   \  '-. '-' 
+                                                                       '^^^'    '--'      
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+
+  $pac = "
+                                                                         .-.      .--.    
+                                                                        | OO|   / _.-' .-.
+                                                                        |   |   \  '-. '-'
+                                                                        '^^^'    '--'     
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                          .-.      .--.   
+                                                                         | OO|   / _.-' .-
+                                                                         |   |   \  '-. '-
+                                                                         '^^^'    '--'    
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                           .-.      .--.  
+                                                                          | OO|   / _.-' .
+                                                                          |   |   \  '-. '
+                                                                          '^^^'    '--'   
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                            .-.      .--. 
+                                                                           | OO|   / _.-' 
+                                                                           |   |   \  '-. 
+                                                                           '^^^'    '--'  
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                             .-.      .--.
+                                                                            | OO|   / _.-'
+                                                                            |   |   \  '-.
+                                                                            '^^^'    '--' 
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                              .-.      .--
+                                                                             | OO|   / _.-
+                                                                             |   |   \  '-
+                                                                             '^^^'    '--'
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                               .-.      .-
+                                                                              | OO|   / _.
+                                                                              |   |   \  '
+                                                                              '^^^'    '--
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                .-.      .
+                                                                               | OO|   / _
+                                                                               |   |   \  
+                                                                               '^^^'    '-
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                 .-.      
+                                                                                | OO|   / 
+                                                                                |   |   \ 
+                                                                                '^^^'    '
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                  .-.     
+                                                                                 | OO|   /
+                                                                                 |   |   \
+                                                                                 '^^^'    
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                   .-.    
+                                                                                  | OO|   
+                                                                                  |   |   
+                                                                                  '^^^'   
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                    .-.   
+                                                                                   | OO|  
+                                                                                   |   |  
+                                                                                   '^^^'  
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                     .-.  
+                                                                                    | OO| 
+                                                                                    |   | 
+                                                                                    '^^^' 
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                      .-. 
+                                                                                     | OO|
+                                                                                     |   |
+                                                                                     '^^^'
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                       .-.
+                                                                                      | OO
+                                                                                      |   
+                                                                                      '^^^
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                        .-
+                                                                                       | O
+                                                                                       |  
+                                                                                       '^^
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                         .
+                                                                                        | 
+                                                                                        | 
+                                                                                        '^
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+  $pac = "
+                                                                                          
+                                                                                         |
+                                                                                         |
+                                                                                         '
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+
+  $pac = "
+                                                                                          
+                                                                                          
+                                                                                          
+                                                                                          
+  "
+  
+  write-host $pac
+  start-sleep -Milliseconds $sleep
+  Clear-Host
+
+
+}
+New-Alias -Name cls -Value pacman -force
+
+
 Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $true -Initialize -Description "Whether to ask or not" -ModuleExport 
