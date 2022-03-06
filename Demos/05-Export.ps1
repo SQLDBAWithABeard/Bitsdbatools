@@ -50,16 +50,29 @@ code $export.fullname
 
 
 # Documentation your whole environment with one script
+# export into a source controlled folder & track changes
+$path = '.\SourceControl'
+
+Get-ChildItem $path| Remove-Item -Recurse 
+
+# Export
 $instanceSplat = @{
-    SqlInstance   = $dbatools1, $dbatools2
-    Path          = '.\Export\'
-    Exclude       = 'ReplicationSettings'
+    SqlInstance     = $dbatools1, $dbatools2
+    Path            = $path
+    Exclude         = 'ReplicationSettings','CentralManagementServer'
+    NoPrefix        = $true
+    ExcludePassword = $true
 }
 Export-DbaInstance @instanceSplat
 
-# Compare the two sp_configure files
+# Remove date from folders
+(Get-ChildItem $path -Directory).Foreach{ 
+  Move-Item $psitem.fullname $psitem.fullname.split('-')[0] 
+}
 
-# export into a source controlled folder & track changes
+# Compare the two sp_configure files
+# Look for new changes in the environment - PR = documentation
+# Blinky thinks they've lost access - promises he had sysadmin yesterday and it's already been approved in the past....promise
 
 # Choose your adventure
 Get-GameTimeRemaining
