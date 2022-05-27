@@ -7,6 +7,8 @@ A magical and sometimes mysterious journey through our git history that shows th
 - [Since we’re in a devcontainer we can set vscode settings for everyone](https://github.com/SQLDBAWithABeard/Bitsdbatools/commit/eeeeb0d45fad96578dbc4339b9e9b30458d3fcd9)
 - [Started moving towards using modules & using PSDefaultParameters to make connecting to the containers easy](https://github.com/SQLDBAWithABeard/Bitsdbatools/commit/bf23bbfa67c2e4cc602f788280c2a634146b1e5c)
   - [Meant we could tidy up the chapters](https://github.com/SQLDBAWithABeard/Bitsdbatools/commit/7ac9e0015a56aec909800ab6bde2a3683598acef)
+  - [Also led us to find a bug in dbatools](https://github.com/SQLDBAWithABeard/Bitsdbatools/commit/26b5579ec2c140862338d902129a5b496233fbac)
+  - [Which was then fixed](https://github.com/dataplat/dbatools/issues/8193)
 - [Added Assert-Correct](https://github.com/SQLDBAWithABeard/Bitsdbatools/commit/2519af94059821388ef23588edb1776efc8336d0)
 - Lots of testing things as we went - sometimes they worked, sometimes they didn't:
   - [Change entrypoint](https://github.com/SQLDBAWithABeard/Bitsdbatools/commit/fee2800bd980ec9233cca08357a14f3baa1e8f3a)
