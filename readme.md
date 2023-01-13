@@ -40,3 +40,5 @@ Only way to properly rebuild to ensure that all volumes etc are removed is to
 cd to .devcontainer in a diff window
 
 `docker-compose -f "docker-compose.yml" -p "bitsdbatools_devcontainer" down`
+
+Rob was here
