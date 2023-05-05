@@ -1,4 +1,11 @@
-Update-Module dbatools
+if((Get-Module dbatools -ListAvailable).Version.Major -ne 2){
+    Update-Module dbatools
+}else{
+}
+
+# Set these defaults for all future sessions on this machine
+Set-DbatoolsConfig -FullName sql.connection.trustcert -Value $true -Register
+Set-DbatoolsConfig -FullName sql.connection.encrypt -Value $false -Register
 Import-Module /workspace/Game/JessAndBeard.psm1
 $containers = $SQLInstances = $dbatools1, $dbatools2 = 'dbatools1', 'dbatools2'
 #region Set up connection
@@ -15,22 +22,22 @@ $Global:PSDefaultParameterValues = @{
     "*dba*:PrimarySqlCredential"     = $continercredential
     "*dba*:SecondarySqlCredential"   = $continercredential
 }
- 
+
 #endregion
 
 Remove-Item '/var/opt/backups/dbatools1' -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item '/shared' -Recurse -Force -ErrorAction SilentlyContinue
 Import-Module Pansies
-$ShallWePlayAGameSetting = Get-PSFConfigValue -Name JessAndBeard.shallweplayagame 
+$ShallWePlayAGameSetting = Get-PSFConfigValue -Name JessAndBeard.shallweplayagame
 
 if ($Host.Name -eq 'ConsoleHost') {
     if ($ShallWePlayAGameSetting ) {
-        Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false 
+        Set-PSFConfig -Module JessAndBeard -Name shallweplayagame -Value $false
         Start-Game
     } else {
         Get-Index
     }
-} 
+}
 
 ######## POSH-GIT
 # with props to https://bradwilson.io/blog/prompt/powershell
