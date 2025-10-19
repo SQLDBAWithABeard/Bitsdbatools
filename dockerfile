@@ -30,6 +30,10 @@ RUN $ErrorActionPreference='Stop'; Install-Module -Name Pester -Force -SkipPubli
 SHELL ["/usr/bin/pwsh", "-c"]
 RUN $ErrorActionPreference='Stop'; Install-Module -Name dbatools,PSFramework,dbachecks,posh-git,Microsoft.PowerShell.ConsoleGuiTools,ImportExcel,Pansies -Force -SkipPublisherCheck;
 
+# Update Help
+SHELL ["/usr/bin/pwsh", "-c"]
+RUN $ErrorActionPreference='Stop'; Update-Help -UICulture en-US;
+
 # Copy Profile
 
 ADD Game/profile.ps1 /root/.config/powershell/
